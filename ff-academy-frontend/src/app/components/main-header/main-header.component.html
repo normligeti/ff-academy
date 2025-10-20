@@ -1,0 +1,43 @@
+<header>
+    <div class="left">
+        <img class="logo" src="assets/logo/logo-text.svg" alt="" [routerLink]="['/home']">
+        <div class="region">
+            <img class="globe" src="assets/icons/globe.svg" alt="">
+            <!-- <p class="lbold">Global</p> -->
+            <p class="lbold" *ngFor="let lang of langs" (click)="switchLang(lang)">
+                {{ lang.toUpperCase() }}
+            </p>
+            <img class="arrow" src="assets/icons/arrow-d.svg" alt="">
+        </div>
+    </div>
+
+    <ul class="nav">
+        <li [routerLink]="['/home']" routerLinkActive="active">
+            {{ 'NAV.HOME' | translate }}
+        </li>
+        <div class="divider"></div>
+        <li [routerLink]="['/knowledgebase']" routerLinkActive="active">
+            {{ 'NAV.KNOWLEDGEBASE' | translate }}
+        </li>
+        <div class="divider"></div>
+        <li class="disabled">
+            {{ 'NAV.ONLINE_PRESENCE' | translate }}
+        </li>
+        <div class="divider"></div>
+        <li class="disabled">
+            {{ 'NAV.WEB3' | translate }}
+        </li>
+        <div class="divider"></div>
+        <li class="disabled">
+            {{ 'NAV.DOWNLOADS' | translate }}
+        </li>
+        <div class="divider"></div>
+        <li class="disabled">
+            {{ 'NAV.MY_PROFILE' | translate }}
+        </li>
+        <li [routerLink]="['/login']">
+            {{ 'NAV.LOGIN' | translate }}
+        </li>
+    </ul>
+    
+</header>

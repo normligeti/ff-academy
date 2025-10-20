@@ -1,0 +1,82 @@
+<section class="section-1">
+    <h4 class="text-gradient center uc bold" [innerHTML]="'KNOWLEDGEBASE.SECTION1.SUBTITLE' | translate"></h4>
+    <h2 class="text-gradient center uc bold" [innerHTML]="'KNOWLEDGEBASE.SECTION1.TITLE' | translate"></h2>
+    <p class="f50 lbold center" [innerHTML]="'KNOWLEDGEBASE.SECTION1.DESCRIPTION' | translate"></p>
+</section>
+
+<section class="section-2">
+    <img src="assets/knowledgebase/scholarship.png" alt="">
+</section>
+
+<section class="section-3">
+    <img class="scroll-hiddexn" src="assets/knowledgebase/pillars.png" alt="">
+</section>
+
+<section class="section-4">
+    <div class="cards">
+        <div class="s4-card available" (click)="showSection()">
+            <img src="assets/knowledgebase/available-badge.svg" alt="" class="badge">
+            <div class="number f28 sbold">01</div>
+            <img src="assets/knowledgebase/icons/lock.svg" alt="" class="lock">
+            <img src="assets/knowledgebase/icons/mindset.svg" alt="" class="icon">
+            <p class="f32 sbold uc center" [innerHTML]="'KNOWLEDGEBASE.SECTION4.CARD1' | translate"></p>
+        </div>
+        <div class="s4-card">
+            <img src="assets/knowledgebase/available-badge.svg" alt="" class="badge">
+            <div class="number f28 sbold">02</div>
+            <img src="assets/knowledgebase/icons/lock.svg" alt="" class="lock">
+            <img src="assets/knowledgebase/icons/logo-invert.svg" alt="" class="icon">
+            <p class="f32 sbold uc center" [innerHTML]="'KNOWLEDGEBASE.SECTION4.CARD2' | translate"></p>
+        </div>
+        <div class="s4-card">
+            <img src="assets/knowledgebase/available-badge.svg" alt="" class="badge">
+            <div class="number f28 sbold">03</div>
+            <img src="assets/knowledgebase/icons/lock.svg" alt="" class="lock">
+            <img src="assets/knowledgebase/icons/network.svg" alt="" class="icon">
+            <p class="f32 sbold uc center" [innerHTML]="'KNOWLEDGEBASE.SECTION4.CARD3' | translate"></p>
+        </div>
+        <div class="s4-card">
+            <img src="assets/knowledgebase/available-badge.svg" alt="" class="badge">
+            <div class="number f28 sbold">04</div>
+            <img src="assets/knowledgebase/icons/lock.svg" alt="" class="lock">
+            <img src="assets/knowledgebase/icons/clock.svg" alt="" class="icon">
+            <p class="f32 sbold uc center" [innerHTML]="'KNOWLEDGEBASE.SECTION4.CARD4' | translate"></p>
+        </div>
+    </div>
+</section>
+
+<section class="section-5">
+    <div class="dropdown" (click)="toggleDropdown()">
+        <img src="assets/knowledgebase/dropdown-active.svg" alt="" class="bg">
+        <h5 class="sbold uc" [innerHTML]="'KNOWLEDGEBASE.SECTION5.LEVEL1.TITLE' | translate"></h5>
+        <p class="f24 sbold uc" [innerHTML]="'KNOWLEDGEBASE.SECTION5.LEVEL1.SUBTITLE' | translate"></p>
+        <img src="assets/knowledgebase/icons/{{dropdownOpen ? 'minus' : 'plus'}}.svg" alt="" class="icon">
+    </div>
+
+    <div class="dropdown-box" [ngClass]="{'open': dropdownOpen}">
+        <img src="assets/knowledgebase/book.png" alt="">
+        <div class="text">
+            <p class="f32 sbold" [innerHTML]="'KNOWLEDGEBASE.SECTION5.LEVEL1.DESCRIPTION_SHORT' | translate"></p>
+            <p class="f24" [innerHTML]="'KNOWLEDGEBASE.SECTION5.LEVEL1.DESCRIPTION_LONG' | translate"></p>
+            <button class="btn-dark-blue small" [routerLink]="['pillar-1']" [innerHTML]="'KNOWLEDGEBASE.SECTION5.LEVEL1.BUTTON' | translate"></button>
+        </div>
+    </div>
+
+    <div class="dropdown inactive">
+        <img src="assets/knowledgebase/dropdown-inactive.svg" alt="" class="bg">
+        <h5 class="sbold uc" [innerHTML]="'KNOWLEDGEBASE.SECTION5.LEVEL2.TITLE' | translate"></h5>
+        <p class="f24 sbold uc" [innerHTML]="'KNOWLEDGEBASE.SECTION5.LEVEL2.SUBTITLE' | translate"></p>
+        <img src="assets/knowledgebase/icons/plus.svg" alt="" class="icon">
+    </div>
+
+    <div class="dropdown-box"></div>
+
+    <div class="dropdown inactive">
+        <img src="assets/knowledgebase/dropdown-inactive.svg" alt="" class="bg">
+        <h5 class="sbold uc" [innerHTML]="'KNOWLEDGEBASE.SECTION5.LEVEL3.TITLE' | translate"></h5>
+        <p class="f24 sbold uc" [innerHTML]="'KNOWLEDGEBASE.SECTION5.LEVEL3.SUBTITLE' | translate"></p>
+        <img src="assets/knowledgebase/icons/plus.svg" alt="" class="icon">
+    </div>
+
+    <div class="dropdown-box"></div>
+</section>

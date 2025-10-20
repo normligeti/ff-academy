@@ -1,0 +1,106 @@
+{
+    "NAV": {
+        "HOME": "Kezdőlap",
+        "KNOWLEDGEBASE": "Tudásbázis",
+        "ONLINE_PRESENCE": "Online jelenlét",
+        "WEB3": "Web3 és FFT",
+        "DOWNLOADS": "Letöltések",
+        "MY_PROFILE": "Profilom",
+        "LOGIN": "Bejelentkezés"
+    },
+    "HOME": {
+        "SECTION1": {
+            "LOGO_TEXT": "Fireflies",
+            "TITLE": "Akadémia",
+            "SUBTITLE": "A siker világosan és strukturáltan",
+            "DESCRIPTION": "Tudd meg, hogyan válhatsz sikeres Fireflies vezetővé."
+        },
+        "SECTION3": {
+            "HEADING": "Mi a Fireflies Akadémia?",
+            "DESCRIPTION": "A Fireflies Akadémia a te egyetlen képzési központod. Itt megtalálod az összes eszközt,<br> stratégiát és útmutatást, amire szükséged van a sikerhez – világosan strukturálva és mindig elérhetően.",
+            "CARD1": "Lépésről-lépésre <br> képzési leckék",
+            "CARD2": "Stratégiai útmutatók <br> és növekedési taktikák",
+            "CARD3": "Könnyen követhető videó <br> leckék és feladatok",
+            "CARD4": "Letölthető segédanyagok <br> és sablonok"
+        },
+        "SECTION4": {
+            "HEADING": "Mit találsz belül",
+            "CARDSET1": {
+                "CARD1": "Légy szabad",
+                "CARD2": "Álmodj nagyobbat",
+                "CARD3": "Fedezz fel többet",
+                "CARD4": "Maradj kíváncsi",
+                "CARD5": "Utazz. Tanulj. Fejlődj."
+            },
+            "CARDSET2": {
+                "CARD1": {
+                    "BUTTON": "Tudásbázis",
+                    "DESCRIPTION": "Mélyebb betekintés a <br> siker 4 pillérébe."
+                },
+                "CARD2": {
+                    "BUTTON": "Online Jelenlét",
+                    "DESCRIPTION": "Közösségi média stratégiák <br> és digitális márkaépítés"
+                },
+                "CARD3": {
+                    "BUTTON": "Web3 & FFT",
+                    "DESCRIPTION": "Modern technológiák <br> és blockchain betekintés."
+                },
+                "CARD4": {
+                    "BUTTON": "Letöltések",
+                    "DESCRIPTION": "Minden fontos dokumentum egy helyen."
+                }
+            }
+        },
+        "SECTION5": {
+            "HEADING1": {
+                "BOLD": "Első lépések",
+                "TEXT": " a Fireflies világában:"
+            },
+            "HEADING2": "A siker 4 pillére",
+            "DESCRIPTION": "Minden sikertörténet erős alapokkal kezdődik. Ismerd meg az alapokat:",
+            "PILLAR1": "Személyes fejlődés és gondolkodásmód",
+            "PILLAR2": "Fireflies rendszer és vállalati ismeretek",
+            "PILLAR3": "A hálózati marketing alapjai",
+            "PILLAR4": "Tevékenységkövetés és munkaszervezés"
+        },
+        "SECTION6": {
+            "BUTTON": "Kezdd el még ma"
+        },
+        "SECTION7": {
+            "HEADING": "Az utazásod <br> itt kezdődik",
+            "DESCRIPTION": "A Fireflies Akadémia megadja neked a <br> tisztánlátást, eszközöket és önbizalmat, <br> hogy lépésről lépésre fejlődj. <span class='sbold blue'>Kezdd el most</span> <span class='blue'> - a <br> sikered története ma indul.</span>",
+            "BUTTON": "KEZDD EL MOST"
+        }
+    },
+    "KNOWLEDGEBASE": {
+        "SECTION1": {
+            "SUBTITLE": "Oldd fel a benned rejlő lehetőségeket.",
+            "TITLE": "Építsd a jövődet.",
+            "DESCRIPTION": "Indítsd el az utad a siker 4 pillérével, és <br> szerezd meg a tudást, szemléletet és készségeket, hogy <br> személyesen és szakmailag is fejlődhess."
+        },
+        "SECTION4": {
+            "CARD1": "Személyes fejlődés <br> és gondolkodásmód",
+            "CARD2": "Fireflies rendszer <br> és vállalati ismeretek",
+            "CARD3": "A hálózati marketing <br> alapjai",
+            "CARD4": "Tevékenységkövetés <br> és munkaszervezés"
+        },
+        "SECTION5": {
+            "LEVEL1": {
+                "TITLE": "ALAP",
+                "SUBTITLE": "Személyes fejlődés és gondolkodásmód",
+                "DESCRIPTION_SHORT": "Ismerd meg az alapokat, amelyek formálják a személyes fejlődésedet és a gondolkodásmódodat.",
+                "DESCRIPTION_LONG": "Ebben az 5 leckében megtanulod, hogyan válj a legértékesebb erőforrásoddá, hogyan vállalj teljes felelősséget az életedért, hogyan tűzz ki valóban motiváló célokat, hogyan építs fenntartható tanulási rutint, és hogyan dolgozz következetesen – függetlenül az azonnali eredményektől. Ez a modul segít kialakítani azt a gondolkodásmódot és fegyelmet, amelyre minden jövőbeli sikered épülni fog.",
+                "BUTTON": "Leckék megtekintése"
+            },
+            "LEVEL2": {
+                "TITLE": "KÖZÉPHALADÓ",
+                "SUBTITLE": "Személyes fejlődés és gondolkodásmód"
+            },
+            "LEVEL3": {
+                "TITLE": "MESTER",
+                "SUBTITLE": "Személyes fejlődés és gondolkodásmód"
+            }
+        }
+    }
+}
+  

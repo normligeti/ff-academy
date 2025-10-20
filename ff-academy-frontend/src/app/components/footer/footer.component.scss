@@ -1,0 +1,66 @@
+@import "mixins.scss";
+
+
+footer {
+    height: 220px;
+    background: linear-gradient(90deg, #505D65 20.43%, #000000 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 9;
+}
+
+.footer-content {
+    width: 100%;
+    max-width: 1200px;
+    height: 116px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.socials, .mail {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.socials {
+    .logo {
+        height: 68px;
+        cursor: pointer;
+    }
+
+    :not(.logo) {
+        height: 24px;
+        // width: 36px;
+        transition: all 0.1s;
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+}
+
+.mail p {
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    bottom: 2px;
+    transition: all 0.1s;
+
+    &:hover {
+        opacity: 0.8;
+    }
+
+    img {
+        height: 20px;
+        position: relative;
+        bottom: -2px;
+    }
+}

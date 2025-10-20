@@ -1,0 +1,106 @@
+{
+    "NAV": {
+        "HOME": "Home",
+        "KNOWLEDGEBASE": "Knowledgebase",
+        "ONLINE_PRESENCE": "Online Presence",
+        "WEB3": "Web3 & FFT",
+        "DOWNLOADS": "Downloads",
+        "MY_PROFILE": "My Profile",
+        "LOGIN": "Log In"
+    },
+    "HOME": {
+        "SECTION1": {
+            "LOGO_TEXT": "Fireflies",
+            "TITLE": "Academy",
+            "SUBTITLE": "Success Made Clear and Structured",
+            "DESCRIPTION": "Discover how to become a successful Fireflies leader."
+        },
+        "SECTION3": {
+            "HEADING": "What is Fireflies Academy?",
+            "DESCRIPTION": "The Fireflies Academy is your one-stop training center. Here you’ll find all the tools,<br> strategies, and guidance you need to succeed – clearly structured and always accessible.",
+            "CARD1": "Step-by-step <br> training lessons",
+            "CARD2": "Strategic guides <br> and growth tactics",
+            "CARD3": "Easy-to-follow video <br> lessons & tasks",
+            "CARD4": "Downloadable resources <br> and templates"
+        },
+        "SECTION4": {
+            "HEADING": "What You’ll Find Inside",
+            "CARDSET1": {
+                "CARD1": "Be Free",
+                "CARD2": "Dream Bigger",
+                "CARD3": "Explore More",
+                "CARD4": "Stay Curious",
+                "CARD5": "Travel. Learn. Evolve."
+            },
+            "CARDSET2": {
+                "CARD1": {
+                    "BUTTON": "Knowledge Base",
+                    "DESCRIPTION": "Deep dives into the <br> 4 pillars of success."
+                },
+                "CARD2": {
+                    "BUTTON": "Online Presence",
+                    "DESCRIPTION": "Social media strategies <br> and digital branding"
+                },
+                "CARD3": {
+                    "BUTTON": "Web3 & FFT",
+                    "DESCRIPTION": "Modern technology <br> & blockchain insights."
+                },
+                "CARD4": {
+                    "BUTTON": "Downloads",
+                    "DESCRIPTION": "All the key documents <br> you need in one place."
+                }
+            }
+        },
+        "SECTION5": {
+            "HEADING1": {
+                "BOLD": "Your First Steps",
+                "TEXT": " in the Fireflies World:"
+            },
+            "HEADING2": "The 4 Pillars of Success",
+            "DESCRIPTION": "Every success story begins with strong foundations. Learn the essentials:",
+            "PILLAR1": "Personal Growth & Mindset",
+            "PILLAR2": "Fireflies System & Company Knowledge",
+            "PILLAR3": "Basics of Network Marketing",
+            "PILLAR4": "Activity Tracking & Work Management"
+        },
+        "SECTION6": {
+            "BUTTON": "Get Started Today"
+        },
+        "SECTION7": {
+            "HEADING": "Your Journey <br> Starts Here",
+            "DESCRIPTION": "The Fireflies Academy gives you the <br> clarity, tools, and confidence to <br> grow step by step. <span class='sbold blue'>Begin now</span> <span class='blue'> - your <br> success story starts today.</span>",
+            "BUTTON": "START NOW"
+        }
+    },
+    "KNOWLEDGEBASE": {
+        "SECTION1": {
+            "SUBTITLE": "Unlock Your Potential.",
+            "TITLE": "Build Your Future.",
+            "DESCRIPTION": "Start your journey with the 4 Pillars of Success and <br> gain the knowledge, mindset, and skills to grow <br> personally and professionally."
+        },
+        "SECTION4": {
+            "CARD1": "Personal Growth <br> & Mindset",
+            "CARD2": "Fireflies System <br> & Company Knowledge",
+            "CARD3": "Basics of Network <br> Marketing",
+            "CARD4": "Activity Tracking <br> & Work Management"
+        },
+        "SECTION5": {
+            "LEVEL1": {
+                "TITLE": "BASIC",
+                "SUBTITLE": "Personal Growth & Mindset",
+                "DESCRIPTION_SHORT": "Discover the foundations that shape your personal growth and mindset.",
+                "DESCRIPTION_LONG": "In these 5 lessons, you’ll learn how to become your most valuable resource, take full responsibility for your life, set truly motivating goals, build a sustainable learning routine, and work consistently — regardless of immediate results. This module will help you develop the mindset and discipline that all your future success will be built upon.",
+                "BUTTON": "View lessons"
+            },
+            "LEVEL2": {
+                "TITLE": "INTERMEDIATE",
+                "SUBTITLE": "Personal Growth & Mindset"
+            },
+            "LEVEL3": {
+                "TITLE": "MASTER",
+                "SUBTITLE": "Personal Growth & Mindset"
+            }
+        }
+    }
+}
+  

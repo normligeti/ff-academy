@@ -1,0 +1,154 @@
+:root {
+    --font-180: 11.25rem;   /* 180px */
+    --font-120: 7.5rem;     /* 120px */
+    --font-100: 6.25rem;    /* 100px */
+    --font-80: 5rem;        /* 80px */
+    --font-70: 4.375rem;    /* 70px */
+    --font-60: 3.75rem;     /* 60px */
+
+    --font-50: 3.125rem;    /* 50px */
+    --font-40: 2.5rem;      /* 40px */
+    --font-32: 2rem;        /* 32px */
+    --font-28: 1.75rem;     /* 28px */
+    --font-24: 1.5rem;      /* 24px */
+
+    --font-21: 1.3125rem;   /* 21px */
+
+    --font-20: 1.25rem;     /* 20px */
+    --font-18: 1.125rem;    /* 18px */
+    --font-16: 1rem;        /* 16px */
+    --font-14: 0.875rem;    /* 14px */
+}
+
+html { 
+    font-size: 80%; 
+}
+
+body {
+    font-family: 'Sofia Pro', sans-serif; 
+    // font-family: 'Arial', sans-serif; 
+    color: var(--gray);
+    font-size: var(--font-21);
+    font-weight: 400; 
+
+    // line-height: normal !important;
+    // * {
+    //     line-height: normal !important;
+    // }
+}
+
+h1 {
+    font-size: var(--font-180);
+    line-height: 1;
+}
+
+h2 {
+    font-size: var(--font-120);
+    line-height: 1;
+}
+
+h3 {
+    font-size: var(--font-100);
+    line-height: 1.2;
+}
+
+h4 {
+    font-size: var(--font-80);
+    line-height: 1;
+}
+
+h5 {
+    font-size: var(--font-70);
+}
+
+h6 {
+    font-size: var(--font-60);
+    line-height: 1.1;
+}
+
+span, th, td, p {
+    line-height: 1.3;
+    // letter-spacing: 1.25px;
+}
+
+h1, h2, h3, h4, h5, h6, span, th, td, p {
+    white-space: pre-line;
+}
+
+.f50 {
+    font-size: var(--font-50);
+}
+
+.f40 {
+    font-size: var(--font-40);
+}
+
+.f32 {
+    font-size: var(--font-32);
+}
+
+.f28 {
+    font-size: var(--font-28);
+}
+
+.f24 {
+    font-size: var(--font-24);
+}
+
+.f20 {
+    font-size: var(--font-20);
+}
+
+.f18 {
+    font-size: var(--font-18);
+}
+
+.f16 {
+    font-size: var(--font-16);
+}
+
+.f14 {
+    font-size: var(--font-14);
+}
+
+.lbold {
+    // font-weight: 400;
+    font-weight: 500;
+}
+
+// .mbold {
+//     font-weight: 500;
+// }
+
+.mbold {
+    font-weight: 600;
+}
+
+.sbold {
+    font-weight: 700;
+}
+
+.bold {
+    font-weight: 900;
+}
+
+.uc {
+    text-transform: uppercase;
+}
+
+.center {
+    text-align: center;
+}
+
+.justify {
+    text-align: justify;
+}
+
+span {
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+.blue {
+    color: var(--blue);
+}

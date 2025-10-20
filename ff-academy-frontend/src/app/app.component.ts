@@ -1,0 +1,57 @@
+import { Component } from '@angular/core';
+import { NavigationStart, Router, RouterOutlet } from '@angular/router';
+import { MainHeaderComponent } from './components/main-header/main-header.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { filter } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { TranslateService } from '@ngx-translate/core';
+
+@Component({
+  selector: 'app-root',
+  imports: [RouterOutlet, MainHeaderComponent, FooterComponent, CommonModule],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.scss'
+})
+export class AppComponent {
+    title = 'ff-academy-frontend';
+
+    constructor( 
+        public router: Router,
+        private translate: TranslateService
+    ) { 
+        // register available languages once
+        this.translate.addLangs(['en', 'hu']);
+
+        // set default language
+        this.translate.setFallbackLang('en');
+
+        // try to detect browser language
+
+        this.translate.use('en');
+    }
+    
+    ngOnInit(): void {
+        this.router.events.pipe(filter(event => event instanceof NavigationStart)).subscribe(() => {
+            this.initScroll();
+        });
+    }
+
+    initScroll() {
+        setTimeout(() => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    
+                    if (entry.intersectionRatio > 0.9) {
+                        entry.target.classList.add('scroll-show');
+                    } 
+                    // if (entry.intersectionRatio === 0) {
+                    //     entry.target.classList.remove('scroll-show');
+                    // }
+                })
+            }, {threshold: [0, 0.9]});
+            
+            const hiddenElements = document.querySelectorAll('.scroll-hidden');
+            hiddenElements.forEach((el) => observer.observe(el));
+        });
+    }
+}

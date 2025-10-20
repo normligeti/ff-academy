@@ -1,0 +1,43 @@
+<div class="login">
+    <div class="content">
+        <img class="login-logo" src="assets/login/login.svg" alt="">
+        <form #formRef="ngForm" class="form">
+
+            <div class="label">
+                <p class="lbold">Email address or username</p>
+            </div>
+            <input type="text" name="email" [(ngModel)]="formData.email" id="" class="input" required #email="ngModel">
+
+            <div class="label">
+                <p class="lbold">Password</p>
+                <p class="f14">Forgot password</p>
+            </div>
+            <div class="input-wrapper">
+                <input type="password" name="password" [(ngModel)]="formData.password"  id="" class="input" required #password="ngModel">
+                <img class="input-icon" src="assets/login/visibility.svg" alt="">
+            </div>
+
+            <div class="checkbox-wrapper">
+                <div class="checkbox"></div>
+                <p class="f14">Remember me</p>
+            </div>
+            
+            <button class="btn-dark-blue" [disabled]="formRef.invalid" (click)="login()" *ngIf="counter === 0">
+                Sign in
+            </button>
+            <button class="btn-dark-blue disabled" (click)="login()" *ngIf="counter === 1">
+                Signing in...
+                <loader color="white" [size]="20"></loader>
+            </button>
+        </form>
+    </div>
+
+    <div class="footer">
+        <img class="logo" src="assets/logo/logo-text.svg" alt="">
+        <p class="f16 lbold">General Business Terms and Conditions</p>
+        <div class="divider"></div>
+        <p class="f16 lbold">Privacy Policy</p>
+        <div class="divider"></div>
+        <p class="f16 lbold">Cookie</p>
+    </div>
+</div>

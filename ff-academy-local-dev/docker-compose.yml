@@ -1,0 +1,41 @@
+version: '3'
+services:
+
+  mongo:
+    image: mongo:8.0
+    restart: always
+    environment:
+      - MONGO_INITDB_DATABASE=ff-academy
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    ports:
+      - 27008:27017
+    volumes:
+      - ./mongo-data:/data/db 
+
+  node-backend:
+    build:
+      context: .
+      dockerfile: node-backend.Dockerfile
+    command: sh -c 'cd /app/src && node index.js'
+    restart: always
+    ports:
+      - 4202:4201
+    environment:
+      NODE_ENV: production
+      NODE_OPTIONS: --max-old-space-size=2048
+      PORT: 4201
+      MONGO_AUTHFROM: admin
+      MONGO_DATABASE: ff-academy
+      MONGO_PASSWORD: password
+      MONGO_SERVER: mongodb://mongo
+      MONGO_LOCAL_DEV: true
+      MONGO_SSL: false
+      MONGO_USERNAME: root
+    volumes:
+      - ../ff-academy-backend:/app
+    depends_on:
+      - mongo
+
+volumes:
+  mongodb: {}

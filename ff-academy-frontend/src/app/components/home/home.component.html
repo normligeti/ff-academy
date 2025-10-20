@@ -1,0 +1,150 @@
+<section class="section-1">
+    <div class="content">
+        <img class="banner-logo" src="assets/logo/logo-banner.svg" alt="">
+        <h4 class="text-gradient uc bold" [innerHTML]="'HOME.SECTION1.LOGO_TEXT' | translate"></h4>
+        <h1 class="text-gradient uc bold" [innerHTML]="'HOME.SECTION1.TITLE' | translate"></h1>
+        <p class="f50 sbold" [innerHTML]="'HOME.SECTION1.SUBTITLE' | translate"></p>
+        <p class="f28 lbold" [innerHTML]="'HOME.SECTION1.DESCRIPTION' | translate"></p>
+    </div>
+    <img class="cloud" src="assets/home/cloud.png" alt="">
+</section>
+
+<section class="section-2">
+    <img class="scroll-hidden" src="assets/home/section-2.png" alt="">
+</section>
+
+<section class="section-3">
+    <h6 class="sbold" [innerHTML]="'HOME.SECTION3.HEADING' | translate"></h6>
+    <p class="f28 lbold center spacer" [innerHTML]="'HOME.SECTION3.DESCRIPTION' | translate"></p>
+    <div class="s3-cards">
+        <div class="s3-card scroll-hidden">
+            <div class="top">
+                <img src="assets/icons/step.svg" alt="">
+            </div>
+            <div class="bottom">
+                <p class="f24 center sbold" [innerHTML]="'HOME.SECTION3.CARD1' | translate"></p>
+            </div>
+        </div>
+        <div class="s3-card scroll-hidden d01">
+            <div class="top">
+                <img src="assets/icons/guide.svg" alt="">
+            </div>
+            <div class="bottom">
+                <div class="triangle"></div>
+                <p class="f24 center sbold" [innerHTML]="'HOME.SECTION3.CARD2' | translate"></p>
+            </div>
+        </div>
+        <div class="s3-card scroll-hidden d02">
+            <div class="top">
+                <img src="assets/icons/lesson.svg" alt="">
+            </div>
+            <div class="bottom">
+                <div class="triangle"></div>
+                <p class="f24 center sbold" [innerHTML]="'HOME.SECTION3.CARD3' | translate"></p>
+            </div>
+        </div>
+        <div class="s3-card scroll-hidden d03">
+            <div class="top">
+                <img src="assets/icons/download.svg" alt="">
+            </div>
+            <div class="bottom">
+                <div class="triangle"></div>
+                <p class="f24 center sbold" [innerHTML]="'HOME.SECTION3.CARD4' | translate"></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="section-4">
+    <h6 class="sbold" [innerHTML]="'HOME.SECTION4.HEADING' | translate"></h6>
+    <!-- <img class="s4img" src="assets/home/section-4.png" alt=""> -->
+    <div class="s4-cards">
+        <div class="s4-card">
+            <img src="assets/home/s4c1.png" alt="">
+            <p class="f24 bold text-gradient" [innerHTML]="'HOME.SECTION4.CARDSET1.CARD1' | translate"></p>
+        </div>
+        <div class="s4-card">
+            <img src="assets/home/s4c2.png" alt="">
+            <p class="f24 bold text-gradient" [innerHTML]="'HOME.SECTION4.CARDSET1.CARD2' | translate"></p>
+        </div>
+        <div class="s4-card">
+            <img src="assets/home/s4c3.png" alt="">
+            <p class="f24 bold text-gradient" [innerHTML]="'HOME.SECTION4.CARDSET1.CARD3' | translate"></p>
+        </div>
+        <div class="s4-card">
+            <img src="assets/home/s4c4.png" alt="">
+            <p class="f24 bold text-gradient" [innerHTML]="'HOME.SECTION4.CARDSET1.CARD4' | translate"></p>
+        </div>
+        <div class="s4-card">
+            <img src="assets/home/s4c5.png" alt="">
+            <p class="f24 bold text-gradient" [innerHTML]="'HOME.SECTION4.CARDSET1.CARD5' | translate"></p>
+        </div>
+    </div>
+    <div class="container">
+        <div class="wrapper">
+            <button class="btn-dark-blue" [routerLink]="['/knowledgebase']" [innerHTML]="'HOME.SECTION4.CARDSET2.CARD1.BUTTON' | translate"></button>
+            <p class="f24 lbold" [innerHTML]="'HOME.SECTION4.CARDSET2.CARD1.DESCRIPTION' | translate"></p>
+        </div>
+        <div class="divider"></div>
+        <div class="wrapper">
+            <button class="btn-dark-blue" [innerHTML]="'HOME.SECTION4.CARDSET2.CARD2.BUTTON' | translate"></button>
+            <p class="f24 lbold" [innerHTML]="'HOME.SECTION4.CARDSET2.CARD2.DESCRIPTION' | translate"></p>
+        </div>
+        <div class="divider"></div>
+        <div class="wrapper">
+            <button class="btn-dark-blue" [innerHTML]="'HOME.SECTION4.CARDSET2.CARD3.BUTTON' | translate"></button>
+            <p class="f24 lbold" [innerHTML]="'HOME.SECTION4.CARDSET2.CARD3.DESCRIPTION' | translate"></p>
+        </div>
+        <div class="divider"></div>
+        <div class="wrapper">
+            <button class="btn-dark-blue" [innerHTML]="'HOME.SECTION4.CARDSET2.CARD4.BUTTON' | translate"></button>
+            <p class="f24 lbold" [innerHTML]="'HOME.SECTION4.CARDSET2.CARD4.DESCRIPTION' | translate"></p>
+        </div>
+    </div>
+</section>
+
+<section class="section-5">
+    <h6 class="lbold">
+        <span class="sbold" [innerHTML]="'HOME.SECTION5.HEADING1.BOLD' | translate"></span>
+        <span [innerHTML]="'HOME.SECTION5.HEADING1.TEXT' | translate"></span>
+    </h6>
+    <h6 class="sbold blue" [innerHTML]="'HOME.SECTION5.HEADING2' | translate"></h6>
+    <p class="f28 lbold spacer" [innerHTML]="'HOME.SECTION5.DESCRIPTION' | translate"></p>
+    <div class="container">
+        <img src="assets/home/section-5.png" alt="">
+        <div class="wrapper">
+            <div class="row">
+                <p class="f32 sbold number">1</p>
+                <p class="f32 sbold" [innerHTML]="'HOME.SECTION5.PILLAR1' | translate"></p>
+            </div>
+            <div class="row">
+                <p class="f32 sbold number">2</p>
+                <p class="f32 sbold" [innerHTML]="'HOME.SECTION5.PILLAR2' | translate"></p>
+            </div>
+            <div class="row">
+                <p class="f32 sbold number">3</p>
+                <p class="f32 sbold" [innerHTML]="'HOME.SECTION5.PILLAR3' | translate"></p>
+            </div>
+            <div class="row">
+                <p class="f32 sbold number">4</p>
+                <p class="f32 sbold" [innerHTML]="'HOME.SECTION5.PILLAR4' | translate"></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-6">
+    <button class="btn-dark-blue small" [routerLink]="['/login']" [innerHTML]="'HOME.SECTION6.BUTTON' | translate"></button>
+</section>
+
+<section class="section-7">
+    <div class="content">
+        <div class="text">
+            <h3 class="sbold" [innerHTML]="'HOME.SECTION7.HEADING' | translate"></h3>
+            <p class="f28 lbold" [innerHTML]="'HOME.SECTION7.DESCRIPTION' | translate"></p>
+            <button class="btn-dark-blue small" [routerLink]="['/login']" [innerHTML]="'HOME.SECTION7.BUTTON' | translate"></button>
+        </div>
+        <img src="assets/home/section-7.png" alt="">
+    </div>
+</section>

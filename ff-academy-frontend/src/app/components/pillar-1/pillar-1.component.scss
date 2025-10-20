@@ -1,0 +1,176 @@
+@import "mixins.scss";
+
+
+.section-1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    padding-bottom: 40px;
+    overflow: hidden;
+
+    .content {
+        max-width: 1200px;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        z-index: 1;
+        padding-right: 40px;
+        
+        img {
+            height: 320px;
+        }
+    }
+    
+    .text {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 500px;
+        background: linear-gradient(193deg, #13aeb6b5 0%, rgba(217, 217, 217, 0) 40%);
+    }
+
+    .cloud {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-35%, -73%);
+        z-index: 0;
+        mix-blend-mode: screen;
+    }
+
+}
+
+.section-2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+
+    
+    .blue-box {
+        width: 100%;
+        max-width: 1200px;
+        border-radius: 20px;
+        padding: 44px 100px 80px 100px;
+        background: linear-gradient(95.93deg, #F1F1F2 0%, #EAFBFB 100%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 80px;
+    }
+
+    .cards {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 68px;
+        margin-top: 50px;
+    }
+
+    .card {
+        width: 100%;
+        height: 340px;
+        border-radius: 15px;
+        background-color: #FFFFFF;
+        box-shadow: 0px 4px 50px 0px #0000001A;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+
+        img {
+            width: 100%;
+            height: 57%;
+            min-height: 57%;
+            object-fit: cover;
+        }
+    }
+
+    .number {
+        width: 36px;
+        height: 28px;
+        position: absolute;
+        left: 0;
+        top: 24px;
+        padding-left: 4px;
+        padding-bottom: 2px;
+        background-color: var(--blue);
+        clip-path: polygon(0% 0%, 75% 0, 100% 50%, 75% 100%, 0% 100%);
+        display: flex;
+        align-items: center;
+        color: white;
+    }
+
+    .card-content {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        text-align: center;
+        padding: 24px;
+    }
+}
+
+.section-3 {
+    height: calc(100vh - 280px);
+    min-height: 500px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 80px;
+    justify-content: center;
+    background: linear-gradient( 201deg, #13aeb6ca 0%, rgba(217, 217, 217, 0) 58%);
+    padding: 40px 0 80px 0;
+
+    .cards {
+        width: 90%;
+        max-width: 1000px;
+        display: flex;
+        gap: 20px;
+    }
+
+    .s3-card {
+        width: 100%;
+        height: 210px;
+        border-radius: 15px;
+        overflow: hidden;
+        background: linear-gradient(110deg, #F1F1F2 0%, #DBFDFF 100%);
+    }
+
+    .top, .bottom {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .top {
+        height: 60%;
+
+        img {
+            max-width: 56px;
+            max-height: 56px;
+        }
+    }
+
+    .bottom {
+        height: 40%;
+        background: linear-gradient(110deg, #13AFB6 20.43%, #03659C 100%);
+        position: relative;
+        clip-path: polygon(50% 15%, 60% 0, 100% 0, 100% 100%, 0 100%, 0 0, 40% 0);
+        color: white;
+    }
+}

@@ -1,0 +1,12 @@
+@import "mixins.scss";
+
+
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    min-height: calc(100vh - 280px);
+    flex: 1;
+}
