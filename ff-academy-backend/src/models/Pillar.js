@@ -1,9 +1,8 @@
-// models/Pillar.js
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const pillarSchema = new mongoose.Schema({
     title: { type: String, required: true },
-    order: { type: Number, required: true, unique: true } 
+    order: { type: Number, required: true, unique: true }
 }, { timestamps: true });
 
-export default mongoose.model("Pillar", pillarSchema);
+module.exports = mongoose.model("Pillar", pillarSchema);
