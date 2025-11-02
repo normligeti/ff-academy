@@ -5,9 +5,9 @@
 
     <div class="content">
         <div class="text">
-            <h4 class="sbold">Pillar 1</h4>
-            <p class="f32 sbold">Personal Growth & Mindset</p>
-            <p class="f32 uc blue sbold">BASIC</p>
+            <h4 class="sbold">Pillar {{ (pillar$ | async)?.order }}</h4>
+            <p class="f32 sbold">{{ (pillar$ | async)?.title }}</p>
+            <p class="f32 uc blue sbold">{{ difficultyName }}</p>
         </div>
         <img src="assets/knowledgebase/book.png" alt="">
     </div>
@@ -17,46 +17,13 @@
     <div class="blue-box">
         <p class="f50 sbold">All Trainings</p>
         <div class="cards">
-            <div class="card">
-                <div class="number f18 sbold">01</div>
+            <div class="card" *ngFor="let training of (trainings$ | async)">
+                <div class="number f18 sbold">0{{ training.order }}</div>
                 <img src="assets/knowledgebase/lesson.png" alt="">
                 <div class="card-content">
-                    <p class="mbold">Why are YOU your most <br> important resource?</p>
-                    <button class="btn-dark-blue xs" [routerLink]="['trainings/1']">start lesson</button>
-                </div>
-            </div>
-            <div class="card disabled">
-                <div class="number f18 sbold">02</div>
-                <img src="assets/knowledgebase/lesson.png" alt="">
-                <div class="card-content">
-                    <p class="mbold">Taking Responsibility <br>
-                        for Your Own Life</p>
-                    <button class="btn-dark-blue xs">start lesson</button>
-                </div>
-            </div>
-            <div class="card disabled">
-                <div class="number f18 sbold">03</div>
-                <img src="assets/knowledgebase/lesson.png" alt="">
-                <div class="card-content">
-                    <p class="mbold">How to Set Realistic, <br>
-                        Motivating Goals?</p>
-                    <button class="btn-dark-blue xs">start lesson</button>
-                </div>
-            </div>
-            <div class="card disabled">
-                <div class="number f18 sbold">04</div>
-                <img src="assets/knowledgebase/lesson.png" alt="">
-                <div class="card-content">
-                    <p class="mbold">Developing a Learning Routine <br> and Maintaining Discipline</p>
-                    <button class="btn-dark-blue xs">start lesson</button>
-                </div>
-            </div>
-            <div class="card disabled">
-                <div class="number f18 sbold">05</div>
-                <img src="assets/knowledgebase/lesson.png" alt="">
-                <div class="card-content">
-                    <p class="mbold">Consistent Work Regardless of <br> Immediate Results</p>
-                    <button class="btn-dark-blue xs">start lesson</button>
+                    <p class="mbold">{{ training.title }}</p>
+                    <button class="btn-dark-blue xs" [routerLink]="['trainings', training.order]">start lesson</button>
+                    <p class="status-test">{{ training.status }}</p>
                 </div>
             </div>
         </div>

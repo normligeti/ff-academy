@@ -84,6 +84,7 @@
 
         p {
             opacity: 50%;
+            // width: 325px;
         }
 
         .icon {
@@ -170,7 +171,9 @@
     
     &.show {
         padding: 64px;
-        max-height: 1066px;
+        // max-height: 1066px;
+        // max-height: 1642px;
+        max-height: 2218px;
         opacity: 1;
         transition: all 0.2s 0s, opacity 0.2s 0.2s;
     }
@@ -188,6 +191,7 @@
         position: relative;
         cursor: pointer;
         transition: all 0.1s;
+        scroll-margin-top: 70px;
 
         h5 {
             position: relative;

@@ -20,70 +20,69 @@
             </div>
         </div>
 
-        <div class="quiz-box" *ngIf="counter < 6" @fadeInOut>
-            <div class="row">
-                <h6 class="blue sbold spacer">Quiz</h6>
-                <p class="f18 number sbold" [ngClass]="{'inactive': counter !== 1 }">01</p>
-                <p class="f18 number sbold" [ngClass]="{'inactive': counter !== 2 }">02</p>
-                <p class="f18 number sbold" [ngClass]="{'inactive': counter !== 3 }">03</p>
-                <p class="f18 number sbold" [ngClass]="{'inactive': counter !== 4 }">04</p>
-                <p class="f18 number sbold" [ngClass]="{'inactive': counter !== 5 }">05</p>
-            </div>
-            <div class="progress-bar">
-                <div class="line" [style.width.%]="counter * 20"></div>
-            </div>
-            <div class="row">
-                <p class="f28 number l sbold">0{{counter}}</p>
-                <p class="mbold spacer">Question</p>
-                <p class="f16">{{5 - counter}} questions remaining</p>
-            </div>
-
-            <div class="question-wrapper">
-                <ng-container *ngFor="let q of questions; index as i">
-                    <div
-                        class="question-content"
-                        [@fadeInOut]
-                        *ngIf="counter === i + 1"
-                    >
-                        <p class="f32 sbold">{{ q.id }}. {{ q.text }}</p>
-                        <div class="answers">
+        <ng-container *ngIf="(quiz$ | async)?.questions as questions">
+            <div class="quiz-box" *ngIf="counter <= questions.length" @fadeInOut>
+                <div class="row">
+                    <h6 class="blue sbold spacer">Quiz</h6>
+                    <p *ngFor="let q of questions; index as i" class="f18 number sbold" [ngClass]="{'inactive': counter !== i + 1 }">0{{ i + 1 }}</p>
+                </div>
+                <div class="progress-bar">
+                    <div class="line" [style.width.%]="counter * (100 / questions.length)"></div>
+                </div>
+                <div class="row">
+                    <p class="f28 number l sbold">0{{counter}}</p>
+                    <p class="mbold spacer">Question</p>
+                    <p class="f16">{{questions.length - counter}} questions remaining</p>
+                </div>
+    
+                <div class="question-wrapper">
+                    <ng-container *ngFor="let q of questions; index as i">
                         <div
-                            class="checkbox-wrapper"
-                            *ngFor="let a of q.answers"
-                            (click)="onSelect(q.id, a)"
+                            class="question-content"
+                            [@fadeInOut]
+                            *ngIf="counter === i + 1"
                         >
-                            <div class="checkbox-border">
-                                <mat-checkbox
-                                    class="display-only"
-                                    [checked]="selectedAnswers[q.id] === a"
-                                    [disabled]="checkedAnswers[q.id]"
-                                    (click)="$event.preventDefault()"
-                                ></mat-checkbox>
+                            <p class="f32 sbold">{{ q.questionId }}. {{ q.text }} --- {{ q.correctAnswer }}</p>
+                            <div class="answers">
+                            <div
+                                class="checkbox-wrapper"
+                                *ngFor="let a of q.answers"
+                                (click)="onSelect(q.questionId, a)"
+                            >
+                                <div class="checkbox-border">
+                                    <mat-checkbox
+                                        class="display-only"
+                                        [checked]="selectedAnswers[q.questionId] === a"
+                                        [disabled]="checkedAnswers[q.questionId]"
+                                        (click)="$event.preventDefault()"
+                                    ></mat-checkbox>
+                                </div>
+                                <p>{{ a }}</p>
                             </div>
-                            <p>{{ a }}</p>
+                            </div>
                         </div>
-                        </div>
-                    </div>
-                </ng-container>
+                    </ng-container>
+                </div>
+                
+                <div class="bottom">
+                    <!-- <button
+                    class="btn-dark-blue small"
+                    (click)="submit()"
+                    *ngIf="!checkedAnswers[counter]"
+                    [disabled]="!selectedAnswers[counter]"
+                    >
+                    submit answer
+                    </button> -->
+    
+                    <button class="btn-dark-blue small" (click)="submit(questions)" [disabled]="!selectedAnswers[counter]"> <p>next question</p></button>
+                </div>
+    
+                  
             </div>
-            
-            <div class="bottom">
-                <!-- <button
-                class="btn-dark-blue small"
-                (click)="submit()"
-                *ngIf="!checkedAnswers[counter]"
-                [disabled]="!selectedAnswers[counter]"
-                >
-                submit answer
-                </button> -->
+        </ng-container>
+        
 
-                <button class="btn-dark-blue small" (click)="submit()" [disabled]="!selectedAnswers[counter]"> <p>next question</p></button>
-            </div>
-
-              
-        </div>
-
-        <div class="result" *ngIf="counter === 6 && success" @fadeInOut>
+        <div class="result" *ngIf="success === true" @fadeInOut>
             <img src="assets/knowledgebase/icons/success.svg" alt="" class="icon">
             <p class="f40 mbold">Congratulations!</p>
             <div>
@@ -91,10 +90,10 @@
                 <p class="f18">Your dedication and effort are paying off — keep moving forward on your journey of growth!</p>
             </div>
             <p class="f24 mbold">Your certificate is now available below.</p>
-            <button class="btn-white s" (click)="increment()">DOWNLOAD YOUR Certificate of Completion</button>
+            <button class="btn-white s" (click)="download()">DOWNLOAD YOUR Certificate of Completion</button>
         </div>
 
-        <div class="result fail" *ngIf="counter === 6 && !success" @fadeInOut>
+        <div class="result fail" *ngIf="success === false" @fadeInOut>
             <img src="assets/knowledgebase/icons/failure.svg" alt="" class="icon">
             <p class="f40 mbold">Not this time… but don’t give up!</p>
             <div>
@@ -104,7 +103,7 @@
             <p class="f24 mbold">You can retake this quiz in 15 days.</p>
         </div>
 
-        <div class="certificate" *ngIf="counter === 7" @fadeInOut>
+        <div class="certificate" *ngIf="fakeDownload" @fadeInOut>
             <img src="assets/knowledgebase/certificate.png" alt="">
         </div>
         

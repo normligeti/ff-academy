@@ -17,7 +17,7 @@
                 <p class="f18 sbold link" [routerLink]="['../']">Back</p>
             </div>
         </div>
-        <h6 class="sbold"><span class="blue">Lesson 1:</span> Why are YOU your most <br> important resource?</h6>
+        <h6 class="sbold"><span class="blue">Lesson {{ (training$ | async)?.order }}:</span> {{ (training$ | async)?.title }}</h6>
         <p>
             The Fireflies business doesn’t start with whether you have a good product or how many acquaintances 
             you have — it starts with who YOU are.

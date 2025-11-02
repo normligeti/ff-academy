@@ -12,41 +12,73 @@
     <img class="scroll-hiddexn" src="assets/knowledgebase/pillars.png" alt="">
 </section>
 
-<section class="section-4">
+<section class="section-4" *ngIf="pillars$ | async as pillars">
     <div class="cards">
-        <div class="s4-card available" (click)="showSection()">
+        <div class="s4-card available" (click)="showSection(pillars[0])">
             <img src="assets/knowledgebase/available-badge.svg" alt="" class="badge">
             <div class="number f28 sbold">01</div>
             <img src="assets/knowledgebase/icons/lock.svg" alt="" class="lock">
             <img src="assets/knowledgebase/icons/mindset.svg" alt="" class="icon">
             <p class="f32 sbold uc center" [innerHTML]="'KNOWLEDGEBASE.SECTION4.CARD1' | translate"></p>
+            <!-- <p class="f32 sbold uc center">{{ pillars[0].title }}</p> -->
         </div>
-        <div class="s4-card">
+        <div class="s4-card available" (click)="showSection(pillars[1])">
             <img src="assets/knowledgebase/available-badge.svg" alt="" class="badge">
             <div class="number f28 sbold">02</div>
             <img src="assets/knowledgebase/icons/lock.svg" alt="" class="lock">
             <img src="assets/knowledgebase/icons/logo-invert.svg" alt="" class="icon">
             <p class="f32 sbold uc center" [innerHTML]="'KNOWLEDGEBASE.SECTION4.CARD2' | translate"></p>
+            <!-- <p class="f32 sbold uc center">{{ pillars[1].title }}</p> -->
+
         </div>
-        <div class="s4-card">
+        <div class="s4-card available" (click)="showSection(pillars[2])">
             <img src="assets/knowledgebase/available-badge.svg" alt="" class="badge">
             <div class="number f28 sbold">03</div>
             <img src="assets/knowledgebase/icons/lock.svg" alt="" class="lock">
             <img src="assets/knowledgebase/icons/network.svg" alt="" class="icon">
             <p class="f32 sbold uc center" [innerHTML]="'KNOWLEDGEBASE.SECTION4.CARD3' | translate"></p>
+            <!-- <p class="f32 sbold uc center">{{ pillars[2].title }}</p> -->
+
         </div>
-        <div class="s4-card">
+        <div class="s4-card available" (click)="showSection(pillars[3])">
             <img src="assets/knowledgebase/available-badge.svg" alt="" class="badge">
             <div class="number f28 sbold">04</div>
             <img src="assets/knowledgebase/icons/lock.svg" alt="" class="lock">
             <img src="assets/knowledgebase/icons/clock.svg" alt="" class="icon">
             <p class="f32 sbold uc center" [innerHTML]="'KNOWLEDGEBASE.SECTION4.CARD4' | translate"></p>
+            <!-- <p class="f32 sbold uc center">{{ pillars[3].title }}</p> -->
+
         </div>
     </div>
 </section>
 
 <section class="section-5">
-    <div class="dropdown" (click)="toggleDropdown()">
+    <!--  -->
+    <ng-container *ngFor="let diff of currentDifficulties; index as i">
+        <div class="dropdown" [id]="'dropdown-' + i"  (click)="toggleDropdown(i)">
+            <img src="assets/knowledgebase/dropdown-active.svg" alt="" class="bg">
+            <h5 class="sbold uc">{{ diff.name }}</h5>
+            <p class="f24 sbold uc">{{ currentPillar.title }}</p>
+            <img src="assets/knowledgebase/icons/{{openStates[i] ? 'minus' : 'plus'}}.svg" alt="" class="icon">
+        </div>
+    
+        <div class="dropdown-box" [ngClass]="{'open': openStates[i]}">
+            <img src="assets/knowledgebase/book.png" alt="">
+            <div class="text">
+                <p class="f32 sbold">{{ diff.subTitle }}</p>
+                <p class="f24">
+                    {{ diff.subText }}
+                    In these 5 lessons, you’ll learn how to become your most valuable resource, take full responsibility for 
+                    your life, set truly motivating goals, build a sustainable learning routine, and work consistently — regardless of immediate results. 
+                    This module will help you develop the mindset and discipline that all your future success will be built upon.
+                </p>
+                <button class="btn-dark-blue small" [routerLink]="['pillars', currentPillar.order, diff.name]" [innerHTML]="'KNOWLEDGEBASE.SECTION5.LEVEL1.BUTTON' | translate"></button>
+            </div>
+        </div>
+    </ng-container>
+    <!--  -->
+
+    <!-- <div class="dropdown" (click)="toggleDropdown()">
         <img src="assets/knowledgebase/dropdown-active.svg" alt="" class="bg">
         <h5 class="sbold uc" [innerHTML]="'KNOWLEDGEBASE.SECTION5.LEVEL1.TITLE' | translate"></h5>
         <p class="f24 sbold uc" [innerHTML]="'KNOWLEDGEBASE.SECTION5.LEVEL1.SUBTITLE' | translate"></p>
@@ -78,5 +110,5 @@
         <img src="assets/knowledgebase/icons/plus.svg" alt="" class="icon">
     </div>
 
-    <div class="dropdown-box"></div>
+    <div class="dropdown-box"></div> -->
 </section>
