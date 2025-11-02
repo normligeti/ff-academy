@@ -5,7 +5,8 @@ const progressSchema = new mongoose.Schema({
     difficultyOrder: { type: Number, required: true },      // 1=basic, 2=intermediate, 3=master
     trainingOrder: { type: Number, required: true },        // training index within difficulty
     completed: { type: Boolean, default: false },
-    completedAt: { type: Date }
+    completedAt: { type: Date },
+    seenVersion: { type: Number, default: 1 }
 });
 
 const userSchema = new mongoose.Schema({

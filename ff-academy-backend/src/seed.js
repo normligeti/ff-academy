@@ -83,7 +83,9 @@ async function seed() {
                 const difficulty = await Difficulty.create({
                     pillarId: pillar._id,
                     name: difficulties[d].name,
-                    order: difficulties[d].order
+                    order: difficulties[d].order,
+                    subTitle: `Subtitle for ${difficulties[d].name} of ${pillar.title}`,
+                    subText: `Subtext for ${difficulties[d].name} of ${pillar.title}`
                 });
                 console.log(`   ➡️ Difficulty: ${difficulty.name}`);
 
@@ -99,8 +101,8 @@ async function seed() {
                 for (let i = 0; i < trainingTitles.length; i++) {
                     const training = await Training.create({
                         difficultyId: difficulty._id,
-                        title: trainingTitles[i],
-                        description: "This is a placeholder text lecture for the training.",
+                        title: `${trainingTitles[i]} for ${pillar.title} ${difficulty.name}`,
+                        description: `This is a placeholder text lecture for training ${i+1} ${difficulty.name}.`,
                         order: i + 1
                     });
                     createdTrainings.push(training);

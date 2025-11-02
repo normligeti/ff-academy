@@ -18,6 +18,10 @@ const curriculumService = {
         return Difficulty.find({ pillarId }).sort({ order: 1 }).lean();
     },
 
+    async listAllDifficulties() {
+        return Difficulty.find({}).sort({ order: 1 }).lean();
+    },
+
     async findDifficultyByPillarIdAndOrder(pillarId, difficultyOrder) {
         return Difficulty.findOne({ pillarId, order: Number(difficultyOrder) }).lean();
     },

@@ -1,11 +1,12 @@
 const curriculumService = require("../services/curriculumService");
 const userService = require("../services/userService");
+const trainingService = require("../services/trainingService");
 
 const DIFFICULTY_NAME_TO_ORDER = { basic: 1, intermediate: 2, master: 3 };
 const DIFFICULTY_ORDER_TO_NAME = { 1: "basic", 2: "intermediate", 3: "master" };
 
 const curriculumController = {
-    // GET /api/pillars
+    // GET /pillars
     async getPillars(req, res) {
         try {
             const pillars = await curriculumService.getAllPillars();
@@ -16,7 +17,7 @@ const curriculumController = {
         }
     },
 
-    // GET /api/pillars/:pillarOrder/difficulties
+    // GET /pillars/:pillarOrder/difficulties
     async getDifficultiesForPillar(req, res) {
         try {
             const { pillarOrder } = req.params;
@@ -26,6 +27,7 @@ const curriculumController = {
             }
 
             const diffs = await curriculumService.listDifficultiesByPillarId(pillar._id);
+            // unnecessary map cause name is already stored?
             const data = diffs.map(d => ({
                 _id: d._id,
                 pillarId: d.pillarId,
@@ -40,10 +42,29 @@ const curriculumController = {
         }
     },
 
-    // GET /api/pillars/:pillarOrder/:difficultyName/trainings
+    // GET /difficulties
+    async getAllDifficulties(req, res) {
+        try {
+            const diffs = await curriculumService.listAllDifficulties();
+            // const data = diffs.map(d => ({
+            //     _id: d._id,
+            //     pillarId: d.pillarId,
+            //     order: d.order,
+            //     name: DIFFICULTY_ORDER_TO_NAME[d.order] || String(d.order)
+            // }));
+
+            res.json(diffs);
+        } catch (err) {
+            console.error("getDifficultiesForPillar error:", err);
+            res.status(500).json({ message: "Failed to fetch difficulties" });
+        }
+    },
+
+    // GET /pillars/:pillarOrder/:difficultyName/trainings
     async getTrainingsForDifficulty(req, res) {
         try {
             const { pillarOrder, difficultyName } = req.params;
+            // const { userId, pillarOrder, difficultyName } = req.params;
             const difficultyOrder = DIFFICULTY_NAME_TO_ORDER[difficultyName];
             if (!difficultyOrder) {
                 return res.status(400).json({ message: "Invalid difficulty name" });
@@ -59,7 +80,8 @@ const curriculumController = {
                 return res.status(404).json({ message: "Difficulty not found" });
             }
 
-            const trainings = await curriculumService.listTrainingsByDifficultyId(difficulty._id);
+            // const trainings = await curriculumService.listTrainingsByDifficultyId(difficulty._id);
+            const trainings = await trainingService.getTrainingsForUser('68f027ed4ac1082b77d6d3c3', difficulty._id);
             res.json(trainings);
         } catch (err) {
             console.error("getTrainingsForDifficulty error:", err);
@@ -67,9 +89,7 @@ const curriculumController = {
         }
     },
 
-    // fentebbi feldobja az összes traininget adott pillar adott difficultyjéhez, de hogy az user számára elérhető e
-    // az csak itt lentebb kerül ellenőrzésre
-    // GET /api/pillars/:pillarOrder/:difficultyName/trainings/:trainingOrder
+    // GET /pillars/:pillarOrder/:difficultyName/trainings/:trainingOrder
     async getTrainingDetail(req, res) {
         try {
             const { pillarOrder, difficultyName, trainingOrder } = req.params;
@@ -117,7 +137,7 @@ const curriculumController = {
     },
 
     // ebben nem is kéne elérhetőséget ellenőrizni
-    // GET /api/pillars/:pillarOrder/:difficultyName/trainings/:trainingOrder/quiz
+    // GET /pillars/:pillarOrder/:difficultyName/trainings/:trainingOrder/quiz
     async getQuizForTraining(req, res) {
         try {
             const { pillarOrder, difficultyName, trainingOrder } = req.params;

@@ -3,6 +3,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes");
+const curriculumRoutes = require("./routes/curriculumRoutes");
 
 const app = express();
 
@@ -19,6 +20,7 @@ connectDB();
 
 // Routes
 app.use("/users", userRoutes);
+app.use("/curriculum", curriculumRoutes);
 
 // Health check
 app.get("/health", (req, res) => {
