@@ -14,5 +14,18 @@ export const ProfileActions = createActionGroup({
     'Logout': emptyProps(),
     'Logout Success': emptyProps(),
     'Logout Failure': props<{ error: any }>(),
+
+    'Save Progress': props<{
+        userId: string;
+        progress: {
+            pillarOrder: number;
+            difficultyOrder: number;
+            trainingOrder: number;
+            completed?: boolean;
+            failed?: boolean;
+        };
+    }>(),
+    'Save Progress Success': props<{ progress: any[] }>(),
+    'Save Progress Failure': props<{ error: any }>()
   }
 });

@@ -8,6 +8,7 @@ import { Store } from '@ngrx/store';
 import { CurriculumSelectors } from '../../../core/store/curriculum/curriculum.selectors';
 import { CurriculumActions } from '../../../core/store/curriculum/curriculum.actions';
 import { filter, firstValueFrom, take } from 'rxjs';
+import { ProfileActions } from '../../../core/store/profile/profile.actions';
 
 @Component({
   selector: 'app-quiz',
@@ -95,6 +96,7 @@ export class QuizComponent {
             );
             this.success = allCorrect;
             console.log('Quiz success?', this.success);
+            this.onQuizComplete(this.success);
         }
 
         this.counter++;
@@ -103,5 +105,28 @@ export class QuizComponent {
     download() {
         this.success = null;
         this.fakeDownload = true;
+    }
+
+    onQuizComplete(passed: boolean) {
+        const progress = {
+            pillarOrder: this.pillarOrder,
+            difficultyOrder: this.getDifficultyOrder(this.difficultyName),
+            trainingOrder: this.trainingOrder,
+            completed: passed,
+            failed: !passed
+        };
+
+        this.store.dispatch(
+            ProfileActions.saveProgress({ userId: '68f027ed4ac1082b77d6d3c3', progress })
+        );
+    }
+
+    getDifficultyOrder(name: string): number {
+        switch (name.toLowerCase()) {
+            case 'basic': return 1;
+            case 'intermediate': return 2;
+            case 'master': return 3;
+            default: return 0;
+        }
     }
 }

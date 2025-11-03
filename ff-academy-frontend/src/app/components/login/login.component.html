@@ -4,17 +4,32 @@
         <form #formRef="ngForm" class="form">
 
             <div class="label">
-                <p class="lbold">Email address or username</p>
+                <p class="lbold">Email address</p>
             </div>
-            <input type="text" name="email" [(ngModel)]="formData.email" id="" class="input" required #email="ngModel">
+            <div class="input-wrapper">
+                <input class="input" type="email" [(ngModel)]="formData.email" name="email" required email #email="ngModel" pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$">
+                <div class="error" *ngIf="email.invalid && (email.dirty || email.touched)">
+                    <p class="f18" *ngIf="email.errors?.['required']">
+                        Email is required.
+                    </p>
+                    <p class="f18" *ngIf="email.errors?.['email'] || email.errors?.['pattern']">
+                        Please enter a valid email address.
+                    </p>
+                </div>
+            </div>
 
             <div class="label">
                 <p class="lbold">Password</p>
                 <p class="f14">Forgot password</p>
             </div>
             <div class="input-wrapper">
-                <input type="password" name="password" [(ngModel)]="formData.password"  id="" class="input" required #password="ngModel">
-                <img class="input-icon" src="assets/login/visibility.svg" alt="">
+                <input [type]="showPassword ? 'text' : 'password'" name="password" [(ngModel)]="formData.password"  id="" class="input" required #password="ngModel">
+                <img class="input-icon" src="assets/login/visibility.svg" alt="" (click)="showPassword = !showPassword">
+                <div class="error" *ngIf="password.invalid && (password.dirty || password.touched)">
+                    <p class="f18" *ngIf="password.errors?.['required']">
+                        Password is required.
+                    </p>
+                </div>
             </div>
 
             <div class="checkbox-wrapper">
@@ -23,10 +38,10 @@
             </div>
             
             <button class="btn-dark-blue" [disabled]="formRef.invalid" (click)="login()" *ngIf="counter === 0">
-                Sign in
+                Log in
             </button>
             <button class="btn-dark-blue disabled" (click)="login()" *ngIf="counter === 1">
-                Signing in...
+                Logging in...
                 <loader color="white" [size]="20"></loader>
             </button>
         </form>

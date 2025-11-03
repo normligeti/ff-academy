@@ -4,6 +4,7 @@ import { catchError, map, concatMap, switchMap } from 'rxjs/operators';
 import { ProfileActions } from './profile.actions';
 import { of } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
+import { ProfileService } from '../../services/profile.service';
 // import { AuthService } from '../../services/AuthService';
 // import { ProfileService } from '../../services/profile.service';
 
@@ -63,9 +64,25 @@ export class ProfileEffects {
     //     );
     // });
 
+    saveProgress$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(ProfileActions.saveProgress),
+            switchMap(({ userId, progress }) =>
+                this.profileService.saveProgress(userId, progress).pipe(
+                    map(updated =>
+                        ProfileActions.saveProgressSuccess({ progress: updated })
+                    ),
+                    catchError(error =>
+                        of(ProfileActions.saveProgressFailure({ error }))
+                    )
+                )
+            )
+        )
+    );
+
 
     constructor(
         private authService: AuthService,
-        // private profileService: ProfileService,
+        private profileService: ProfileService,
     ) {}
 }

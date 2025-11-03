@@ -23,4 +23,8 @@ export class ProfileService {
     createUser(user: User): Observable<User> {
         return this.http.post<User>(`${this.baseUrl}/users/create`, user);
     }
+
+    saveProgress(userId: string, progress: any): Observable<any[]> {
+        return this.http.post<any[]>(`${this.baseUrl}/users/${userId}/progress`, progress);
+    }
 }

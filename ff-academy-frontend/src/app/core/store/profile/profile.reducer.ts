@@ -66,6 +66,18 @@ export const reducer = createReducer(
         ...initialState,
         error
     })),
+
+    on(ProfileActions.saveProgress, state => ({ ...state, loading: true })),
+    on(ProfileActions.saveProgressSuccess, (state, { progress }) => ({
+        ...state,
+        loading: false,
+        progress
+    })),
+    on(ProfileActions.saveProgressFailure, (state, { error }) => ({
+        ...state,
+        loading: false,
+        error
+    }))
 );
 
 export const profileFeature = createFeature({

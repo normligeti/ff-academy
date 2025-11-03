@@ -18,6 +18,7 @@ export class LoginComponent {
         private store: Store
     ) {}
 
+    showPassword = false;
     counter = 0;
 
     formData = {
