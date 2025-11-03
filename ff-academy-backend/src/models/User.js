@@ -6,8 +6,11 @@ const progressSchema = new mongoose.Schema({
     trainingOrder: { type: Number, required: true },        // training index within difficulty
     completed: { type: Boolean, default: false },
     completedAt: { type: Date },
-    seenVersion: { type: Number, default: 1 }
-});
+    seenVersion: { type: Number, default: 1 },
+    failedAttempts: { type: Number, default: 0 },
+    lastFailedAt: { type: Date },
+    retryAvailableAt: { type: Date }
+}, { _id: false });
 
 const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },

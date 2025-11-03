@@ -28,14 +28,14 @@ const curriculumController = {
 
             const diffs = await curriculumService.listDifficultiesByPillarId(pillar._id);
             // unnecessary map cause name is already stored?
-            const data = diffs.map(d => ({
-                _id: d._id,
-                pillarId: d.pillarId,
-                order: d.order,
-                name: DIFFICULTY_ORDER_TO_NAME[d.order] || String(d.order)
-            }));
+            // const data = diffs.map(d => ({
+            //     _id: d._id,
+            //     pillarId: d.pillarId,
+            //     order: d.order,
+            //     name: DIFFICULTY_ORDER_TO_NAME[d.order] || String(d.order)
+            // }));
 
-            res.json(data);
+            res.json(diffs);
         } catch (err) {
             console.error("getDifficultiesForPillar error:", err);
             res.status(500).json({ message: "Failed to fetch difficulties" });
@@ -136,7 +136,6 @@ const curriculumController = {
         }
     },
 
-    // ebben nem is kéne elérhetőséget ellenőrizni
     // GET /pillars/:pillarOrder/:difficultyName/trainings/:trainingOrder/quiz
     async getQuizForTraining(req, res) {
         try {
