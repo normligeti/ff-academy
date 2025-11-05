@@ -14,11 +14,8 @@ import { CommonModule } from '@angular/common';
 export class TrainingDetailComponent {
     private store = inject(Store);
 
-    pillarOrder!: number;
-    difficultyName!: string;
-    trainingOrder!: number;
-
-    training$ = this.store.select(CurriculumSelectors.selectTrainingDetail);
+    trainingId!: string;
+    training$ = this.store.select(CurriculumSelectors.selectSelectedTraining);
 
     constructor(
         private route: ActivatedRoute
@@ -26,15 +23,11 @@ export class TrainingDetailComponent {
 
     ngOnInit() {
         this.route.paramMap.subscribe(params => {
-            this.pillarOrder = Number(params.get('pillarOrder'));
-            this.difficultyName = params.get('difficultyName') || '';
-            this.trainingOrder = Number(params.get('trainingOrder'));
+            this.trainingId = String(params.get('trainingId'));
 
             this.store.dispatch(
                 CurriculumActions.loadTrainingDetail({
-                    pillarOrder: this.pillarOrder,
-                    difficultyName: this.difficultyName,
-                    trainingOrder: this.trainingOrder
+                    trainingId: this.trainingId
                 })
             );
         });

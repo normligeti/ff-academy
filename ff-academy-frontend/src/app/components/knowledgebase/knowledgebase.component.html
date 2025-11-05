@@ -53,12 +53,11 @@
 </section>
 
 <section class="section-5">
-    <!--  -->
-    <ng-container *ngFor="let diff of currentDifficulties; index as i">
+    <ng-container *ngFor="let diff of selectedPillar?.difficulties; index as i">
         <div class="dropdown" [id]="'dropdown-' + i"  (click)="toggleDropdown(i)">
             <img src="assets/knowledgebase/dropdown-active.svg" alt="" class="bg">
             <h5 class="sbold uc">{{ diff.name }}</h5>
-            <p class="f24 sbold uc">{{ currentPillar.title }}</p>
+            <p class="f24 sbold uc">{{ selectedPillar.title }}</p>
             <img src="assets/knowledgebase/icons/{{openStates[i] ? 'minus' : 'plus'}}.svg" alt="" class="icon">
         </div>
     
@@ -72,43 +71,8 @@
                     your life, set truly motivating goals, build a sustainable learning routine, and work consistently — regardless of immediate results. 
                     This module will help you develop the mindset and discipline that all your future success will be built upon.
                 </p>
-                <button class="btn-dark-blue small" [routerLink]="['pillars', currentPillar.order, diff.name]" [innerHTML]="'KNOWLEDGEBASE.SECTION5.LEVEL1.BUTTON' | translate"></button>
+                <button class="btn-dark-blue small" [routerLink]="['pillars', selectedPillar.order, diff.name]" [innerHTML]="'KNOWLEDGEBASE.SECTION5.LEVEL1.BUTTON' | translate"></button>
             </div>
         </div>
     </ng-container>
-    <!--  -->
-
-    <!-- <div class="dropdown" (click)="toggleDropdown()">
-        <img src="assets/knowledgebase/dropdown-active.svg" alt="" class="bg">
-        <h5 class="sbold uc" [innerHTML]="'KNOWLEDGEBASE.SECTION5.LEVEL1.TITLE' | translate"></h5>
-        <p class="f24 sbold uc" [innerHTML]="'KNOWLEDGEBASE.SECTION5.LEVEL1.SUBTITLE' | translate"></p>
-        <img src="assets/knowledgebase/icons/{{dropdownOpen ? 'minus' : 'plus'}}.svg" alt="" class="icon">
-    </div>
-
-    <div class="dropdown-box" [ngClass]="{'open': dropdownOpen}">
-        <img src="assets/knowledgebase/book.png" alt="">
-        <div class="text">
-            <p class="f32 sbold" [innerHTML]="'KNOWLEDGEBASE.SECTION5.LEVEL1.DESCRIPTION_SHORT' | translate"></p>
-            <p class="f24" [innerHTML]="'KNOWLEDGEBASE.SECTION5.LEVEL1.DESCRIPTION_LONG' | translate"></p>
-            <button class="btn-dark-blue small" [routerLink]="['pillars/1/basic']" [innerHTML]="'KNOWLEDGEBASE.SECTION5.LEVEL1.BUTTON' | translate"></button>
-        </div>
-    </div>
-
-    <div class="dropdown inactive">
-        <img src="assets/knowledgebase/dropdown-inactive.svg" alt="" class="bg">
-        <h5 class="sbold uc" [innerHTML]="'KNOWLEDGEBASE.SECTION5.LEVEL2.TITLE' | translate"></h5>
-        <p class="f24 sbold uc" [innerHTML]="'KNOWLEDGEBASE.SECTION5.LEVEL2.SUBTITLE' | translate"></p>
-        <img src="assets/knowledgebase/icons/plus.svg" alt="" class="icon">
-    </div>
-
-    <div class="dropdown-box"></div>
-
-    <div class="dropdown inactive">
-        <img src="assets/knowledgebase/dropdown-inactive.svg" alt="" class="bg">
-        <h5 class="sbold uc" [innerHTML]="'KNOWLEDGEBASE.SECTION5.LEVEL3.TITLE' | translate"></h5>
-        <p class="f24 sbold uc" [innerHTML]="'KNOWLEDGEBASE.SECTION5.LEVEL3.SUBTITLE' | translate"></p>
-        <img src="assets/knowledgebase/icons/plus.svg" alt="" class="icon">
-    </div>
-
-    <div class="dropdown-box"></div> -->
 </section>

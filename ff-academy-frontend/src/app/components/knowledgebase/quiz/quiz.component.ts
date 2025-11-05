@@ -31,12 +31,15 @@ import { ProfileActions } from '../../../core/store/profile/profile.actions';
 
 export class QuizComponent {
     private store = inject(Store);
+    trainingId!: string;
+    // trainingOrder!: number;
 
-    pillarOrder!: number;
-    difficultyName!: string;
-    trainingOrder!: number;
-    quiz$ = this.store.select(CurriculumSelectors.selectQuiz);
-    // questions: any[];
+    // pillarOrder!: number;
+    // difficultyName!: string;
+    
+    quiz$ = this.store.select(CurriculumSelectors.selectSelectedQuiz);
+    training$ = this.store.select(CurriculumSelectors.selectSelectedTraining);
+    
     counter = 1;
 
     constructor(
@@ -45,25 +48,21 @@ export class QuizComponent {
 
     ngOnInit() {
         this.route.paramMap.subscribe(params => {
-            this.pillarOrder = Number(params.get('pillarOrder'));
-            this.difficultyName = params.get('difficultyName') || '';
-            this.trainingOrder = Number(params.get('trainingOrder'));
+            this.trainingId = String(params.get('trainingId'));
+            // this.pillarOrder = Number(params.get('pillarOrder'));
+            // this.difficultyName = String(params.get('difficultyName'));
 
             this.store.dispatch(
                 CurriculumActions.loadQuiz({
-                    pillarOrder: this.pillarOrder,
-                    difficultyName: this.difficultyName,
-                    trainingOrder: this.trainingOrder
+                    trainingId: this.trainingId
                 })
             );
 
-            // this.quiz$.pipe(
-            //     filter(q => !!q && !!q.questions),
-            //     take(1)
-            // )
-            // .subscribe(quiz => {
-            //     this.questions = quiz?.questions;
-            // });
+            this.store.dispatch(
+                CurriculumActions.loadTrainingDetail({
+                    trainingId: this.trainingId
+                })
+            );
         });
     }
 
@@ -108,18 +107,25 @@ export class QuizComponent {
     }
 
     onQuizComplete(passed: boolean) {
-        const progress = {
-            pillarOrder: this.pillarOrder,
-            difficultyOrder: this.getDifficultyOrder(this.difficultyName),
-            trainingOrder: this.trainingOrder,
-            completed: passed,
-            failed: !passed
-        };
-
-        this.store.dispatch(
-            ProfileActions.saveProgress({ userId: '68f027ed4ac1082b77d6d3c3', progress })
-        );
+        this.training$.pipe(take(1)).subscribe(training => {
+            const status = passed ? 'completed' : 'failed';
+    
+            const progress = {
+                trainingId: training?._id,
+                path: `${training?.path}`,
+                status,
+                seenVersion: training?.version ?? 1
+            };
+    
+            this.store.dispatch(
+                ProfileActions.saveProgress({
+                    userId: '68f027ed4ac1082b77d6d3c3',
+                    progressData: progress
+                })
+            );
+        });
     }
+    
 
     getDifficultyOrder(name: string): number {
         switch (name.toLowerCase()) {

@@ -4,61 +4,142 @@ import { CurriculumActions } from './curriculum.actions';
 export const curriculumFeatureKey = 'curriculum';
 
 export interface CurriculumState {
+    // Pillars
     pillars: any[];
-    difficulties: any[];
-    trainings: any[];
-    trainingDetail: any | null;
-    quiz: any | null;
-    loading: boolean;
+    loadingPillars: boolean;
     loadedPillars: boolean;
-    error: any;
+    pillarsError: any;
+
+    // Trainings
+    trainings: any[];
+    loadingTrainings: boolean;
+    loadedTrainings: boolean;
+    trainingsError: any;
+
+    // Selected training
+    selectedTraining: any | null;
+    loadingTrainingDetail: boolean;
+    loadedTrainingDetail: boolean;
+    trainingDetailError: any;
+
+    // Selected quiz
+    selectedQuiz: any | null;
+    loadingQuiz: boolean;
+    loadedQuiz: boolean;
+    quizError: any;
 }
 
 export const initialState: CurriculumState = {
+    // Pillars
     pillars: [],
-    difficulties: [],
-    trainings: [],
-    trainingDetail: null,
-    quiz: null,
-    loading: false,
+    loadingPillars: false,
     loadedPillars: false,
-    error: null
+    pillarsError: null,
+
+    // Trainings
+    trainings: [],
+    loadingTrainings: false,
+    loadedTrainings: false,
+    trainingsError: null,
+
+    // Training detail
+    selectedTraining: null,
+    loadingTrainingDetail: false,
+    loadedTrainingDetail: false,
+    trainingDetailError: null,
+
+    // Quiz
+    selectedQuiz: null,
+    loadingQuiz: false,
+    loadedQuiz: false,
+    quizError: null
 };
 
 export const reducer = createReducer(
     initialState,
 
-    // Pillars
-    on(CurriculumActions.loadPillars, state => ({ ...state, loading: true, error: null })),
-    on(CurriculumActions.loadPillarsSuccess, (state, { pillars }) => ({ ...state, loading: false, loadedPillars: true, pillars })),
-    on(CurriculumActions.loadPillarsFailure, (state, { error }) => ({ ...state, loading: false, loadedPillars: false, error })),
+    // --- PILLARS ---
+    on(CurriculumActions.loadPillars, state => ({
+        ...state,
+        loadingPillars: true,
+        loadedPillars: false,
+        pillarsError: null
+    })),
+    on(CurriculumActions.loadPillarsSuccess, (state, { pillars }) => ({
+        ...state,
+        loadingPillars: false,
+        loadedPillars: true,
+        pillars
+    })),
+    on(CurriculumActions.loadPillarsFailure, (state, { error }) => ({
+        ...state,
+        loadingPillars: false,
+        loadedPillars: false,
+        pillarsError: error
+    })),
 
-    // Difficulties
-    on(CurriculumActions.loadDifficulties, state => ({ ...state, loading: true, error: null })),
-    on(CurriculumActions.loadDifficultiesSuccess, (state, { difficulties }) => ({ ...state, loading: false, difficulties })),
-    on(CurriculumActions.loadDifficultiesFailure, (state, { error }) => ({ ...state, loading: false, error })),
+    // --- TRAININGS ---
+    on(CurriculumActions.loadTrainings, state => ({
+        ...state,
+        loadingTrainings: true,
+        loadedTrainings: false,
+        trainingsError: null
+    })),
+    on(CurriculumActions.loadTrainingsSuccess, (state, { trainings }) => ({
+        ...state,
+        loadingTrainings: false,
+        loadedTrainings: true,
+        trainings
+    })),
+    on(CurriculumActions.loadTrainingsFailure, (state, { error }) => ({
+        ...state,
+        loadingTrainings: false,
+        loadedTrainings: false,
+        trainingsError: error
+    })),
 
-    on(CurriculumActions.loadAllDifficulties, state => ({ ...state, loading: true, error: null })),
-    on(CurriculumActions.loadAllDifficultiesSuccess, (state, { difficulties }) => ({ ...state, loading: false, difficulties })),
-    on(CurriculumActions.loadAllDifficultiesFailure, (state, { error }) => ({ ...state, loading: false, error })),
+    // --- TRAINING DETAIL ---
+    on(CurriculumActions.loadTrainingDetail, state => ({
+        ...state,
+        loadingTrainingDetail: true,
+        loadedTrainingDetail: false,
+        trainingDetailError: null
+    })),
+    on(CurriculumActions.loadTrainingDetailSuccess, (state, { detail }) => ({
+        ...state,
+        loadingTrainingDetail: false,
+        loadedTrainingDetail: true,
+        selectedTraining: detail
+    })),
+    on(CurriculumActions.loadTrainingDetailFailure, (state, { error }) => ({
+        ...state,
+        loadingTrainingDetail: false,
+        loadedTrainingDetail: false,
+        trainingDetailError: error
+    })),
 
-    // Trainings
-    on(CurriculumActions.loadTrainings, state => ({ ...state, loading: true, error: null })),
-    on(CurriculumActions.loadTrainingsSuccess, (state, { trainings }) => ({ ...state, loading: false, trainings })),
-    on(CurriculumActions.loadTrainingsFailure, (state, { error }) => ({ ...state, loading: false, error })),
-
-    // Training detail
-    on(CurriculumActions.loadTrainingDetail, state => ({ ...state, loading: true, error: null })),
-    on(CurriculumActions.loadTrainingDetailSuccess, (state, { detail }) => ({ ...state, loading: false, trainingDetail: detail })),
-    on(CurriculumActions.loadTrainingDetailFailure, (state, { error }) => ({ ...state, loading: false, error })),
-
-    // Quiz
-    on(CurriculumActions.loadQuiz, state => ({ ...state, loading: true, error: null })),
-    on(CurriculumActions.loadQuizSuccess, (state, { quiz }) => ({ ...state, loading: false, quiz })),
-    on(CurriculumActions.loadQuizFailure, (state, { error }) => ({ ...state, loading: false, error })),
+    // --- QUIZ ---
+    on(CurriculumActions.loadQuiz, state => ({
+        ...state,
+        loadingQuiz: true,
+        loadedQuiz: false,
+        quizError: null
+    })),
+    on(CurriculumActions.loadQuizSuccess, (state, { quiz }) => ({
+        ...state,
+        loadingQuiz: false,
+        loadedQuiz: true,
+        selectedQuiz: quiz
+    })),
+    on(CurriculumActions.loadQuizFailure, (state, { error }) => ({
+        ...state,
+        loadingQuiz: false,
+        loadedQuiz: false,
+        quizError: error
+    }))
 );
 
 export const curriculumFeature = createFeature({
     name: curriculumFeatureKey,
-    reducer,
+    reducer
 });

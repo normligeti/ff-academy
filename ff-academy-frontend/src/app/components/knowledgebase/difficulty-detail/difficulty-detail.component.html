@@ -22,8 +22,23 @@
                 <img src="assets/knowledgebase/lesson.png" alt="">
                 <div class="card-content">
                     <p class="mbold">{{ training.title }}</p>
-                    <button class="btn-dark-blue xs" [routerLink]="['trainings', training.order]">start lesson</button>
-                    <p class="status-test">{{ training.status }}</p>
+                    <button class="btn-dark-blue xs" [routerLink]="['trainings', training._id]">start lesson</button>
+                    <p class="status-test">{{ training.userProgress.status }}
+                        <!--  -->
+                        <span *ngIf="training.userProgress?.status === 'failed'">
+                            <ng-container *ngIf="trainingsCountdowns[training._id] as countdown$">
+                                <ng-container *ngIf="(countdown$ | async) as t">
+                                    <span *ngIf="t.totalMs > 0; else retryNow">
+                                        <span>({{ t.days }}d {{ t.hours }}h {{ t.minutes }}m {{ t.seconds }}s)</span>
+                                    </span>
+                                    <ng-template #retryNow>
+                                        <span>Retry available now!</span>
+                                    </ng-template>
+                                </ng-container>
+                            </ng-container>
+                        </span>
+                        <!--  -->
+                    </p>
                 </div>
             </div>
         </div>

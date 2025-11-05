@@ -13,8 +13,8 @@ export const routes: Routes = [
         children: [
             { path: '', component: KnowledgebaseComponent },
             { path: 'pillars/:pillarOrder/:difficultyName', component: DifficultyDetailComponent },
-            { path: 'pillars/:pillarOrder/:difficultyName/trainings/:trainingOrder', component: TrainingDetailComponent },
-            { path: 'pillars/:pillarOrder/:difficultyName/trainings/:trainingOrder/quiz', component: QuizComponent }
+            { path: 'pillars/:pillarOrder/:difficultyName/trainings/:trainingId', component: TrainingDetailComponent },
+            { path: 'pillars/:pillarOrder/:difficultyName/trainings/:trainingId/quiz', component: QuizComponent }
         ]
     },
     { path: 'login', component: LoginComponent },

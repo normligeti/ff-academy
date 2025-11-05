@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, concatMap, switchMap } from 'rxjs/operators';
+import { catchError, map, concatMap, switchMap, mergeMap } from 'rxjs/operators';
 import { ProfileActions } from './profile.actions';
 import { of } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
@@ -67,10 +67,10 @@ export class ProfileEffects {
     saveProgress$ = createEffect(() =>
         this.actions$.pipe(
             ofType(ProfileActions.saveProgress),
-            switchMap(({ userId, progress }) =>
-                this.profileService.saveProgress(userId, progress).pipe(
-                    map(updated =>
-                        ProfileActions.saveProgressSuccess({ progress: updated })
+            mergeMap(({ userId, progressData }) =>
+                this.profileService.saveUserProgress(userId, progressData).pipe(
+                    map(updatedProgress =>
+                        ProfileActions.saveProgressSuccess({ updatedProgress })
                     ),
                     catchError(error =>
                         of(ProfileActions.saveProgressFailure({ error }))

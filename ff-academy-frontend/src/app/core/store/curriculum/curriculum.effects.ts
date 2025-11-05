@@ -1,6 +1,7 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, mergeMap, of } from 'rxjs';
+import { of } from 'rxjs';
+import { mergeMap, map, catchError } from 'rxjs/operators';
 import { CurriculumService } from '../../services/curriculum.service';
 import { CurriculumActions } from './curriculum.actions';
 
@@ -8,10 +9,9 @@ import { CurriculumActions } from './curriculum.actions';
 export class CurriculumEffects {
     actions$ = inject(Actions);
 
-    constructor(
-        private curriculumService: CurriculumService
-    ) {}
+    constructor(private curriculumService: CurriculumService) {}
 
+    // --- Load Pillars ---
     loadPillars$ = createEffect(() =>
         this.actions$.pipe(
             ofType(CurriculumActions.loadPillars),
@@ -24,30 +24,7 @@ export class CurriculumEffects {
         )
     );
 
-    loadDifficulties$ = createEffect(() =>
-        this.actions$.pipe(
-            ofType(CurriculumActions.loadDifficulties),
-            mergeMap(({ pillarOrder }) =>
-                this.curriculumService.getDifficulties(pillarOrder).pipe(
-                    map(difficulties => CurriculumActions.loadDifficultiesSuccess({ difficulties })),
-                    catchError(error => of(CurriculumActions.loadDifficultiesFailure({ error })))
-                )
-            )
-        )
-    );
-
-    loadAllDifficulties$ = createEffect(() =>
-        this.actions$.pipe(
-            ofType(CurriculumActions.loadAllDifficulties),
-            mergeMap(() =>
-                this.curriculumService.getAllDifficulties().pipe(
-                    map(difficulties => CurriculumActions.loadAllDifficultiesSuccess({ difficulties })),
-                    catchError(error => of(CurriculumActions.loadAllDifficultiesFailure({ error })))
-                )
-            )
-        )
-    );
-
+    // --- Load Trainings for a difficulty ---
     loadTrainings$ = createEffect(() =>
         this.actions$.pipe(
             ofType(CurriculumActions.loadTrainings),
@@ -60,11 +37,12 @@ export class CurriculumEffects {
         )
     );
 
+    // --- Load Training Detail by ID ---
     loadTrainingDetail$ = createEffect(() =>
         this.actions$.pipe(
             ofType(CurriculumActions.loadTrainingDetail),
-            mergeMap(({ pillarOrder, difficultyName, trainingOrder }) =>
-                this.curriculumService.getTrainingDetail(pillarOrder, difficultyName, trainingOrder).pipe(
+            mergeMap(({ trainingId }) =>
+                this.curriculumService.getTrainingById(trainingId).pipe(
                     map(detail => CurriculumActions.loadTrainingDetailSuccess({ detail })),
                     catchError(error => of(CurriculumActions.loadTrainingDetailFailure({ error })))
                 )
@@ -72,11 +50,25 @@ export class CurriculumEffects {
         )
     );
 
+    // --- Load Training Detail by Path (optional) ---
+    loadTrainingDetailByPath$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(CurriculumActions.loadTrainingDetailByPath),
+            mergeMap(({ path }) =>
+                this.curriculumService.getTrainingByPath(path).pipe(
+                    map(detail => CurriculumActions.loadTrainingDetailByPathSuccess({ detail })),
+                    catchError(error => of(CurriculumActions.loadTrainingDetailByPathFailure({ error })))
+                )
+            )
+        )
+    );
+
+    // --- Load Quiz by trainingId ---
     loadQuiz$ = createEffect(() =>
         this.actions$.pipe(
             ofType(CurriculumActions.loadQuiz),
-            mergeMap(({ pillarOrder, difficultyName, trainingOrder }) =>
-                this.curriculumService.getQuiz(pillarOrder, difficultyName, trainingOrder).pipe(
+            mergeMap(({ trainingId }) =>
+                this.curriculumService.getQuiz(trainingId).pipe(
                     map(quiz => CurriculumActions.loadQuizSuccess({ quiz })),
                     catchError(error => of(CurriculumActions.loadQuizFailure({ error })))
                 )

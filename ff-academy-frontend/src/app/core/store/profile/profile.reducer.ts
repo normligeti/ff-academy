@@ -9,6 +9,9 @@ export interface ProfileState {
     isAuthenticated: boolean;
     isLoading: boolean;
     isLoaded: boolean;
+    userProgress: any[];
+    savingProgress: boolean;
+    progressError: any;
 }
   
   const initialState: ProfileState = {
@@ -16,7 +19,10 @@ export interface ProfileState {
     error: null,
     isAuthenticated: false,
     isLoading: false,
-    isLoaded: false
+    isLoaded: false,
+    userProgress: [],
+    savingProgress: false,
+    progressError: null,
 };
   
 export const reducer = createReducer(
@@ -67,17 +73,22 @@ export const reducer = createReducer(
         error
     })),
 
-    on(ProfileActions.saveProgress, state => ({ ...state, loading: true })),
-    on(ProfileActions.saveProgressSuccess, (state, { progress }) => ({
+    // --- PROGRESS ---
+    on(ProfileActions.saveProgress, (state) => ({
         ...state,
-        loading: false,
-        progress
+        savingProgress: true,
+        progressError: null
+    })),
+    on(ProfileActions.saveProgressSuccess, (state, { updatedProgress }) => ({
+        ...state,
+        savingProgress: false,
+        userProgress: updatedProgress
     })),
     on(ProfileActions.saveProgressFailure, (state, { error }) => ({
         ...state,
-        loading: false,
-        error
-    }))
+        savingProgress: false,
+        progressError: error
+    })),
 );
 
 export const profileFeature = createFeature({
