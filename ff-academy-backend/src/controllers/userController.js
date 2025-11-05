@@ -49,29 +49,29 @@ const userController = {
 
     async getUserProgress(req, res) {
         try {
-            const progress = await userService.getUserProgress(req.params.id);
-            if (progress === null) {
+            const userId = req.params.id;
+            const progress = await userService.getUserProgress(userId);
+            if (!progress) {
                 return res.status(404).json({ message: "User not found" });
             }
             res.json(progress);
         } catch (err) {
             console.error("getUserProgress error:", err);
-            res.status(500).json({ message: "Failed to fetch progress" });
+            res.status(500).json({ message: "Failed to fetch user progress" });
         }
     },
 
-    async addProgress(req, res) {
+    async addOrUpdateProgress(req, res) {
         try {
-            const updatedProgress = await userService.addOrUpdateProgress(
-                req.params.id,
-                req.body
-            );
+            const userId = req.params.id;
+            const progressData = req.body;
+            const updatedProgress = await userService.addOrUpdateProgress(userId, progressData);
             if (!updatedProgress) {
                 return res.status(404).json({ message: "User not found" });
             }
             res.json(updatedProgress);
         } catch (err) {
-            console.error("addProgress error:", err);
+            console.error("addOrUpdateProgress error:", err);
             res.status(500).json({ message: "Failed to update progress" });
         }
     }

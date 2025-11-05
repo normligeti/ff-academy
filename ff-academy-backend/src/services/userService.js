@@ -18,48 +18,74 @@ const userService = {
         return User.findByIdAndDelete(id).lean();
     },
 
+    /**
+     * Get all progress records for a user
+     */
     async getUserProgress(userId) {
         const user = await User.findById(userId).lean();
-        return user ? user.progress : null;
+        if (!user) return null;
+        return user.progress || [];
     },
 
+    /**
+     * Add or update a progress entry for a given training
+     * Handles completion, failure, retry cooldown, and version bump.
+     */
     async addOrUpdateProgress(userId, progressData) {
-        // progressData = { pillarOrder, difficultyOrder, trainingOrder, completed, failed }
         const user = await User.findById(userId);
         if (!user) return null;
     
-        const existing = user.progress.find(
-            p =>
-                p.pillarOrder === progressData.pillarOrder &&
-                p.difficultyOrder === progressData.difficultyOrder &&
-                p.trainingOrder === progressData.trainingOrder
-        );
+        const { trainingId, path, status = 'not_started', seenVersion = 1 } = progressData;
     
+        // Find existing progress entry for this training
+        let entry = user.progress.find(p => p.trainingId.toString() === trainingId);
         const now = new Date();
     
-        if (existing) {
-            if (progressData.completed) {
-                existing.completed = true;
-                existing.completedAt = now;
-                existing.failedAttempts = 0;
-                existing.retryAvailableAt = null;
-            } else if (progressData.failed) {
-                existing.failedAttempts += 1;
-                existing.lastFailedAt = now;
-                existing.retryAvailableAt = new Date(
-                    now.getTime() + 15 * 24 * 60 * 60 * 1000 // 15 days
-                );
+        if (!entry) {
+            // Prepare new entry
+            entry = {
+                trainingId,
+                path,
+                status,
+                seenVersion,
+                completedAt: null,
+                failedAt: null,
+                retryAvailableAt: null
+            };
+    
+            // Apply timestamps for new entry based on its status
+            if (status === 'completed') {
+                entry.completedAt = now;
+            } else if (status === 'failed') {
+                entry.failedAt = now;
+                entry.retryAvailableAt = new Date(now.getTime() + 15 * 24 * 60 * 60 * 1000);
             }
+    
+            user.progress.push(entry);
         } else {
-            user.progress.push({
-                ...progressData,
-                completedAt: progressData.completed ? now : null,
-                failedAttempts: progressData.failed ? 1 : 0,
-                lastFailedAt: progressData.failed ? now : null,
-                retryAvailableAt: progressData.failed
-                    ? new Date(now.getTime() + 15 * 24 * 60 * 60 * 1000)
-                    : null
-            });
+            // Update existing
+            entry.status = status;
+            entry.seenVersion = seenVersion;
+    
+            // Apply timestamps for existing entry
+            switch (status) {
+                case 'completed':
+                    entry.completedAt = now;
+                    entry.failedAt = null;
+                    entry.retryAvailableAt = null;
+                    break;
+                case 'failed':
+                    entry.failedAt = now;
+                    entry.retryAvailableAt = new Date(now.getTime() + 15 * 24 * 60 * 60 * 1000);
+                    break;
+                case 'in_progress':
+                    break;
+                case 'not_started':
+                    entry.completedAt = null;
+                    entry.failedAt = null;
+                    entry.retryAvailableAt = null;
+                    break;
+            }
         }
     
         await user.save();

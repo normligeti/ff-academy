@@ -11,6 +11,6 @@ router.delete("/:id", userController.deleteUser);
 
 // Progress
 router.get("/:id/progress", userController.getUserProgress);
-router.post("/:id/progress", userController.addProgress);
+router.post("/:id/progress", userController.addOrUpdateProgress);
 
 module.exports = router;
