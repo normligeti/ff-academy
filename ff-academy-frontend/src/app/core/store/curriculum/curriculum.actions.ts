@@ -8,10 +8,10 @@ export const CurriculumActions = createActionGroup({
         'Load Pillars Success': props<{ pillars: any[] }>(),
         'Load Pillars Failure': props<{ error: any }>(),
 
-        // --- Trainings (by pillar + difficulty) ---
-        'Load Trainings': props<{ pillarOrder: number; difficultyName: string }>(),
-        'Load Trainings Success': props<{ trainings: any[] }>(),
-        'Load Trainings Failure': props<{ error: any }>(),
+        // --- Trainings for user ---
+        'Load Trainings For User': emptyProps(),
+        'Load Trainings For User Success': props<{ trainings: any[] }>(),
+        'Load Trainings For User Failure': props<{ error: any }>(),
 
         // --- Training Detail (by ID) ---
         'Load Training Detail': props<{ trainingId: string }>(),

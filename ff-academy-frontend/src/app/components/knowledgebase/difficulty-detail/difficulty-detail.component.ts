@@ -42,10 +42,7 @@ export class DifficultyDetailComponent {
                 }
             );
             
-            this.store.dispatch(CurriculumActions.loadTrainings({
-                    pillarOrder: this.pillarOrder,
-                    difficultyName: this.difficultyName
-                })
+            this.store.dispatch(CurriculumActions.loadTrainingsForUser()
             );
 
             // Derive pillar observable for current pillar

@@ -79,19 +79,19 @@ export const reducer = createReducer(
     })),
 
     // --- TRAININGS ---
-    on(CurriculumActions.loadTrainings, state => ({
+    on(CurriculumActions.loadTrainingsForUser, state => ({
         ...state,
         loadingTrainings: true,
         loadedTrainings: false,
         trainingsError: null
     })),
-    on(CurriculumActions.loadTrainingsSuccess, (state, { trainings }) => ({
+    on(CurriculumActions.loadTrainingsForUserSuccess, (state, { trainings }) => ({
         ...state,
         loadingTrainings: false,
         loadedTrainings: true,
         trainings
     })),
-    on(CurriculumActions.loadTrainingsFailure, (state, { error }) => ({
+    on(CurriculumActions.loadTrainingsForUserFailure, (state, { error }) => ({
         ...state,
         loadingTrainings: false,
         loadedTrainings: false,

@@ -18,9 +18,9 @@ export class CurriculumService {
     }
 
     // --- TRAININGS ---
-    getTrainings(pillarOrder: number, difficultyName: string): Observable<any[]> {
+    getTrainingsForUser(): Observable<any[]> {
         return this.http.get<any[]>(
-            `${this.baseUrl}/curriculum/pillars/${pillarOrder}/${difficultyName}/trainings`
+            `${this.baseUrl}/curriculum/pillars/user-trainings`
         );
     }
 

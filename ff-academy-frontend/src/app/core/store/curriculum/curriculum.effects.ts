@@ -24,14 +24,14 @@ export class CurriculumEffects {
         )
     );
 
-    // --- Load Trainings for a difficulty ---
-    loadTrainings$ = createEffect(() =>
+    // --- Load Trainings for an user ---
+    loadTrainingsForUser$ = createEffect(() =>
         this.actions$.pipe(
-            ofType(CurriculumActions.loadTrainings),
-            mergeMap(({ pillarOrder, difficultyName }) =>
-                this.curriculumService.getTrainings(pillarOrder, difficultyName).pipe(
-                    map(trainings => CurriculumActions.loadTrainingsSuccess({ trainings })),
-                    catchError(error => of(CurriculumActions.loadTrainingsFailure({ error })))
+            ofType(CurriculumActions.loadTrainingsForUser),
+            mergeMap(() =>
+                this.curriculumService.getTrainingsForUser().pipe(
+                    map(trainings => CurriculumActions.loadTrainingsForUserSuccess({ trainings })),
+                    catchError(error => of(CurriculumActions.loadTrainingsForUserFailure({ error })))
                 )
             )
         )

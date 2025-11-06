@@ -106,6 +106,7 @@ export class QuizComponent {
         this.fakeDownload = true;
     }
 
+    // TODO should handle removing quiz from selected after failure or leaving quiz
     onQuizComplete(passed: boolean) {
         this.training$.pipe(take(1)).subscribe(training => {
             const status = passed ? 'completed' : 'failed';
