@@ -13,14 +13,27 @@ const curriculumController = {
     },
 
     // GET /pillars/:pillarOrder/:difficultyName/trainings
-    async getTrainingsForDifficulty(req, res) {
+    // async getTrainingsForDifficulty(req, res) {
+    //     try {
+    //         const { pillarOrder, difficultyName } = req.params;
+    //         const trainings = await curriculumService.getTrainingsForDifficulty(pillarOrder, difficultyName);
+    //         res.json(trainings);
+    //     } catch (err) {
+    //         console.error("getTrainingsForDifficulty error:", err);
+    //         res.status(500).json({ message: "Failed to fetch trainings" });
+    //     }
+    // },
+
+    // GET /pillars/user-trainings
+    async getTrainingsForUser(req, res) {
         try {
-            const { pillarOrder, difficultyName } = req.params;
-            const trainings = await curriculumService.getTrainingsForDifficulty(pillarOrder, difficultyName);
-            res.json(trainings);
+            // const userId = req.params.id; // /curriculum/trainings/:id
+            const userId = '68f027ed4ac1082b77d6d3c3';
+            const decorated = await curriculumService.getDecoratedTrainingsForUser(userId);
+            res.json(decorated);
         } catch (err) {
-            console.error("getTrainingsForDifficulty error:", err);
-            res.status(500).json({ message: "Failed to fetch trainings" });
+            console.error("getAllTrainingsForUser error:", err);
+            res.status(500).json({ message: "Failed to fetch decorated trainings" });
         }
     },
 
@@ -28,8 +41,18 @@ const curriculumController = {
     async getTrainingById(req, res) {
         try {
             const { trainingId } = req.params;
+            // const userId = req.query.userId;
+            const userId = '68f027ed4ac1082b77d6d3c3';
+
+            const access = await curriculumService.checkTrainingAccess(userId, trainingId);
+            
+            if (!access.ok || !access.allowTraining) {
+                return res.status(403).json({ message: access.reason });
+            }
+
             const training = await curriculumService.getTrainingById(trainingId);
             if (!training) return res.status(404).json({ message: "Training not found" });
+
             res.json(training);
         } catch (err) {
             console.error("getTrainingById error:", err);
@@ -41,8 +64,18 @@ const curriculumController = {
     async getTrainingByPath(req, res) {
         try {
             const { path } = req.params;
+            // const userId = req.query.userId;
+            const userId = '68f027ed4ac1082b77d6d3c3';
+
             const training = await curriculumService.getTrainingByPath(path);
             if (!training) return res.status(404).json({ message: "Training not found" });
+
+            const access = await curriculumService.checkTrainingAccess(userId, training._id);
+            
+            if (!access.ok || !access.allowTraining) {
+                return res.status(403).json({ message: access.reason });
+            }
+
             res.json(training);
         } catch (err) {
             console.error("getTrainingByPath error:", err);
@@ -54,14 +87,25 @@ const curriculumController = {
     async getQuizForTraining(req, res) {
         try {
             const { trainingId } = req.params;
+            // const userId = req.query.userId;
+            const userId = '68f027ed4ac1082b77d6d3c3';
+
+            const access = await curriculumService.checkTrainingAccess(userId, trainingId);
+            
+            if (!access.ok || !access.allowQuiz) {
+                return res.status(403).json({ message: access.reason });
+            }
+
             const quiz = await curriculumService.getQuizForTraining(trainingId);
             if (!quiz) return res.status(404).json({ message: "Quiz not found" });
+
             res.json(quiz);
         } catch (err) {
             console.error("getQuizForTraining error:", err);
             res.status(500).json({ message: "Failed to fetch quiz" });
         }
     }
+
 };
 
 module.exports = curriculumController;

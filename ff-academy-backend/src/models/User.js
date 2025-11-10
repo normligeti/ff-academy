@@ -3,11 +3,7 @@ const mongoose = require("mongoose");
 const progressSchema = new mongoose.Schema({
     trainingId: { type: mongoose.Schema.Types.ObjectId, ref: "Training", required: true },
     path: { type: String, required: true },
-    status: {
-        type: String,
-        enum: ['not_started', 'in_progress', 'failed', 'completed'],
-        default: 'not_started'
-    },
+    status: { type: String },
     completedAt: { type: Date },
     failedAt: { type: Date },
     retryAvailableAt: { type: Date },

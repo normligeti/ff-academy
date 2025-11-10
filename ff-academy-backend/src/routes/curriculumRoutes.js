@@ -6,8 +6,9 @@ const router = express.Router();
 // Pillars
 router.get("/pillars", curriculumController.getPillars);
 
-// Trainings under a difficulty (semantic name in URL)
-router.get("/pillars/:pillarOrder/:difficultyName/trainings", curriculumController.getTrainingsForDifficulty);
+// Trainings
+// router.get("/pillars/:pillarOrder/:difficultyName/trainings", curriculumController.getTrainingsForDifficulty);
+router.get("/pillars/user-trainings", curriculumController.getTrainingsForUser);
 
 // Training details
 router.get("/trainings/:trainingId", curriculumController.getTrainingById);
