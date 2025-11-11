@@ -1,31 +1,9 @@
 const curriculumService = require("../services/curriculumService");
 
 const curriculumController = {
-    // GET /pillars
-    async getPillars(req, res) {
-        try {
-            const pillars = await curriculumService.getAllPillars();
-            res.json(pillars);
-        } catch (err) {
-            console.error("getPillars error:", err);
-            res.status(500).json({ message: "Failed to fetch pillars" });
-        }
-    },
 
-    // GET /pillars/:pillarOrder/:difficultyName/trainings
-    // async getTrainingsForDifficulty(req, res) {
-    //     try {
-    //         const { pillarOrder, difficultyName } = req.params;
-    //         const trainings = await curriculumService.getTrainingsForDifficulty(pillarOrder, difficultyName);
-    //         res.json(trainings);
-    //     } catch (err) {
-    //         console.error("getTrainingsForDifficulty error:", err);
-    //         res.status(500).json({ message: "Failed to fetch trainings" });
-    //     }
-    // },
-
-    // GET /pillars/user-trainings
-    async getTrainingsForUser(req, res) {
+    // GET /curriculum-data
+    async getCurriculumDataForUser(req, res) {
         try {
             // const userId = req.params.id; // /curriculum/trainings/:id
             const userId = '68f027ed4ac1082b77d6d3c3';

@@ -1,11 +1,9 @@
 // seed.js
 const mongoose = require("mongoose");
 const Pillar = require("./models/Pillar.js");
-// const Difficulty = require("./models/Difficulty.js");
 const Training = require("./models/Training.js");
 const Quiz = require("./models/Quiz.js");
 
-// 📌 MongoDB connection
 const MONGO_URI = "mongodb://root:password@localhost:27008/ff-academy?authSource=admin";
 
 

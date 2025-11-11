@@ -4,96 +4,27 @@ const Quiz = require("../models/Quiz");
 const User = require("../models/User");
 
 const curriculumService = {
-    // --- PILLARS ---
-    async getAllPillars() {
-        return Pillar.find({}).sort({ order: 1 }).lean();
-    },
-
-    // --- TRAININGS ---
-    // async getTrainingsForDifficulty(pillarOrder, difficultyName) {
-    //     const pillar = await Pillar.findOne({ order: pillarOrder }).lean();
-    //     if (!pillar) throw new Error("Pillar not found");
-
-    //     const difficulty = pillar.difficulties.find(d => d.name === difficultyName);
-    //     if (!difficulty) throw new Error("Difficulty not found");
-
-    //     return Training.find({
-    //         pillarOrder,
-    //         difficultyOrder: difficulty.order
-    //     })
-    //         .sort({ order: 1 })
-    //         .lean();
-    // },
-
-    // test for user specific stuff
-    // const userId = '68f027ed4ac1082b77d6d3c3';
-    // async getTrainingsForDifficulty(pillarOrder, difficultyName) {
-    //     const userId = '68f027ed4ac1082b77d6d3c3';
-    //     const user = await User.findById(userId).lean();
-    //     if (!user) throw new Error('User not found');
-    
-    //     const pillar = await Pillar.findOne({ order: pillarOrder }).lean();
-    //     if (!pillar) throw new Error('Pillar not found');
-    
-    //     const difficulty = pillar.difficulties.find(d => d.name === difficultyName);
-    //     if (!difficulty) throw new Error('Difficulty not found');
-    
-    //     const trainings = await Training.find({
-    //         pillarOrder,
-    //         difficultyOrder: difficulty.order
-    //     })
-    //         .sort({ order: 1 })
-    //         .lean();
-    
-    //     const userProgress = user.progress || [];
-    
-    //     // merge training info with user progress
-    //     const decorated = trainings.map(t => {
-    //         const progressEntry = userProgress.find(
-    //             p => p.trainingId.toString() === t._id.toString()
-    //         );
-    
-    //         return {
-    //             ...t,
-    //             userProgress: progressEntry
-    //                 ? {
-    //                     status: progressEntry.status,
-    //                     completedAt: progressEntry.completedAt || null,
-    //                     failedAt: progressEntry.failedAt || null,
-    //                     retryAvailableAt: progressEntry.retryAvailableAt || null,
-    //                     seenVersion: progressEntry.seenVersion
-    //                 }
-    //                 : {
-    //                     status: 'not_started',
-    //                     completedAt: null,
-    //                     failedAt: null,
-    //                     retryAvailableAt: null,
-    //                     seenVersion: 1
-    //                 }
-    //         };
-    //     });
-    
-    //     return decorated;
-    // },
-
     async getDecoratedTrainingsForUser(userId) {
         const user = await User.findById(userId).lean();
         if (!user) throw new Error("User not found");
-
+    
+        const pillars = await Pillar.find({}).sort({ order: 1 }).lean();
         const trainings = await Training.find({}).sort({ order: 1 }).lean();
+    
         const userProgress = user.progress || [];
         const now = Date.now();
-
-        // Sort all trainings globally: difficulty-major order (1.1.1 → 4.3.2)
+    
+        // Sort all trainings globally: difficulty-major order
         trainings.sort((a, b) => {
             const [pa, da, ta] = a.path.split('.').map(Number);
             const [pb, db, tb] = b.path.split('.').map(Number);
-            if (da !== db) return da - db;     // difficulty first
-            if (pa !== pb) return pa - pb;     // then pillar
-            return ta - tb;                    // then training
+    
+            if (da !== db) return da - db;     // difficulty-major
+            if (pa !== pb) return pa - pb;
+            return ta - tb;
         });
-
-        // STEP 1: merge progress info into each training
+    
+        // STEP 1: merge user progress into each training
         const decorated = trainings.map(t => {
             const progress = userProgress.find(p => p.trainingId.toString() === t._id.toString());
             const merged = {
@@ -108,13 +39,13 @@ const curriculumService = {
             };
             return merged;
         });
-
+    
+        // STEP 2: progression pointer
         const lastProgressIndex = decorated.findLastIndex(
             t => ['completed', 'failed'].includes(t.userProgress.status)
         );
-        
+    
         let stopIndex = -1;
-        
         if (lastProgressIndex !== -1) {
             const last = decorated[lastProgressIndex].userProgress;
             const retryAt = new Date(last.retryAvailableAt).getTime() || 0;
@@ -122,15 +53,14 @@ const curriculumService = {
                 stopIndex = lastProgressIndex;
             }
         }
-
-        // STEP 3: derive global states
+    
+        // STEP 3: derive global training states
         for (let i = 0; i < decorated.length; i++) {
             const t = decorated[i];
             const up = t.userProgress;
-
+    
             let state = "locked";
-
-            // Base progress logic
+    
             if (up.status === "completed") {
                 state = "completed";
             } else if (up.status === "failed") {
@@ -139,26 +69,93 @@ const curriculumService = {
             } else if (i === lastProgressIndex + 1 && (stopIndex === -1 || i < stopIndex)) {
                 state = "available";
             }
-
-            // "new" = before lastCompleted but never touched
+    
             if (up.status === null && i < lastProgressIndex) {
                 state = "new";
             }
-
-            // "modified" = training version bumped since user last saw
+    
             if (t.version > up.seenVersion) {
                 state = "modified";
             }
-
-            // lock everything after an active failed training
+    
             if (stopIndex !== -1 && i > stopIndex) {
                 state = "locked";
             }
-
+    
             up.status = state;
         }
-
-        return decorated;
+    
+        // STEP 4: BUILD PILLAR + DIFFICULTY STRUCTURE 
+        const decoratedPillars = pillars.map((pillar) => {
+            return {
+                ...pillar,
+                status: "locked", // temporary
+                difficulties: pillar.difficulties.map((diff) => ({
+                    order: diff.order,
+                    name: diff.name,
+                    subTitle: diff.subTitle,
+                    subText: diff.subText,
+                    status: "locked",   // placeholder
+                    trainings: []
+                }))
+            };
+        });
+    
+        // Group trainings into correct pillar/difficulty
+        decorated.forEach(t => {
+            const [pillarOrder, diffOrder] = t.path.split('.').map(Number);
+    
+            const pillar = decoratedPillars.find(p => p.order === pillarOrder);
+            if (!pillar) return;
+    
+            const difficulty = pillar.difficulties.find(d => d.order === diffOrder);
+            if (!difficulty) return;
+    
+            difficulty.trainings.push(t);
+        });
+    
+        // STEP 5: Compute difficulty statuss
+        decoratedPillars.forEach(pillar => {
+            pillar.difficulties.forEach(diff => {
+                const trainings = diff.trainings;
+    
+                const allCompleted = trainings.every(t => ["completed", "new", "modified"].includes(t.userProgress.status));
+                const hasAvailable = trainings.some(t => ["available", "failed"].includes(t.userProgress.status));
+    
+                if (allCompleted) diff.status = "completed";
+                else if (hasAvailable) diff.status = "in_progress";
+                else diff.status = "locked";
+            });
+        });
+    
+        // STEP 6: Compute pillar statuss
+        decoratedPillars.forEach((pillar, idx) => {
+            const allCompleted = pillar.difficulties.every(d => d.status === "completed");
+    
+            if (allCompleted) {
+                pillar.status = "completed";
+                return;
+            }
+    
+            if (idx === 0) {
+                pillar.status = "in_progress";
+                return;
+            }
+    
+            const prevPillar = decoratedPillars[idx - 1];
+            const prevBasic = prevPillar.difficulties.find(d => d.order === 1);
+    
+            if (prevBasic?.status === "completed") {
+                pillar.status = "in_progress";
+            } else {
+                pillar.status = "locked";
+            }
+        });
+    
+        // Final return object
+        return {
+            pillars: decoratedPillars
+        };
     },
 
     

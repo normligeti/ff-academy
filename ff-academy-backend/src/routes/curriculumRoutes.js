@@ -4,11 +4,7 @@ const curriculumController = require("../controllers/curriculumController");
 const router = express.Router();
 
 // Pillars
-router.get("/pillars", curriculumController.getPillars);
-
-// Trainings
-// router.get("/pillars/:pillarOrder/:difficultyName/trainings", curriculumController.getTrainingsForDifficulty);
-router.get("/pillars/user-trainings", curriculumController.getTrainingsForUser);
+router.get("/curriculum-data", curriculumController.getCurriculumDataForUser);
 
 // Training details
 router.get("/trainings/:trainingId", curriculumController.getTrainingById);

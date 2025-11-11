@@ -2,10 +2,10 @@ const mongoose = require("mongoose");
 
 const difficultySchema = new mongoose.Schema({
     order: { type: Number, required: true },         // 1 = Basic, 2 = Intermediate, 3 = Master
-    name: { type: String, required: true },          // 'basic', 'intermediate', 'master'
+    name: { type: String, required: true },
     subTitle: { type: String, default: "" },
     subText: { type: String, default: "" }
-}, { _id: false }); // don’t need separate _id for each difficulty
+}, { _id: false });
 
 const pillarSchema = new mongoose.Schema({
     title: { type: String, required: true },

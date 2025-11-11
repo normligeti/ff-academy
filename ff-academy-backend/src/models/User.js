@@ -10,7 +10,6 @@ const progressSchema = new mongoose.Schema({
     seenVersion: { type: Number, default: 1 }
 }, { _id: false });
 
-
 const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     name: { type: String, required: true },

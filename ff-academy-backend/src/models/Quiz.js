@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const questionSchema = new mongoose.Schema({
-    questionId: { type: Number, required: true },   // for frontend handling
+    questionId: { type: Number, required: true },
     text: { type: String, required: true },
     answers: [{ type: String, required: true }],
     correctAnswer: { type: String, required: true }
