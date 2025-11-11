@@ -41,7 +41,7 @@ export class KnowledgebaseComponent {
         let element = document.querySelector('.section-5') as HTMLElement;
         this.openStates = { 0:true, 1:false, 2:false };
 
-        if ((pillar.order !== this.selectedPillar?.order) || !element.classList.contains('show')) {
+        if ((pillar?.order !== this.selectedPillar?.order) || !element.classList.contains('show')) {
             element.classList.add('show');
             setTimeout(() => {
                 document.querySelector('.section-5')?.scrollIntoView({

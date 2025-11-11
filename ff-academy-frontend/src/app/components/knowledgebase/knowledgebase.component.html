@@ -9,6 +9,7 @@
 </section>
 
 <section class="section-3">
+    <!-- TODO restore scroll animations -->
     <img class="scroll-hiddexn" src="assets/knowledgebase/pillars.png" alt="">
 </section>
 
@@ -53,6 +54,7 @@
 </section>
 
 <section class="section-5">
+    <ng-container *ngIf="!selectedPillar?.difficulties">Content not available at the moment.</ng-container>
     <ng-container *ngFor="let diff of selectedPillar?.difficulties; index as i">
         <div class="dropdown" [id]="'dropdown-' + i"  (click)="toggleDropdown(i)">
             <img src="assets/knowledgebase/dropdown-active.svg" alt="" class="bg">

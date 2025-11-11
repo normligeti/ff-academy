@@ -29,6 +29,27 @@ export const CurriculumSelectors = {
         selectCurriculumState,
         (state) => state.trainings
     ),
+    selectTrainingsForDifficulty: (
+        pillarOrder: number,
+        difficultyName: string
+    ) => createSelector(
+        selectCurriculumState,
+        (state) => {
+            const trainings = state.trainings;
+                const diffMap: Record<string, number> = {
+                    basic: 1,
+                    intermediate: 2,
+                    master: 3
+                };
+        
+                const difficultyOrder = diffMap[difficultyName];
+    
+            return trainings.filter(t => {
+                const [pOrder, dOrder] = t.path.split('.').map(Number);
+                return pOrder === pillarOrder && dOrder === difficultyOrder;
+            });
+        }
+    ),
     selectTrainingsLoading: createSelector(
         selectCurriculumState,
         (state) => state.loadingTrainings
@@ -47,17 +68,17 @@ export const CurriculumSelectors = {
         selectCurriculumState,
         (state) => state.selectedTraining
     ),
-    selectTrainingDetailLoading: createSelector(
+    selectSelectedTrainingLoading: createSelector(
         selectCurriculumState,
-        (state) => state.loadingTrainingDetail
+        (state) => state.loadingSelectedTraining
     ),
-    selectTrainingDetailLoaded: createSelector(
+    selectSelectedTrainingLoaded: createSelector(
         selectCurriculumState,
-        (state) => state.loadedTrainingDetail
+        (state) => state.loadedSelectedTraining
     ),
-    selectTrainingDetailError: createSelector(
+    selectSelectedTrainingError: createSelector(
         selectCurriculumState,
-        (state) => state.trainingDetailError
+        (state) => state.selectedTrainingError
     ),
 
     // --- QUIZ ---

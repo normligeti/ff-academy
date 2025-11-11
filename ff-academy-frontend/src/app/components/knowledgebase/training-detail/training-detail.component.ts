@@ -5,6 +5,7 @@ import { CurriculumSelectors } from '../../../core/store/curriculum/curriculum.s
 import { CurriculumActions } from '../../../core/store/curriculum/curriculum.actions';
 import { CommonModule } from '@angular/common';
 import { LoaderComponent } from "../../loader/loader.component";
+import { combineLatest, map, Observable, take } from 'rxjs';
 
 @Component({
   selector: 'app-training-detail',
@@ -15,21 +16,53 @@ import { LoaderComponent } from "../../loader/loader.component";
 export class TrainingDetailComponent {
     private store = inject(Store);
 
-    trainingId!: string;
     training$ = this.store.select(CurriculumSelectors.selectSelectedTraining);
+    trainings$: Observable<any>;
+    nextTrainings$: Observable<any>;
+    loading$ = this.store.select(CurriculumSelectors.selectSelectedTrainingLoading);
+    error$ = this.store.select(CurriculumSelectors.selectSelectedTrainingError);
 
     constructor(
         private route: ActivatedRoute
     ) {}
 
-    // TODO should handle removing training from selected if necessary
     ngOnInit() {
         this.route.paramMap.subscribe(params => {
-            this.trainingId = String(params.get('trainingId'));
-
+            let trainingId = String(params.get('trainingId'));
+            let pillarOrder = Number(params.get('pillarOrder'));
+            let difficultyName = params.get('difficultyName') || '';
+            
             this.store.dispatch(
-                CurriculumActions.loadTrainingDetail({
-                    trainingId: this.trainingId
+                CurriculumActions.loadSelectedTraining({
+                    trainingId: trainingId
+                })
+            );
+
+            this.store.select(CurriculumSelectors.selectTrainingsLoaded)
+                .pipe(take(1))
+                .subscribe((loaded) => {
+                    if (!loaded) {
+                        this.store.dispatch(CurriculumActions.loadTrainingsForUser());
+                    }
+                }
+            );
+
+            this.trainings$ = this.store.select(
+                CurriculumSelectors.selectTrainingsForDifficulty(
+                    pillarOrder,
+                    difficultyName
+                )
+            );
+
+            this.nextTrainings$ = combineLatest([
+                this.trainings$,
+                this.training$
+            ]).pipe(
+                map(([trainings, current]) => {
+                    if (!trainings || !current) return [];
+            
+                    // Keep only trainings that come AFTER the current one
+                    return trainings.filter(t => t.order > current.order);
                 })
             );
         });

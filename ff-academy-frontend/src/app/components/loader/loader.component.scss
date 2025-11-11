@@ -14,14 +14,12 @@
         height: calc(100vh - 280px);
         
         .nb-spinner {
-
+            width: 100px;
+            height: 100px;
+            border-width: 5px;
         }
     }
-    // .nb-spinner {
-    //     width: 100px;
-    //     height: 100px;
-    //     border-width: 5px;
-    // }
+    
 
     // @include MobileView {
     //     min-height: 450px;

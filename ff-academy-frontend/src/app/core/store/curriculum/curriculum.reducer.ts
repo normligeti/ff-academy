@@ -18,9 +18,9 @@ export interface CurriculumState {
 
     // Selected training
     selectedTraining: any | null;
-    loadingTrainingDetail: boolean;
-    loadedTrainingDetail: boolean;
-    trainingDetailError: any;
+    loadingSelectedTraining: boolean;
+    loadedSelectedTraining: boolean;
+    selectedTrainingError: any;
 
     // Selected quiz
     selectedQuiz: any | null;
@@ -44,9 +44,9 @@ export const initialState: CurriculumState = {
 
     // Training detail
     selectedTraining: null,
-    loadingTrainingDetail: false,
-    loadedTrainingDetail: false,
-    trainingDetailError: null,
+    loadingSelectedTraining: false,
+    loadedSelectedTraining: false,
+    selectedTrainingError: null,
 
     // Quiz
     selectedQuiz: null,
@@ -98,24 +98,24 @@ export const reducer = createReducer(
         trainingsError: error
     })),
 
-    // --- TRAINING DETAIL ---
-    on(CurriculumActions.loadTrainingDetail, state => ({
+    // --- TRAINING DETAILS ---
+    on(CurriculumActions.loadSelectedTraining, state => ({
         ...state,
-        loadingTrainingDetail: true,
-        loadedTrainingDetail: false,
-        trainingDetailError: null
+        loadingSelectedTraining: true,
+        loadedSelectedTraining: false,
+        selectedTrainingError: null
     })),
-    on(CurriculumActions.loadTrainingDetailSuccess, (state, { detail }) => ({
+    on(CurriculumActions.loadSelectedTrainingSuccess, (state, { detail }) => ({
         ...state,
-        loadingTrainingDetail: false,
-        loadedTrainingDetail: true,
+        loadingSelectedTraining: false,
+        loadedSelectedTraining: true,
         selectedTraining: detail
     })),
-    on(CurriculumActions.loadTrainingDetailFailure, (state, { error }) => ({
+    on(CurriculumActions.loadSelectedTrainingFailure, (state, { error }) => ({
         ...state,
-        loadingTrainingDetail: false,
-        loadedTrainingDetail: false,
-        trainingDetailError: error
+        loadingSelectedTraining: false,
+        loadedSelectedTraining: false,
+        selectedTrainingError: error
     })),
 
     // --- QUIZ ---

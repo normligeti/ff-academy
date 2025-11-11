@@ -3,12 +3,13 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { CurriculumSelectors } from '../../../core/store/curriculum/curriculum.selectors';
 import { CurriculumActions } from '../../../core/store/curriculum/curriculum.actions';
-import { filter, interval, map, Observable, startWith, take, takeWhile } from 'rxjs';
+import { combineLatest, filter, interval, map, Observable, startWith, take, takeWhile } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { LoaderComponent } from "../../loader/loader.component";
 
 @Component({
   selector: 'app-difficulty-detail',
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule, CommonModule, LoaderComponent],
   templateUrl: './difficulty-detail.component.html',
   styleUrl: './difficulty-detail.component.scss'
 })
@@ -17,8 +18,25 @@ export class DifficultyDetailComponent {
     pillarOrder!: number;
     difficultyName!: string;
 
-    trainings$ = this.store.select(CurriculumSelectors.selectTrainings);
     pillar$!: Observable<any>;
+    trainings$!: Observable<any>;
+
+    loading$ = combineLatest([
+        this.store.select(CurriculumSelectors.selectTrainingsLoading),
+        this.store.select(CurriculumSelectors.selectPillarsLoading)
+    ]).pipe(
+        map(([trainingsLoading, pillarsLoading]) => trainingsLoading || pillarsLoading)
+    );
+
+    error$ = combineLatest([
+        this.store.select(CurriculumSelectors.selectTrainingsError),
+        this.store.select(CurriculumSelectors.selectPillarsError)
+    ]).pipe(
+        map(([trainingsError, pillarsError]) =>
+            [trainingsError, pillarsError].filter(Boolean)   // remove null/undefined
+        )
+    );
+
 
     // countdown
     trainingsCountdowns: { [trainingId: string]: Observable<any> } = {};
@@ -42,26 +60,35 @@ export class DifficultyDetailComponent {
                 }
             );
             
-            this.store.dispatch(CurriculumActions.loadTrainingsForUser()
-            );
+            this.store.dispatch(CurriculumActions.loadTrainingsForUser());
 
             // Derive pillar observable for current pillar
             this.pillar$ = this.store.select(CurriculumSelectors.selectPillars).pipe(
                 filter(pillars => !!pillars && pillars.length > 0),
-                map(pillars => pillars.find(p => p.order === this.pillarOrder))
+                map(pillars => pillars?.find(p => p.order === this.pillarOrder))
             );
 
+            // get filtered trainings
+            this.trainings$ = this.store.select(
+                CurriculumSelectors.selectTrainingsForDifficulty(
+                    this.pillarOrder,
+                    this.difficultyName
+                )
+            );
+            
             // Build countdowns for failed trainings whenever trainings change
             this.trainings$
                 .pipe()
                 .subscribe(trainings => {
                     this.trainingsCountdowns = {};
-                    trainings
-                        .filter(t => t.userProgress?.status === 'failed' && t.userProgress?.retryAvailableAt)
+                    trainings?.filter(t => t.userProgress?.status === 'failed' && t.userProgress?.retryAvailableAt)
                         .forEach(t => {
                             this.trainingsCountdowns[t._id] = this.createCountdown$(t.userProgress.retryAvailableAt);
-                        });
-            });
+                        }
+                    );
+                }
+            );
+            
         });
     }
 

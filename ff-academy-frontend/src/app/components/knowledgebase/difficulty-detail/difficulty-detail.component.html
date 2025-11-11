@@ -1,93 +1,107 @@
-<section class="section-1">
-    <div class="background">
-        <img class="cloud" src="assets/knowledgebase/cloud.png" alt="">
+<!-- <div *ngIf="loading$ | async" class="loader-container">
+    <div class="subpage-background">
+        <img class="subpage-cloud" src="assets/knowledgebase/cloud.png" alt="">
     </div>
+    
+    <loader [fullscreen]="true"></loader>
+</div> -->
 
-    <div class="content">
-        <div class="text">
-            <h4 class="sbold">Pillar {{ (pillar$ | async)?.order }}</h4>
-            <p class="f32 sbold">{{ (pillar$ | async)?.title }}</p>
-            <p class="f32 uc blue sbold">{{ difficultyName }}</p>
+<div *ngIf="(error$ | async)!.length > 1 " class="loader-container">
+        <pre>{{ (error$ | async) | json }}</pre>
+</div>
+
+<!-- <ng-container *ngIf="!(loading$ | async) && !((error$ | async)!.length > 1)"> -->
+    <section class="section-1">
+        <div class="subpage-background">
+            <img class="subpage-cloud" src="assets/knowledgebase/cloud.png" alt="">
         </div>
-        <img src="assets/knowledgebase/book.png" alt="">
-    </div>
-</section>
-
-<section class="section-2">
-    <div class="blue-box">
-        <p class="f50 sbold">All Trainings</p>
-        <div class="cards">
-            <div class="card" *ngFor="let training of (trainings$ | async)">
-                <div class="number f18 sbold">0{{ training.order }}</div>
-                <img src="assets/knowledgebase/lesson.png" alt="">
-                <div class="card-content">
-                    <p class="mbold">{{ training.title }}</p>
-                    <button class="btn-dark-blue xs" [routerLink]="['trainings', training._id]">start lesson</button>
-                    <p class="status-test">{{ training.userProgress.status }}
-                        <!--  -->
-                        <span *ngIf="training.userProgress?.status === 'failed'">
-                            <ng-container *ngIf="trainingsCountdowns[training._id] as countdown$">
-                                <ng-container *ngIf="(countdown$ | async) as t">
-                                    <span *ngIf="t.totalMs > 0; else retryNow">
-                                        <span>({{ t.days }}d {{ t.hours }}h {{ t.minutes }}m {{ t.seconds }}s)</span>
-                                    </span>
-                                    <ng-template #retryNow>
-                                        <span>Retry available now!</span>
-                                    </ng-template>
+    
+        <div class="content">
+            <div class="text">
+                <h4 class="sbold">Pillar {{ (pillar$ | async)?.order }}</h4>
+                <p class="f32 sbold">{{ (pillar$ | async)?.title }}</p>
+                <p class="f32 uc blue sbold">{{ difficultyName }}</p>
+            </div>
+            <img src="assets/knowledgebase/book.png" alt="">
+        </div>
+    </section>
+    
+    <section class="section-2">
+        <div class="blue-box">
+            <p class="f50 sbold">All Trainings</p>
+            <div class="cards">
+                <div class="card" *ngFor="let training of (trainings$ | async)">
+                    <div class="number f18 sbold">0{{ training.order }}</div>
+                    <img src="assets/knowledgebase/lesson.png" alt="">
+                    <div class="card-content">
+                        <p class="mbold">{{ training.title }}</p>
+                        <button class="btn-dark-blue xs" [routerLink]="['trainings', training._id]">start lesson</button>
+                        <p class="status-test">{{ training.userProgress.status }}
+                            <!--  -->
+                            <span *ngIf="training.userProgress?.status === 'failed'">
+                                <ng-container *ngIf="trainingsCountdowns[training._id] as countdown$">
+                                    <ng-container *ngIf="(countdown$ | async) as t">
+                                        <span *ngIf="t.totalMs > 0; else retryNow">
+                                            <span>({{ t.days }}d {{ t.hours }}h {{ t.minutes }}m {{ t.seconds }}s)</span>
+                                        </span>
+                                        <ng-template #retryNow>
+                                            <span>Retry available now!</span>
+                                        </ng-template>
+                                    </ng-container>
                                 </ng-container>
-                            </ng-container>
-                        </span>
-                        <!--  -->
+                            </span>
+                            <!--  -->
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="section-3">
+        <h6 class="sbold">Essential Resources for Your Training</h6>
+        
+        <div class="cards">
+            <div class="s3-card scroll-hidden">
+                <div class="top">
+                    <img src="assets/icons/presentation.svg" alt="">
+                </div>
+                <div class="bottom">
+                    <p class="f24 center sbold">
+                        Presentations
+                    </p>
+                </div>
+            </div>
+            <div class="s3-card scroll-hidden d01">
+                <div class="top">
+                    <img src="assets/icons/audio.svg" alt="">
+                </div>
+                <div class="bottom">
+                    <p class="f24 center sbold">
+                        Audio Trainings
+                    </p>
+                </div>
+            </div>
+            <div class="s3-card scroll-hidden d02">
+                <div class="top">
+                    <img src="assets/icons/video.svg" alt="">
+                </div>
+                <div class="bottom">
+                    <p class="f24 center sbold">
+                        Video Tools
+                    </p>
+                </div>
+            </div>
+            <div class="s3-card scroll-hidden d03">
+                <div class="top">
+                    <img src="assets/icons/training.svg" alt="">
+                </div>
+                <div class="bottom">
+                    <p class="f24 center sbold">
+                        Training Materials
                     </p>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-
-<section class="section-3">
-    <h6 class="sbold">Essential Resources for Your Training</h6>
-    
-    <div class="cards">
-        <div class="s3-card scroll-hidden">
-            <div class="top">
-                <img src="assets/icons/presentation.svg" alt="">
-            </div>
-            <div class="bottom">
-                <p class="f24 center sbold">
-                    Presentations
-                </p>
-            </div>
-        </div>
-        <div class="s3-card scroll-hidden d01">
-            <div class="top">
-                <img src="assets/icons/audio.svg" alt="">
-            </div>
-            <div class="bottom">
-                <p class="f24 center sbold">
-                    Audio Trainings
-                </p>
-            </div>
-        </div>
-        <div class="s3-card scroll-hidden d02">
-            <div class="top">
-                <img src="assets/icons/video.svg" alt="">
-            </div>
-            <div class="bottom">
-                <p class="f24 center sbold">
-                    Video Tools
-                </p>
-            </div>
-        </div>
-        <div class="s3-card scroll-hidden d03">
-            <div class="top">
-                <img src="assets/icons/training.svg" alt="">
-            </div>
-            <div class="bottom">
-                <p class="f24 center sbold">
-                    Training Materials
-                </p>
-            </div>
-        </div>
-    </div>
-</section>
+    </section>
+<!-- </ng-container> -->

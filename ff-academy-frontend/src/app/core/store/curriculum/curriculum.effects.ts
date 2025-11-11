@@ -38,26 +38,26 @@ export class CurriculumEffects {
     );
 
     // --- Load Training Detail by ID ---
-    loadTrainingDetail$ = createEffect(() =>
+    loadSelectedTraining$ = createEffect(() =>
         this.actions$.pipe(
-            ofType(CurriculumActions.loadTrainingDetail),
+            ofType(CurriculumActions.loadSelectedTraining),
             mergeMap(({ trainingId }) =>
                 this.curriculumService.getTrainingById(trainingId).pipe(
-                    map(detail => CurriculumActions.loadTrainingDetailSuccess({ detail })),
-                    catchError(error => of(CurriculumActions.loadTrainingDetailFailure({ error })))
+                    map(detail => CurriculumActions.loadSelectedTrainingSuccess({ detail })),
+                    catchError(error => of(CurriculumActions.loadSelectedTrainingFailure({ error })))
                 )
             )
         )
     );
 
     // --- Load Training Detail by Path (optional) ---
-    loadTrainingDetailByPath$ = createEffect(() =>
+    loadSelectedTrainingByPath$ = createEffect(() =>
         this.actions$.pipe(
-            ofType(CurriculumActions.loadTrainingDetailByPath),
+            ofType(CurriculumActions.loadSelectedTrainingByPath),
             mergeMap(({ path }) =>
                 this.curriculumService.getTrainingByPath(path).pipe(
-                    map(detail => CurriculumActions.loadTrainingDetailByPathSuccess({ detail })),
-                    catchError(error => of(CurriculumActions.loadTrainingDetailByPathFailure({ error })))
+                    map(detail => CurriculumActions.loadSelectedTrainingByPathSuccess({ detail })),
+                    catchError(error => of(CurriculumActions.loadSelectedTrainingByPathFailure({ error })))
                 )
             )
         )

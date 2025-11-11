@@ -1,113 +1,123 @@
-<section class="section-1">
-    <div class="background">
-        <img class="cloud" src="assets/knowledgebase/cloud.png" alt="">
+<div *ngIf="loading$ | async" class="loader-container">
+    <div class="subpage-background">
+        <img class="subpage-cloud" src="assets/knowledgebase/cloud.png" alt="">
     </div>
-
-    <div class="content">
-        <div class="nav">
-            <div class="path">
-                <p class="f18 link" [routerLink]="['/home']">Home</p>
-                <img src="assets/icons/arrow-r.svg" alt="">
-                <p class="f18 link" [routerLink]="['/knowledgebase']">Knowledgebase</p>
-                <img src="assets/icons/arrow-r.svg" alt="">
-                <p class="f18 link" [routerLink]="['../training']">Why are YOU your most important resource?</p>
-                <img src="assets/icons/arrow-r.svg" alt="">
-                <p class="f18 sbold">Quiz</p>
-            </div>
-            <div class="path">
-                <img src="assets/icons/arrow-l.svg" alt="">
-                <p class="f18 sbold link" [routerLink]="['../training']">Back</p>
-            </div>
-        </div>
-
-        <ng-container *ngIf="(quiz$ | async)?.questions as questions">
-            <div class="quiz-box" *ngIf="counter <= questions.length" @fadeInOut>
-                <div class="row">
-                    <h6 class="blue sbold spacer">Quiz</h6>
-                    <p *ngFor="let q of questions; index as i" class="f18 number sbold" [ngClass]="{'inactive': counter !== i + 1 }">0{{ i + 1 }}</p>
-                </div>
-                <div class="progress-bar">
-                    <div class="line" [style.width.%]="counter * (100 / questions.length)"></div>
-                </div>
-                <div class="row">
-                    <p class="f28 number l sbold">0{{counter}}</p>
-                    <p class="mbold spacer">Question</p>
-                    <p class="f16">{{questions.length - counter}} questions remaining</p>
-                </div>
     
-                <div class="question-wrapper">
-                    <ng-container *ngFor="let q of questions; index as i">
-                        <div
-                            class="question-content"
-                            [@fadeInOut]
-                            *ngIf="counter === i + 1"
-                        >
-                            <p class="f32 sbold">{{ q.questionId }}. {{ q.text }} --- {{ q.correctAnswer }}</p>
-                            <div class="answers">
+    <loader [fullscreen]="true"></loader>
+</div>
+
+<div *ngIf="(error$ | async)!.length > 0 " class="loader-container">
+        <pre>{{ (error$ | async) | json }}</pre>
+</div>
+
+<ng-container *ngIf="!(loading$ | async) && !((error$ | async)!.length > 0)">
+    <section class="section-1">
+        <div class="subpage-background">
+            <img class="subpage-cloud" src="assets/knowledgebase/cloud.png" alt="">
+        </div>
+    
+        <div class="content">
+            <div class="nav">
+                <div class="path">
+                    <p class="f18 link" [routerLink]="['/home']">Home</p>
+                    <img src="assets/icons/arrow-r.svg" alt="">
+                    <p class="f18 link" [routerLink]="['/knowledgebase']">Knowledgebase</p>
+                    <img src="assets/icons/arrow-r.svg" alt="">
+                    <p class="f18 link" [routerLink]="['../training']">Why are YOU your most important resource?</p>
+                    <img src="assets/icons/arrow-r.svg" alt="">
+                    <p class="f18 sbold">Quiz</p>
+                </div>
+                <div class="path">
+                    <img src="assets/icons/arrow-l.svg" alt="">
+                    <p class="f18 sbold link" [routerLink]="['../training']">Back</p>
+                </div>
+            </div>
+    
+            <ng-container *ngIf="(quiz$ | async)?.questions as questions">
+                <div class="quiz-box" *ngIf="counter <= questions.length" @fadeInOut>
+                    <div class="row">
+                        <h6 class="blue sbold spacer">Quiz</h6>
+                        <p *ngFor="let q of questions; index as i" class="f18 number sbold" [ngClass]="{'inactive': counter !== i + 1 }">0{{ i + 1 }}</p>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="line" [style.width.%]="counter * (100 / questions.length)"></div>
+                    </div>
+                    <div class="row">
+                        <p class="f28 number l sbold">0{{counter}}</p>
+                        <p class="mbold spacer">Question</p>
+                        <p class="f16">{{questions.length - counter}} questions remaining</p>
+                    </div>
+        
+                    <div class="question-wrapper">
+                        <ng-container *ngFor="let q of questions; index as i">
                             <div
-                                class="checkbox-wrapper"
-                                *ngFor="let a of q.answers"
-                                (click)="onSelect(q.questionId, a)"
+                                class="question-content"
+                                [@fadeInOut]
+                                *ngIf="counter === i + 1"
                             >
-                                <div class="checkbox-border">
-                                    <mat-checkbox
-                                        class="display-only"
-                                        [checked]="selectedAnswers[q.questionId] === a"
-                                        [disabled]="checkedAnswers[q.questionId]"
-                                        (click)="$event.preventDefault()"
-                                    ></mat-checkbox>
+                                <p class="f32 sbold">{{ q.questionId }}. {{ q.text }} --- {{ q.correctAnswer }}</p>
+                                <div class="answers">
+                                <div
+                                    class="checkbox-wrapper"
+                                    *ngFor="let a of q.answers"
+                                    (click)="onSelect(q.questionId, a)"
+                                >
+                                    <div class="checkbox-border">
+                                        <mat-checkbox
+                                            class="display-only"
+                                            [checked]="selectedAnswers[q.questionId] === a"
+                                            [disabled]="checkedAnswers[q.questionId]"
+                                            (click)="$event.preventDefault()"
+                                        ></mat-checkbox>
+                                    </div>
+                                    <p>{{ a }}</p>
                                 </div>
-                                <p>{{ a }}</p>
+                                </div>
                             </div>
-                            </div>
-                        </div>
-                    </ng-container>
+                        </ng-container>
+                    </div>
+                    
+                    <div class="bottom">
+                        <button class="btn-dark-blue small" (click)="submit(questions)" [disabled]="!selectedAnswers[counter]"> <p>next question</p></button>
+                    </div>
+                      
                 </div>
-                
-                <div class="bottom">
-                    <!-- <button
-                    class="btn-dark-blue small"
-                    (click)="submit()"
-                    *ngIf="!checkedAnswers[counter]"
-                    [disabled]="!selectedAnswers[counter]"
-                    >
-                    submit answer
-                    </button> -->
+            </ng-container>
     
-                    <button class="btn-dark-blue small" (click)="submit(questions)" [disabled]="!selectedAnswers[counter]"> <p>next question</p></button>
+            <div class="result" *ngIf="success === true" @fadeInOut>
+                <img src="assets/knowledgebase/icons/success.svg" alt="" class="icon">
+                <p class="f40 mbold">Congratulations!</p>
+                <div>
+                    <p class="f24">You’ve successfully completed this lesson’s quiz.</p>
+                    <p class="f18">Your dedication and effort are paying off — keep moving forward on your journey of growth!</p>
                 </div>
+                <p class="f24 mbold">Your certificate is now available below.</p>
+                <button class="btn-white s" (click)="download()">DOWNLOAD YOUR Certificate of Completion</button>
+            </div>
     
-                  
+            <div class="result fail" *ngIf="success === false" @fadeInOut>
+                <img src="assets/knowledgebase/icons/failure.svg" alt="" class="icon">
+
+                <ng-container *ngIf="!savingProgressFailed">
+                    <p class="f40 mbold">Not this time… but don’t give up!</p>
+                    <div>
+                        <p class="f24">You didn’t pass the quiz, but this is just part of the learning process.</p>
+                        <p class="f18">Take time to review the lesson, practice the concepts, and come back stronger.</p>
+                    </div>
+                    <p class="f24 mbold">You can retake this quiz in 15 days.</p>
+                </ng-container>
+
+                <ng-container *ngIf="savingProgressFailed">
+                    <p class="f28 mbold">Something went wrong while trying to save results.</p>
+                    <p class="f28 mbold">Please try again later.</p>
+                </ng-container>
             </div>
-        </ng-container>
-        
-
-        <div class="result" *ngIf="success === true" @fadeInOut>
-            <img src="assets/knowledgebase/icons/success.svg" alt="" class="icon">
-            <p class="f40 mbold">Congratulations!</p>
-            <div>
-                <p class="f24">You’ve successfully completed this lesson’s quiz.</p>
-                <p class="f18">Your dedication and effort are paying off — keep moving forward on your journey of growth!</p>
+    
+            <div class="certificate" *ngIf="fakeDownload" @fadeInOut>
+                <img src="assets/knowledgebase/certificate.png" alt="">
             </div>
-            <p class="f24 mbold">Your certificate is now available below.</p>
-            <button class="btn-white s" (click)="download()">DOWNLOAD YOUR Certificate of Completion</button>
+            
         </div>
+    </section>
+</ng-container>
 
-        <div class="result fail" *ngIf="success === false" @fadeInOut>
-            <img src="assets/knowledgebase/icons/failure.svg" alt="" class="icon">
-            <p class="f40 mbold">Not this time… but don’t give up!</p>
-            <div>
-                <p class="f24">You didn’t pass the quiz, but this is just part of the learning process.</p>
-                <p class="f18">Take time to review the lesson, practice the concepts, and come back stronger.</p>
-            </div>
-            <p class="f24 mbold">You can retake this quiz in 15 days.</p>
-        </div>
-
-        <div class="certificate" *ngIf="fakeDownload" @fadeInOut>
-            <img src="assets/knowledgebase/certificate.png" alt="">
-        </div>
-        
-    </div>
-
-
-</section>

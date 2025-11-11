@@ -1,17 +1,16 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { InMemoryScrollingFeature, InMemoryScrollingOptions, provideRouter, withInMemoryScrolling } from '@angular/router';
-
 import { routes } from './app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
-
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { effects, reducers, metaReducers } from './core/store/store';
-import { provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { BASE_URL, PRODUCTION_HOSTNAMES } from './core/utils/variables';
 import { environment } from '../environments/environment';
 import { provideTranslateService } from '@ngx-translate/core';
 import {provideTranslateHttpLoader} from "@ngx-translate/http-loader";
+import { lockedResourceInterceptor } from './core/utils/locked-resource.interceptor';
 
 const scrollConfig: InMemoryScrollingOptions = {
     scrollPositionRestoration: 'enabled'
@@ -26,7 +25,11 @@ export const appConfig: ApplicationConfig = {
         provideAnimations(),
         provideStore(reducers, { metaReducers }),
         provideEffects(effects),
-        provideHttpClient(),
+        provideHttpClient(
+            withInterceptors([
+                lockedResourceInterceptor
+            ])
+        ),
         { 
             provide: BASE_URL, 
             useValue: PRODUCTION_HOSTNAMES.includes(window.location.hostname) ? environment.API_BASE_PATH : environment.DEV_API_BASE_PATH 

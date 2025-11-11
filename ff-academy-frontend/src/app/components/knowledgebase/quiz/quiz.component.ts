@@ -7,12 +7,14 @@ import { trigger, transition, style, animate, state } from '@angular/animations'
 import { Store } from '@ngrx/store';
 import { CurriculumSelectors } from '../../../core/store/curriculum/curriculum.selectors';
 import { CurriculumActions } from '../../../core/store/curriculum/curriculum.actions';
-import { filter, firstValueFrom, take } from 'rxjs';
+import { combineLatest, filter, firstValueFrom, map, Subject, take, takeUntil } from 'rxjs';
 import { ProfileActions } from '../../../core/store/profile/profile.actions';
+import { LoaderComponent } from "../../loader/loader.component";
+import { Actions, ofType } from '@ngrx/effects';
 
 @Component({
   selector: 'app-quiz',
-  imports: [RouterModule, CommonModule, MatCheckboxModule, FormsModule],
+  imports: [RouterModule, CommonModule, MatCheckboxModule, FormsModule, LoaderComponent],
   templateUrl: './quiz.component.html',
   styleUrl: './quiz.component.scss',
   animations: [
@@ -32,25 +34,39 @@ import { ProfileActions } from '../../../core/store/profile/profile.actions';
 export class QuizComponent {
     private store = inject(Store);
     trainingId!: string;
-    // trainingOrder!: number;
+    savingProgressFailed: boolean;
 
-    // pillarOrder!: number;
-    // difficultyName!: string;
+    destroy$ = new Subject<void>();
     
     quiz$ = this.store.select(CurriculumSelectors.selectSelectedQuiz);
     training$ = this.store.select(CurriculumSelectors.selectSelectedTraining);
+
+    loading$ = combineLatest([
+        this.store.select(CurriculumSelectors.selectSelectedTrainingLoading),
+        this.store.select(CurriculumSelectors.selectQuizLoading)
+    ]).pipe(
+        map(([trainingLoading, quizLoading]) => trainingLoading || quizLoading)
+    );
+
+    error$ = combineLatest([
+        this.store.select(CurriculumSelectors.selectSelectedTrainingError),
+        this.store.select(CurriculumSelectors.selectQuizError)
+    ]).pipe(
+        map(([trainingError, quizError]) =>
+            [trainingError, quizError].filter(Boolean)   // remove null/undefined
+        )
+    );
     
     counter = 1;
 
     constructor(
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private actions$: Actions
     ) {}
 
     ngOnInit() {
         this.route.paramMap.subscribe(params => {
             this.trainingId = String(params.get('trainingId'));
-            // this.pillarOrder = Number(params.get('pillarOrder'));
-            // this.difficultyName = String(params.get('difficultyName'));
 
             this.store.dispatch(
                 CurriculumActions.loadQuiz({
@@ -59,11 +75,34 @@ export class QuizComponent {
             );
 
             this.store.dispatch(
-                CurriculumActions.loadTrainingDetail({
+                CurriculumActions.loadSelectedTraining({
                     trainingId: this.trainingId
                 })
             );
         });
+
+        this.actions$
+            .pipe(
+                ofType(ProfileActions.saveProgressSuccess),
+                takeUntil(this.destroy$)
+            )
+            .subscribe(() => {
+                // handle success
+                this.success = this.allQuestionsCorrect;
+            }
+        );
+
+        this.actions$
+            .pipe(
+                ofType(ProfileActions.saveProgressFailure),
+                takeUntil(this.destroy$)
+            )
+            .subscribe(err => {
+                // handle failure
+                this.savingProgressFailed = true;
+                this.success = false;
+            }
+        );
     }
 
 
@@ -71,6 +110,7 @@ export class QuizComponent {
     success: boolean | null = null; // null = not finished, true/false after last question
     selectedAnswers: Record<number, string | null> = {};
     checkedAnswers: Record<number, boolean> = {};
+    allQuestionsCorrect: boolean;
     fakeDownload = false;
 
     onSelect(questionId: number, answer: string) {
@@ -90,26 +130,18 @@ export class QuizComponent {
         this.checkedAnswers[currentQ.questionId] = true;
         
         if (this.counter === questions.length) {
-            const allCorrect = questions.every(q =>
+            this.allQuestionsCorrect = questions.every(q =>
                 this.selectedAnswers[q.questionId] === q.correctAnswer
             );
-            this.success = allCorrect;
-            console.log('Quiz success?', this.success);
-            this.onQuizComplete(this.success);
+            this.onQuizComplete();
         }
 
         this.counter++;
     }
 
-    download() {
-        this.success = null;
-        this.fakeDownload = true;
-    }
-
-    // TODO should handle removing quiz from selected after failure or leaving quiz
-    onQuizComplete(passed: boolean) {
+    onQuizComplete() {
         this.training$.pipe(take(1)).subscribe(training => {
-            const status = passed ? 'completed' : 'failed';
+            const status = this.allQuestionsCorrect ? 'completed' : 'failed';
     
             const progress = {
                 trainingId: training?._id,
@@ -126,7 +158,11 @@ export class QuizComponent {
             );
         });
     }
-    
+
+    download() {
+        this.success = null;
+        this.fakeDownload = true;
+    }
 
     getDifficultyOrder(name: string): number {
         switch (name.toLowerCase()) {

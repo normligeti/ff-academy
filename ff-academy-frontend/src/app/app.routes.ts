@@ -5,6 +5,7 @@ import { LoginComponent } from './components/login/login.component';
 import { DifficultyDetailComponent } from './components/knowledgebase/difficulty-detail/difficulty-detail.component';
 import { TrainingDetailComponent } from './components/knowledgebase/training-detail/training-detail.component';
 import { QuizComponent } from './components/knowledgebase/quiz/quiz.component';
+import { LockedComponent } from './components/locked/locked.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -18,4 +19,5 @@ export const routes: Routes = [
         ]
     },
     { path: 'login', component: LoginComponent },
+    { path: 'locked', component: LockedComponent },
 ];
