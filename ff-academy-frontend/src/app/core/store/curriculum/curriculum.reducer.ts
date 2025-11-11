@@ -4,17 +4,10 @@ import { CurriculumActions } from './curriculum.actions';
 export const curriculumFeatureKey = 'curriculum';
 
 export interface CurriculumState {
-    // Pillars
-    pillars: any[];
-    loadingPillars: boolean;
-    loadedPillars: boolean;
-    pillarsError: any;
-
-    // Trainings
-    trainings: any[];
-    loadingTrainings: boolean;
-    loadedTrainings: boolean;
-    trainingsError: any;
+    curriculum: any | null;
+    loadingCurriculum: boolean;
+    loadedCurriculum: boolean;
+    curriculumError: any;
 
     // Selected training
     selectedTraining: any | null;
@@ -30,17 +23,10 @@ export interface CurriculumState {
 }
 
 export const initialState: CurriculumState = {
-    // Pillars
-    pillars: [],
-    loadingPillars: false,
-    loadedPillars: false,
-    pillarsError: null,
-
-    // Trainings
-    trainings: [],
-    loadingTrainings: false,
-    loadedTrainings: false,
-    trainingsError: null,
+    curriculum: null,
+    loadingCurriculum: false,
+    loadedCurriculum: false,
+    curriculumError: null,
 
     // Training detail
     selectedTraining: null,
@@ -58,44 +44,25 @@ export const initialState: CurriculumState = {
 export const reducer = createReducer(
     initialState,
 
-    // --- PILLARS ---
-    on(CurriculumActions.loadPillars, state => ({
+    // Curriculum curriculum
+    on(CurriculumActions.loadDecoratedCurriculum, state => ({
         ...state,
-        loadingPillars: true,
-        loadedPillars: false,
-        pillarsError: null
+        loadingCurriculum: true,
+        curriculumError: null
     })),
-    on(CurriculumActions.loadPillarsSuccess, (state, { pillars }) => ({
+    
+    on(CurriculumActions.loadDecoratedCurriculumSuccess, (state, { curriculum }) => ({
         ...state,
-        loadingPillars: false,
-        loadedPillars: true,
-        pillars
+        loadingCurriculum: false,
+        loadedCurriculum: true,
+        curriculum: curriculum
     })),
-    on(CurriculumActions.loadPillarsFailure, (state, { error }) => ({
+    
+    on(CurriculumActions.loadDecoratedCurriculumFailure, (state, { error }) => ({
         ...state,
-        loadingPillars: false,
-        loadedPillars: false,
-        pillarsError: error
-    })),
-
-    // --- TRAININGS ---
-    on(CurriculumActions.loadTrainingsForUser, state => ({
-        ...state,
-        loadingTrainings: true,
-        loadedTrainings: false,
-        trainingsError: null
-    })),
-    on(CurriculumActions.loadTrainingsForUserSuccess, (state, { trainings }) => ({
-        ...state,
-        loadingTrainings: false,
-        loadedTrainings: true,
-        trainings
-    })),
-    on(CurriculumActions.loadTrainingsForUserFailure, (state, { error }) => ({
-        ...state,
-        loadingTrainings: false,
-        loadedTrainings: false,
-        trainingsError: error
+        loadingCurriculum: false,
+        loadedCurriculum: false,
+        curriculumError: error
     })),
 
     // --- TRAINING DETAILS ---

@@ -3,15 +3,10 @@ import { createActionGroup, emptyProps, props } from '@ngrx/store';
 export const CurriculumActions = createActionGroup({
     source: 'Curriculum',
     events: {
-        // --- Pillars ---
-        'Load Pillars': emptyProps(),
-        'Load Pillars Success': props<{ pillars: any[] }>(),
-        'Load Pillars Failure': props<{ error: any }>(),
-
-        // --- Trainings for user ---
-        'Load Trainings For User': emptyProps(),
-        'Load Trainings For User Success': props<{ trainings: any[] }>(),
-        'Load Trainings For User Failure': props<{ error: any }>(),
+        // Load full decorated curriculum
+        'Load Decorated Curriculum': emptyProps(),
+        'Load Decorated Curriculum Success': props<{ curriculum: any }>(),
+        'Load Decorated Curriculum Failure': props<{ error: any }>(),
 
         // --- Selected Training (by ID) ---
         'Load Selected Training': props<{ trainingId: string }>(),

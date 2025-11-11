@@ -21,6 +21,7 @@
             <img src="assets/knowledgebase/icons/lock.svg" alt="" class="lock">
             <img src="assets/knowledgebase/icons/mindset.svg" alt="" class="icon">
             <p class="f32 sbold uc center" [innerHTML]="'KNOWLEDGEBASE.SECTION4.CARD1' | translate"></p>
+            <p class="status-test">{{pillars[0]?.status}}</p>
             <!-- <p class="f32 sbold uc center">{{ pillars[0].title }}</p> -->
         </div>
         <div class="s4-card available" (click)="showSection(pillars[1])">
@@ -29,6 +30,7 @@
             <img src="assets/knowledgebase/icons/lock.svg" alt="" class="lock">
             <img src="assets/knowledgebase/icons/logo-invert.svg" alt="" class="icon">
             <p class="f32 sbold uc center" [innerHTML]="'KNOWLEDGEBASE.SECTION4.CARD2' | translate"></p>
+            <p class="status-test">{{pillars[1]?.status}}</p>
             <!-- <p class="f32 sbold uc center">{{ pillars[1].title }}</p> -->
 
         </div>
@@ -38,6 +40,7 @@
             <img src="assets/knowledgebase/icons/lock.svg" alt="" class="lock">
             <img src="assets/knowledgebase/icons/network.svg" alt="" class="icon">
             <p class="f32 sbold uc center" [innerHTML]="'KNOWLEDGEBASE.SECTION4.CARD3' | translate"></p>
+            <p class="status-test">{{pillars[2]?.status}}</p>
             <!-- <p class="f32 sbold uc center">{{ pillars[2].title }}</p> -->
 
         </div>
@@ -47,6 +50,7 @@
             <img src="assets/knowledgebase/icons/lock.svg" alt="" class="lock">
             <img src="assets/knowledgebase/icons/clock.svg" alt="" class="icon">
             <p class="f32 sbold uc center" [innerHTML]="'KNOWLEDGEBASE.SECTION4.CARD4' | translate"></p>
+            <p class="status-test">{{pillars[3]?.status}}</p>
             <!-- <p class="f32 sbold uc center">{{ pillars[3].title }}</p> -->
 
         </div>
@@ -61,6 +65,7 @@
             <h5 class="sbold uc">{{ diff.name }}</h5>
             <p class="f24 sbold uc">{{ selectedPillar.title }}</p>
             <img src="assets/knowledgebase/icons/{{openStates[i] ? 'minus' : 'plus'}}.svg" alt="" class="icon">
+            <p class="status-test">{{diff?.status}}</p>
         </div>
     
         <div class="dropdown-box" [ngClass]="{'open': openStates[i]}">

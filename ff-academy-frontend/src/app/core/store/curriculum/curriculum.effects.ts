@@ -11,27 +11,15 @@ export class CurriculumEffects {
 
     constructor(private curriculumService: CurriculumService) {}
 
-    // --- Load Pillars ---
-    loadPillars$ = createEffect(() =>
+    loadDecoratedCurriculum$ = createEffect(() =>
         this.actions$.pipe(
-            ofType(CurriculumActions.loadPillars),
+            ofType(CurriculumActions.loadDecoratedCurriculum),
             mergeMap(() =>
-                this.curriculumService.getPillars().pipe(
-                    map(pillars => CurriculumActions.loadPillarsSuccess({ pillars })),
-                    catchError(error => of(CurriculumActions.loadPillarsFailure({ error })))
-                )
-            )
-        )
-    );
-
-    // --- Load Trainings for an user ---
-    loadTrainingsForUser$ = createEffect(() =>
-        this.actions$.pipe(
-            ofType(CurriculumActions.loadTrainingsForUser),
-            mergeMap(() =>
-                this.curriculumService.getTrainingsForUser().pipe(
-                    map(trainings => CurriculumActions.loadTrainingsForUserSuccess({ trainings })),
-                    catchError(error => of(CurriculumActions.loadTrainingsForUserFailure({ error })))
+                this.curriculumService.getDecoratedCurriculum().pipe(
+                    map(curr => CurriculumActions.loadDecoratedCurriculumSuccess({ curriculum: curr })),
+                    catchError(error =>
+                        of(CurriculumActions.loadDecoratedCurriculumFailure({ error }))
+                    )
                 )
             )
         )

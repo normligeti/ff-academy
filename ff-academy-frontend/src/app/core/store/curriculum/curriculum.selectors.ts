@@ -6,61 +6,68 @@ import { curriculumFeatureKey } from './curriculum.reducer';
 export const selectCurriculumState = createFeatureSelector<CurriculumState>(curriculumFeatureKey);
 
 export const CurriculumSelectors = {
+    
+    // --- BASE CURRICULUM ---
+    selectCurriculum: createSelector(
+        selectCurriculumState,
+        state => state.curriculum
+    ),
+    selectCurriculumLoading: createSelector(
+        selectCurriculumState,
+        state => state.loadingCurriculum
+    ),
+    selectCurriculumLoaded: createSelector(
+        selectCurriculumState,
+        state => state.loadedCurriculum
+    ),
+    selectCurriculumError: createSelector(
+        selectCurriculumState,
+        state => state.curriculumError
+    ),
+
     // --- PILLARS ---
     selectPillars: createSelector(
         selectCurriculumState,
-        (state) => state.pillars
+        state => state.curriculum?.pillars ?? []
     ),
-    selectPillarsLoading: createSelector(
-        selectCurriculumState,
-        (state) => state.loadingPillars
-    ),
-    selectPillarsLoaded: createSelector(
-        selectCurriculumState,
-        (state) => state.loadedPillars
-    ),
-    selectPillarsError: createSelector(
-        selectCurriculumState,
-        (state) => state.pillarsError
+    selectPillar: (pillarOrder: number) =>
+        createSelector(
+            selectCurriculumState,
+            state =>
+                state.curriculum?.pillars?.find(
+                    p => p.order === pillarOrder
+                ) ?? null
     ),
 
-    // --- TRAININGS ---
-    selectTrainings: createSelector(
-        selectCurriculumState,
-        (state) => state.trainings
+    // --- DIFFICULTIES ---
+    selectDifficulty: (pillarOrder: number, difficultyName: string) =>
+        createSelector(
+            selectCurriculumState,
+            state => {
+                const pillar = state.curriculum?.pillars?.find(
+                    p => p.order === pillarOrder
+                );
+                return pillar?.difficulties?.find(
+                    d => d.name === difficultyName
+                ) ?? null;
+            }
     ),
-    selectTrainingsForDifficulty: (
-        pillarOrder: number,
-        difficultyName: string
-    ) => createSelector(
-        selectCurriculumState,
-        (state) => {
-            const trainings = state.trainings;
-                const diffMap: Record<string, number> = {
-                    basic: 1,
-                    intermediate: 2,
-                    master: 3
-                };
-        
-                const difficultyOrder = diffMap[difficultyName];
-    
-            return trainings.filter(t => {
-                const [pOrder, dOrder] = t.path.split('.').map(Number);
-                return pOrder === pillarOrder && dOrder === difficultyOrder;
-            });
-        }
-    ),
-    selectTrainingsLoading: createSelector(
-        selectCurriculumState,
-        (state) => state.loadingTrainings
-    ),
-    selectTrainingsLoaded: createSelector(
-        selectCurriculumState,
-        (state) => state.loadedTrainings
-    ),
-    selectTrainingsError: createSelector(
-        selectCurriculumState,
-        (state) => state.trainingsError
+
+    // --- TRAININGS INSIDE DIFFICULTY ---
+    selectTrainingsForDifficulty: (pillarOrder: number, difficultyName: string) =>
+        createSelector(
+            selectCurriculumState,
+            state => {
+                const pillar = state.curriculum?.pillars?.find(
+                    p => p.order === pillarOrder
+                );
+                if (!pillar) return [];
+
+                const difficulty = pillar.difficulties?.find(
+                    d => d.name === difficultyName
+                );
+                return difficulty?.trainings ?? [];
+            }
     ),
 
     // --- TRAINING DETAIL ---

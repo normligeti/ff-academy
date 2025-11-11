@@ -6,63 +6,68 @@ import { CurriculumActions } from '../../../core/store/curriculum/curriculum.act
 import { CommonModule } from '@angular/common';
 import { LoaderComponent } from "../../loader/loader.component";
 import { combineLatest, map, Observable, take } from 'rxjs';
+import { CountdownPipe } from '../../../core/utils/countdown.pipe';
 
 @Component({
   selector: 'app-training-detail',
-  imports: [RouterModule, CommonModule, LoaderComponent],
+  imports: [RouterModule, CommonModule, CountdownPipe],
   templateUrl: './training-detail.component.html',
   styleUrl: './training-detail.component.scss'
 })
 export class TrainingDetailComponent {
     private store = inject(Store);
 
+    trainingId!: string;
+    pillarOrder!: number;
+    difficultyName!: string;
+
     training$ = this.store.select(CurriculumSelectors.selectSelectedTraining);
-    trainings$: Observable<any>;
-    nextTrainings$: Observable<any>;
-    loading$ = this.store.select(CurriculumSelectors.selectSelectedTrainingLoading);
+    nextTrainings$!: Observable<any[]>;
+    trainingsForDifficulty$!: Observable<any[]>;
+
     error$ = this.store.select(CurriculumSelectors.selectSelectedTrainingError);
 
-    constructor(
-        private route: ActivatedRoute
-    ) {}
+    constructor(private route: ActivatedRoute) {}
 
     ngOnInit() {
         this.route.paramMap.subscribe(params => {
-            let trainingId = String(params.get('trainingId'));
-            let pillarOrder = Number(params.get('pillarOrder'));
-            let difficultyName = params.get('difficultyName') || '';
-            
-            this.store.dispatch(
-                CurriculumActions.loadSelectedTraining({
-                    trainingId: trainingId
-                })
-            );
+            this.trainingId = String(params.get('trainingId'));
+            this.pillarOrder = Number(params.get('pillarOrder'));
+            this.difficultyName = params.get('difficultyName') || '';
 
-            this.store.select(CurriculumSelectors.selectTrainingsLoaded)
+            this.store.select(CurriculumSelectors.selectCurriculumLoaded)
                 .pipe(take(1))
-                .subscribe((loaded) => {
+                .subscribe(loaded => {
                     if (!loaded) {
-                        this.store.dispatch(CurriculumActions.loadTrainingsForUser());
+                        this.store.dispatch(CurriculumActions.loadDecoratedCurriculum());
                     }
                 }
             );
 
-            this.trainings$ = this.store.select(
+            this.store.dispatch(
+                CurriculumActions.loadSelectedTraining({
+                    trainingId: this.trainingId
+                })
+            );
+
+            this.trainingsForDifficulty$ = this.store.select(
                 CurriculumSelectors.selectTrainingsForDifficulty(
-                    pillarOrder,
-                    difficultyName
+                    this.pillarOrder,
+                    this.difficultyName
                 )
             );
 
             this.nextTrainings$ = combineLatest([
-                this.trainings$,
+                this.trainingsForDifficulty$,
                 this.training$
             ]).pipe(
                 map(([trainings, current]) => {
                     if (!trainings || !current) return [];
-            
-                    // Keep only trainings that come AFTER the current one
-                    return trainings.filter(t => t.order > current.order);
+
+                    const index = trainings.findIndex(t => t._id === current._id);
+                    if (index === -1) return [];
+
+                    return trainings.slice(index + 1);
                 })
             );
         });

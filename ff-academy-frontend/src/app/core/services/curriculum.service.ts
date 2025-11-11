@@ -12,16 +12,20 @@ export class CurriculumService {
         @Inject(BASE_URL) private baseUrl: string
     ) {}
 
-    // --- PILLARS ---
-    getPillars(): Observable<any[]> {
-        return this.http.get<any[]>(`${this.baseUrl}/curriculum/pillars`);
-    }
+    // // --- PILLARS ---
+    // getPillars(): Observable<any[]> {
+    //     return this.http.get<any[]>(`${this.baseUrl}/curriculum/pillars`);
+    // }
 
-    // --- TRAININGS ---
-    getTrainingsForUser(): Observable<any[]> {
-        return this.http.get<any[]>(
-            `${this.baseUrl}/curriculum/pillars/user-trainings`
-        );
+    // // --- TRAININGS ---
+    // getTrainingsForUser(): Observable<any[]> {
+    //     return this.http.get<any[]>(
+    //         `${this.baseUrl}/curriculum/pillars/user-trainings`
+    //     );
+    // }
+
+    getDecoratedCurriculum(): Observable<any> {
+        return this.http.get<any>(`${this.baseUrl}/curriculum/curriculum-data`);
     }
 
     // --- TRAINING DETAIL (by ID) ---

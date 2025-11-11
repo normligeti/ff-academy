@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 import { CurriculumActions } from '../../core/store/curriculum/curriculum.actions';
 import { CurriculumSelectors } from '../../core/store/curriculum/curriculum.selectors';
-import { filter, take } from 'rxjs';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-knowledgebase',
@@ -15,15 +15,17 @@ import { filter, take } from 'rxjs';
 })
 export class KnowledgebaseComponent {
     private store = inject(Store);
+
     pillars$ = this.store.select(CurriculumSelectors.selectPillars);
-    selectedPillar: any;
+
+    selectedPillar: any = null;
 
     ngOnInit() {
-        this.store.select(CurriculumSelectors.selectPillarsLoaded)
+        this.store.select(CurriculumSelectors.selectCurriculumLoaded)
             .pipe(take(1))
-            .subscribe((loaded) => {
+            .subscribe(loaded => {
                 if (!loaded) {
-                    this.store.dispatch(CurriculumActions.loadPillars());
+                    this.store.dispatch(CurriculumActions.loadDecoratedCurriculum());
                 }
             }
         );
@@ -34,12 +36,12 @@ export class KnowledgebaseComponent {
     }
 
 
-    // dropdown display
-    openStates: { [key: number]: boolean } = { 0:true, 1:false, 2:false };
+    // dropdown display (openstates init values might not work TODO)
+    openStates: { [key: number]: boolean } = { 0:false, 1:false, 2:false };
 
     showSection(pillar) {
         let element = document.querySelector('.section-5') as HTMLElement;
-        this.openStates = { 0:true, 1:false, 2:false };
+        this.openStates = { 0:false, 1:false, 2:false };
 
         if ((pillar?.order !== this.selectedPillar?.order) || !element.classList.contains('show')) {
             element.classList.add('show');

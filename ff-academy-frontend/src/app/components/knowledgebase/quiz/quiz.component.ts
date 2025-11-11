@@ -3,18 +3,17 @@ import { Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
-import { trigger, transition, style, animate, state } from '@angular/animations';
+import { trigger, transition, style, animate } from '@angular/animations';
 import { Store } from '@ngrx/store';
 import { CurriculumSelectors } from '../../../core/store/curriculum/curriculum.selectors';
 import { CurriculumActions } from '../../../core/store/curriculum/curriculum.actions';
-import { combineLatest, filter, firstValueFrom, map, Subject, take, takeUntil } from 'rxjs';
+import { combineLatest, map, Subject, take, takeUntil } from 'rxjs';
 import { ProfileActions } from '../../../core/store/profile/profile.actions';
-import { LoaderComponent } from "../../loader/loader.component";
 import { Actions, ofType } from '@ngrx/effects';
 
 @Component({
   selector: 'app-quiz',
-  imports: [RouterModule, CommonModule, MatCheckboxModule, FormsModule, LoaderComponent],
+  imports: [RouterModule, CommonModule, MatCheckboxModule, FormsModule],
   templateUrl: './quiz.component.html',
   styleUrl: './quiz.component.scss',
   animations: [
@@ -40,13 +39,6 @@ export class QuizComponent {
     
     quiz$ = this.store.select(CurriculumSelectors.selectSelectedQuiz);
     training$ = this.store.select(CurriculumSelectors.selectSelectedTraining);
-
-    loading$ = combineLatest([
-        this.store.select(CurriculumSelectors.selectSelectedTrainingLoading),
-        this.store.select(CurriculumSelectors.selectQuizLoading)
-    ]).pipe(
-        map(([trainingLoading, quizLoading]) => trainingLoading || quizLoading)
-    );
 
     error$ = combineLatest([
         this.store.select(CurriculumSelectors.selectSelectedTrainingError),
@@ -87,8 +79,8 @@ export class QuizComponent {
                 takeUntil(this.destroy$)
             )
             .subscribe(() => {
-                // handle success
                 this.success = this.allQuestionsCorrect;
+                this.store.dispatch(CurriculumActions.loadDecoratedCurriculum());
             }
         );
 
@@ -98,9 +90,9 @@ export class QuizComponent {
                 takeUntil(this.destroy$)
             )
             .subscribe(err => {
-                // handle failure
                 this.savingProgressFailed = true;
                 this.success = false;
+                this.store.dispatch(CurriculumActions.loadDecoratedCurriculum());
             }
         );
     }
