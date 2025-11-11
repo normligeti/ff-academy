@@ -44,14 +44,13 @@ const curriculumController = {
             // const userId = req.query.userId;
             const userId = '68f027ed4ac1082b77d6d3c3';
 
-            const access = await curriculumService.checkTrainingAccess(userId, trainingId);
+            const result = await curriculumService.checkTrainingAccess(userId, trainingId);
             
-            if (!access.ok || !access.allowTraining) {
-                return res.status(403).json({ message: access.reason });
+            if (!result.access.ok || !result.access.allowTraining) {
+                return res.status(403).json({ message: result.access.reason });
             }
 
-            const training = await curriculumService.getTrainingById(trainingId);
-            if (!training) return res.status(404).json({ message: "Training not found" });
+            const training = result.training;
 
             res.json(training);
         } catch (err) {
@@ -70,13 +69,15 @@ const curriculumController = {
             const training = await curriculumService.getTrainingByPath(path);
             if (!training) return res.status(404).json({ message: "Training not found" });
 
-            const access = await curriculumService.checkTrainingAccess(userId, training._id);
+            const result = await curriculumService.checkTrainingAccess(userId, training._id);
             
-            if (!access.ok || !access.allowTraining) {
-                return res.status(403).json({ message: access.reason });
+            if (!result.access.ok || !result.access.allowTraining) {
+                return res.status(403).json({ message: result.access.reason });
             }
 
-            res.json(training);
+            const trainingForResponse = result.training;
+
+            res.json(trainingForResponse);
         } catch (err) {
             console.error("getTrainingByPath error:", err);
             res.status(500).json({ message: "Failed to fetch training" });
@@ -90,10 +91,10 @@ const curriculumController = {
             // const userId = req.query.userId;
             const userId = '68f027ed4ac1082b77d6d3c3';
 
-            const access = await curriculumService.checkTrainingAccess(userId, trainingId);
+            const result = await curriculumService.checkTrainingAccess(userId, trainingId);
             
-            if (!access.ok || !access.allowQuiz) {
-                return res.status(403).json({ message: access.reason });
+            if (!result.access.ok || !result.access.allowQuiz) {
+                return res.status(403).json({ message: result.access.reason });
             }
 
             const quiz = await curriculumService.getQuizForTraining(trainingId);

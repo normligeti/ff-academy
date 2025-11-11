@@ -35,7 +35,7 @@ const userService = {
         const user = await User.findById(userId);
         if (!user) return null;
     
-        const { trainingId, path, status = 'not_started', seenVersion = 1 } = progressData;
+        const { trainingId, path, status, seenVersion = 1 } = progressData;
     
         // Find existing progress entry for this training
         let entry = user.progress.find(p => p.trainingId.toString() === trainingId);
@@ -80,11 +80,11 @@ const userService = {
                     break;
                 case 'in_progress':
                     break;
-                case 'not_started':
-                    entry.completedAt = null;
-                    entry.failedAt = null;
-                    entry.retryAvailableAt = null;
-                    break;
+                // case 'not_started':
+                //     entry.completedAt = null;
+                //     entry.failedAt = null;
+                //     entry.retryAvailableAt = null;
+                //     break;
             }
         }
     

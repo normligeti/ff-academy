@@ -158,13 +158,6 @@ const curriculumService = {
             up.status = state;
         }
 
-        // STEP 4: if no progress yet, unlock only first training
-        // if (lastProgressIndex === -1) {
-        //     decorated.forEach((t, i) => {
-        //         t.userProgress.state = i === 0 ? "available" : "locked";
-        //     });
-        // }
-
         return decorated;
     },
 
@@ -206,6 +199,8 @@ const curriculumService = {
         });
 
         const targetIndex = decorated.findIndex(t => t._id.toString() === trainingId);
+        const t = decorated[targetIndex];
+        const up = t.userProgress;
 
         // find last completed/failed
         const lastProgressIndex = decorated.findLastIndex(t =>
@@ -215,9 +210,17 @@ const curriculumService = {
         // if no progress → only first index allowed
         if (lastProgressIndex === -1) {
             if (targetIndex === 0) {
-                return { ok: true, allowTraining: true, allowQuiz: true };
+                let allowQuiz = true;
+                t.userProgress.allowQuiz = allowQuiz;
+                return { 
+                    access: { ok: true, allowTraining: true, allowQuiz: allowQuiz }, 
+                    training: t 
+                };
             }
-            return { ok: false, reason: "Locked" };
+            return { 
+                access: { ok: false, reason: "Locked" }, 
+                training: {} 
+            };
         }
 
         // find if last progress is failed AND still locked by cooldown
@@ -230,36 +233,60 @@ const curriculumService = {
             }
         }
 
-        const t = decorated[targetIndex];
-        const up = t.userProgress;
-
         // determine state (simplified)
         const versionModified = t.version > up.seenVersion;
 
         if (versionModified) {
-            return { ok: true, allowTraining: true, allowQuiz: false, reason: "Quiz already completed (Modified training)" };
+            let allowQuiz = false;
+            t.userProgress.allowQuiz = allowQuiz;
+            return {
+                access: { ok: true, allowTraining: true, allowQuiz: allowQuiz, reason: "Quiz already completed (Modified training)" },
+                training: t
+            };
         }
 
         if (up.status === "completed") {
-            return { ok: true, allowTraining: true, allowQuiz: false, reason: "Quiz already completed" };
+            let allowQuiz = false;
+            t.userProgress.allowQuiz = allowQuiz;
+            return {
+                access: { ok: true, allowTraining: true, allowQuiz: allowQuiz, reason: "Quiz already completed" },
+                training: t
+            };
         }
 
         if (up.status === "failed") {
             const retryAt = new Date(up.retryAvailableAt).getTime() || 0;
             const canRetry = retryAt <= now;
-            return { ok: true, allowTraining: true, allowQuiz: canRetry, reason: canRetry ? undefined : "Retry cooldown" };
+            t.userProgress.allowQuiz = canRetry;
+            return {
+                access: { ok: true, allowTraining: true, allowQuiz: canRetry, reason: canRetry ? undefined : "Retry cooldown" },
+                training: t
+            }
         }
 
         if (targetIndex === lastProgressIndex + 1 && (stopIndex === -1 || targetIndex < stopIndex)) {
-            return { ok: true, allowTraining: true, allowQuiz: true };
+            let allowQuiz = true;
+            t.userProgress.allowQuiz = allowQuiz;
+            return {
+                access: { ok: true, allowTraining: true, allowQuiz: allowQuiz },
+                training: t
+            }
         }
 
         if (targetIndex < lastProgressIndex) {
             // training added earlier in the path → new
-            return { ok: true, allowTraining: true, allowQuiz: true };
+            let allowQuiz = true;
+            t.userProgress.allowQuiz = allowQuiz;
+            return {
+                access: { ok: true, allowTraining: true, allowQuiz: allowQuiz },
+                training: t
+            }
         }
 
-        return { ok: false, reason: "Locked" };
+        return {
+            access: { ok: false, reason: "Locked" },
+            training: {}
+        }
     },
 
     async getTrainingById(trainingId) {
