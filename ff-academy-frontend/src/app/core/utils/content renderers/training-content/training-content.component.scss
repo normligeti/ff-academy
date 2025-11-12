@@ -1,0 +1,105 @@
+@import "mixins.scss";
+
+
+
+p {
+    line-height: 1.5;
+}
+
+.content {
+    max-width: 1000px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    gap: 30px;
+    z-index: 1;
+    padding-bottom: 40px;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.path {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    img {
+        height: 10px;
+        position: relative;
+        top: 1px;
+    }
+}
+
+.link {
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.image-large {
+    width: 100%;
+    max-width: 1000px;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.number {
+    width: 46px;
+    height: 34px;
+    padding-left: 7px;
+    padding-bottom: 2px;
+    background-color: var(--blue);
+    clip-path: polygon(0% 0%, 75% 0, 100% 50%, 75% 100%, 0% 100%);
+    display: flex;
+    align-items: center;
+    color: white;
+}
+
+ul {
+    padding-left: 70px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    span.blue {
+        margin-right: 20px;
+    }
+}
+
+.blue-box {
+    width: 100%;
+    border-radius: 10px;
+    background: linear-gradient(95.93deg, #F1F1F2 0%, #DBEFF0 100%);
+    padding: 12px 16px;
+}
+
+.divider {
+    width: 100%;
+    border-bottom: 1px solid #0596AE33;
+}
+
+.text-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.dark-border {
+    border: 2px solid #505D65;
+    border-radius: 10px;
+    padding: 8px 20px;
+}

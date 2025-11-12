@@ -1,1 +1,66 @@
-<p>training-content works!</p>
+<!-- TODO azt kene itt eldonteni, hogy hogyan lesz ez szerkesztve, aki csinalja, az hogyan akar bele szines felkover kiemelest rakni,
+ design alapjan lesz e csinalva, stb.  -->
+<ng-container [ngSwitch]="block.type">
+
+    <!-- PARAGRAPH -->
+    <p *ngSwitchCase="'paragraph'" [innerHTML]="get('text')">
+    </p>
+
+    <!-- IMAGE -->
+    <img *ngSwitchCase="'image'" class="image-large" [src]="get('src')" [alt]="get('alt') || ''">
+
+    <!-- SECTION TITLE (number + heading) -->
+    <div *ngSwitchCase="'sectionTitle'" class="title">
+        <p *ngIf="get('number')" class="f28 number sbold">{{ get('number') }}</p>
+        <p class="f32 mbold blue">{{ get('title') }}</p>
+    </div>
+
+    <!-- SUBPARAGRAPH / HIGHLIGHTED LINE -->
+    <p *ngSwitchCase="'subParagraph'" class="f24 mbold" [innerHTML]="get('text')"></p>
+
+    <!-- BULLET LIST -->
+    <ul *ngSwitchCase="'list'">
+        <li *ngFor="let item of get('items')">
+            <span class="blue">&bull;</span>
+            <span [innerHTML]="item"></span>
+        </li>
+    </ul>
+
+    <!-- CALLOUT / BLUE BOX -->
+    <div *ngSwitchCase="'callout'" class="blue-box">
+        <p class="blue" [innerHTML]="get('text')"></p>
+    </div>
+
+    <!-- DIVIDER -->
+    <div *ngSwitchCase="'divider'" class="divider"></div>
+
+    <!-- TEXT WRAPPER (Q&A style) -->
+    <div *ngSwitchCase="'textWrapper'" class="text-wrapper">
+        <div *ngFor="let pair of get('pairs')">
+            <p class="mbold" [innerHTML]="pair.question"></p>
+            <p [innerHTML]="pair.answer"></p>
+        </div>
+    </div>
+
+    <!-- SUBHEADING -->
+    <h6 *ngSwitchCase="'subHeading'" class="sbold">
+        {{ get('text') }}
+    </h6>
+
+    <!-- BORDERED PARAGRAPH -->
+    <p *ngSwitchCase="'borderedParagraph'" class="dark-border">
+        {{ get('text') }}
+    </p>
+
+    <!-- TASK WRAPPER -->
+    <div *ngSwitchCase="'taskWrapper'" class="no-gap-wrapper">
+        <p class="f32 mbold blue">{{ get('title') }}</p>
+        <p class="f32">
+            <span class="mbold">Goal: </span>{{ get('goal') }}
+        </p>
+    </div>
+
+    <!-- FALLBACK -->
+    <pre *ngSwitchDefault>{{ block | json }}</pre>
+
+</ng-container>

@@ -24,12 +24,12 @@
         </div>
     </div>
     <div class="content">
+        <h6 class="sbold"><span class="blue">Lesson {{ (training$ | async)?.order }}:</span> {{ (training$ | async)?.title }}</h6>
 
-        <!-- <ng-container *ngFor="let block of training.content">
-            <app-training-content [block]="block" [lang]="currentLang"></app-training-content>
-        </ng-container> -->
-        <!-- <h6 class="sbold"><span class="blue">Lesson {{ (training$ | async)?.order }}:</span> {{ (training$ | async)?.title }}</h6>
-        <p>
+        <ng-container *ngFor="let block of (training$ | async)?.content">
+            <app-training-content [block]="block" lang="en"></app-training-content>
+        </ng-container>
+        <!-- <p>
             The Fireflies business doesn’t start with whether you have a good product or how many acquaintances 
             you have — it starts with who YOU are.
             Your most important resource in this business is not money, not connections, and not even

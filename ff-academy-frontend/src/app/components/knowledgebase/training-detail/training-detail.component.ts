@@ -10,10 +10,10 @@ import { CountdownPipe } from '../../../core/utils/countdown.pipe';
 import { TrainingContentComponent } from "../../../core/utils/content renderers/training-content/training-content.component";
 
 @Component({
-  selector: 'app-training-detail',
-  imports: [RouterModule, CommonModule, CountdownPipe, TrainingContentComponent],
-  templateUrl: './training-detail.component.html',
-  styleUrl: './training-detail.component.scss'
+    selector: 'app-training-detail',
+    imports: [RouterModule, CommonModule, CountdownPipe, TrainingContentComponent],
+    templateUrl: './training-detail.component.html',
+    styleUrl: './training-detail.component.scss'
 })
 export class TrainingDetailComponent {
     private store = inject(Store);
