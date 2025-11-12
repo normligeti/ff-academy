@@ -131,6 +131,7 @@ export class QuizComponent {
         this.counter++;
     }
 
+    // TODO decide what to do when failing a new quiz and opening modified quiz
     onQuizComplete() {
         this.training$.pipe(take(1)).subscribe(training => {
             const status = this.allQuestionsCorrect ? 'completed' : 'failed';
