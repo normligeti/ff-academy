@@ -78,13 +78,6 @@ const userService = {
                     entry.failedAt = now;
                     entry.retryAvailableAt = new Date(now.getTime() + 15 * 24 * 60 * 60 * 1000);
                     break;
-                case 'in_progress':
-                    break;
-                // case 'not_started':
-                //     entry.completedAt = null;
-                //     entry.failedAt = null;
-                //     entry.retryAvailableAt = null;
-                //     break;
             }
         }
     
