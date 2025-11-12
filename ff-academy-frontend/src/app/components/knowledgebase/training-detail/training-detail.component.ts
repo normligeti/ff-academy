@@ -7,10 +7,11 @@ import { CommonModule } from '@angular/common';
 import { LoaderComponent } from "../../loader/loader.component";
 import { combineLatest, map, Observable, take } from 'rxjs';
 import { CountdownPipe } from '../../../core/utils/countdown.pipe';
+import { TrainingContentComponent } from "../../../core/utils/content renderers/training-content/training-content.component";
 
 @Component({
   selector: 'app-training-detail',
-  imports: [RouterModule, CommonModule, CountdownPipe],
+  imports: [RouterModule, CommonModule, CountdownPipe, TrainingContentComponent],
   templateUrl: './training-detail.component.html',
   styleUrl: './training-detail.component.scss'
 })

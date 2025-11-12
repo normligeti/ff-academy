@@ -7,6 +7,7 @@
         <img class="subpage-cloud" src="assets/knowledgebase/cloud.png" alt="">
     </div>
 
+    <!-- // fix extra padding caused by duplicating content container  -->
     <div class="content">
         <div class="nav">
             <div class="path">
@@ -21,7 +22,11 @@
                 <p class="f18 sbold link" [routerLink]="['../']">Back</p>
             </div>
         </div>
-        <h6 class="sbold"><span class="blue">Lesson {{ (training$ | async)?.order }}:</span> {{ (training$ | async)?.title }}</h6>
+    </div>
+    <div class="content">
+
+        
+        <!-- <h6 class="sbold"><span class="blue">Lesson {{ (training$ | async)?.order }}:</span> {{ (training$ | async)?.title }}</h6>
         <p>
             The Fireflies business doesn’t start with whether you have a good product or how many acquaintances 
             you have — it starts with who YOU are.
@@ -55,7 +60,7 @@
                 A habit you build today can bring results for years.</p>
         </div>
         <div class="divider"></div>
-        <!--  -->
+        
 
         <div class="title">
             <p class="f28 number sbold">02</p>
@@ -72,7 +77,7 @@
             <p class="blue"><span class="mbold">The truth:</span> This business is for anyone who is <span class="mbold">willing to work on themselves.</span></p>
         </div>
         <div class="divider"></div>
-        <!--  -->
+        
 
         <div class="title">
             <p class="f28 number sbold">03</p>
@@ -93,7 +98,7 @@
             </div>
         </div>
         <div class="divider"></div>
-        <!--  -->
+        
 
         <div class="title">
             <p class="f28 number sbold">04</p>
@@ -109,7 +114,7 @@
         </div>
         <p>No one is born a ready entrepreneur. Success is the result of <span class="mbold">learning + practice + growth from mistakes.</span></p>
         <div class="divider"></div>
-        <!--  -->
+        
 
         <div class="title">
             <p class="f28 number sbold">05</p>
@@ -128,7 +133,7 @@
             <p class="blue">If the answer is “yes” to all, and you’re not afraid to work, <span class="mbold">no one can stop you.</span></p>
         </div>
         <div class="divider"></div>
-        <!--  -->
+        
 
         <h6 class="sbold">Practical example</h6>
         <p class="dark-border">
@@ -137,7 +142,7 @@
             yourself).
         </p>
         <div class="divider"></div>
-        <!--  -->
+        
 
         <div>
             <p class="f32 mbold blue">Task - Create your own value map</p>
@@ -158,7 +163,7 @@
             <li><span class="blue">&bull;</span> Write this on a note and put it next to your workplace or laptop. This will be your goal.</li>
         </ul>
         <div class="divider"></div>
-        <!--  -->
+        
 
         <p class="f32 mbold blue">Action plan</p>
         <div class="blue-box">
@@ -170,7 +175,7 @@
         </div>
         <div class="blue-box">
             <p class="blue">Come up with one new positive habit that you will start this week and make sure to keep it for at least 30 days.</p>
-        </div>
+        </div> -->
     </div>
 </section>
 
@@ -183,7 +188,7 @@
         <p *ngIf="!(training$ | async)?.userProgress?.allowQuiz && !(training$ | async)?.userProgress?.retryAvailableAt">quiz already completed</p>
         <p *ngIf="!(training$ | async)?.userProgress?.allowQuiz && (training$ | async)?.userProgress?.retryAvailableAt">
             you can retry quiz in:
-            <!--  -->
+            
             <ng-container *ngIf="(training$ | async)?.userProgress.retryAvailableAt as date">
                 <ng-container *ngIf="(date | countdown | async) as t">
                     <span *ngIf="t.totalMs > 0; else retryNow">
@@ -194,7 +199,7 @@
                     <span>Retry available!</span>
                 </ng-template>
             </ng-container>
-            <!--  -->
+            
         </p>
     </button>
 </section>
