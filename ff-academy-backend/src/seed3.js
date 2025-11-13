@@ -4,8 +4,6 @@ const Training = require("./models/Training.js");
 async function seedTrainingContent() {
     await mongoose.connect("mongodb://root:password@localhost:27008/ff-academy?authSource=admin");
 
-    const path = "1.1.1"; // your target training path
-
     const content = [
         {
           "type": "paragraph",
@@ -281,7 +279,7 @@ async function seedTrainingContent() {
         {
           "type": "borderedParagraph",
           "data": {
-            "text": "A new Fireflies member who spends 30 minutes a day learning...",
+            "text": "A new Fireflies member who spends 30 minutes a day learning, talks to 5 new people a week, and reviews their goals every month can build a network in half a year that produces results on its own — but only because they started working on themselves (the first circle is yourself). ",
             "translations": [
               { "lang": "en", "value": "A new Fireflies member who spends 30 minutes a day learning..." },
               { "lang": "hu", "value": "Egy új Fireflies tag, aki napi 30 percet tanulással tölt..." }
@@ -392,26 +390,12 @@ async function seedTrainingContent() {
     ];
 
     try {
-        const training = await Training.findOne({ path });
+        const trainings = await Training.find({});
 
-        if (!training) {
-            console.warn(`⚠️ No training found for path "${path}". `);
-            // const newTraining = new Training({
-            //     title: [{ lang: "en", value: "You as a business success factor" }],
-            //     description: [{ lang: "en", value: "Mindset and discipline." }],
-            //     order: 1,
-            //     path,
-            //     version: 1,
-            //     difficultyId: "6750a4f17ce7db9d6f2a192a", // TODO: replace with real ID
-            //     content
-            // });
-            // await newTraining.save();
-            // console.log("✅ Created new training with path", path);
-        } else {
-            training.content = content;
-            // training.version = (training.version || 1) + 1;
-            await training.save();
-            console.log(`✅ Updated training "${path}"`);
+        for (let index = 0; index < trainings.length; index++) {
+            trainings[index].content = content;
+            console.log(`✅ Updated training "${trainings[index].path}"`);
+            await trainings[index].save();
         }
     } catch (err) {
         console.error("❌ Error while seeding training:", err);
