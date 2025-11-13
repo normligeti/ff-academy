@@ -15,7 +15,7 @@
 
 <section class="section-4" *ngIf="pillars$ | async as pillars">
     <div class="cards">
-        <div class="s4-card available" (click)="showSection(pillars[0])">
+        <div class="s4-card" [ngClass]="{'available': pillars[0]?.status !== 'locked'}" (click)="showSection(pillars[0])">
             <img src="assets/knowledgebase/available-badge.svg" alt="" class="badge">
             <div class="number f28 sbold">01</div>
             <img src="assets/knowledgebase/icons/lock.svg" alt="" class="lock">
@@ -24,7 +24,7 @@
             <p class="status-test">{{pillars[0]?.status}}</p>
             <!-- <p class="f32 sbold uc center">{{ pillars[0].title }}</p> -->
         </div>
-        <div class="s4-card available" (click)="showSection(pillars[1])">
+        <div class="s4-card" [ngClass]="{'available': pillars[1]?.status !== 'locked'}" (click)="showSection(pillars[1])">
             <img src="assets/knowledgebase/available-badge.svg" alt="" class="badge">
             <div class="number f28 sbold">02</div>
             <img src="assets/knowledgebase/icons/lock.svg" alt="" class="lock">
@@ -34,7 +34,7 @@
             <!-- <p class="f32 sbold uc center">{{ pillars[1].title }}</p> -->
 
         </div>
-        <div class="s4-card available" (click)="showSection(pillars[2])">
+        <div class="s4-card" [ngClass]="{'available': pillars[2]?.status !== 'locked'}" (click)="showSection(pillars[2])">
             <img src="assets/knowledgebase/available-badge.svg" alt="" class="badge">
             <div class="number f28 sbold">03</div>
             <img src="assets/knowledgebase/icons/lock.svg" alt="" class="lock">
@@ -44,7 +44,7 @@
             <!-- <p class="f32 sbold uc center">{{ pillars[2].title }}</p> -->
 
         </div>
-        <div class="s4-card available" (click)="showSection(pillars[3])">
+        <div class="s4-card" [ngClass]="{'available': pillars[3]?.status !== 'locked'}" (click)="showSection(pillars[3])">
             <img src="assets/knowledgebase/available-badge.svg" alt="" class="badge">
             <div class="number f28 sbold">04</div>
             <img src="assets/knowledgebase/icons/lock.svg" alt="" class="lock">
@@ -60,8 +60,8 @@
 <section class="section-5">
     <ng-container *ngIf="!selectedPillar?.difficulties">Content not available at the moment.</ng-container>
     <ng-container *ngFor="let diff of selectedPillar?.difficulties; index as i">
-        <div class="dropdown" [id]="'dropdown-' + i"  (click)="toggleDropdown(i)">
-            <img src="assets/knowledgebase/dropdown-active.svg" alt="" class="bg">
+        <div class="dropdown" [ngClass]="{'inactive': diff.status === 'locked'}" [id]="'dropdown-' + i"  (click)="toggleDropdown(i)">
+            <img src="assets/knowledgebase/dropdown-{{ diff.status !== 'locked' ? 'active' : 'inactive'}}.svg" alt="" class="bg">
             <h5 class="sbold uc">{{ diff.name }}</h5>
             <p class="f24 sbold uc">{{ selectedPillar.title }}</p>
             <img src="assets/knowledgebase/icons/{{openStates[i] ? 'minus' : 'plus'}}.svg" alt="" class="icon">

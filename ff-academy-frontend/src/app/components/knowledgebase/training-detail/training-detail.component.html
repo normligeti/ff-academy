@@ -7,23 +7,21 @@
         <img class="subpage-cloud" src="assets/knowledgebase/cloud.png" alt="">
     </div>
 
-    <!-- // fix extra padding caused by duplicating content container  -->
     <div class="content">
         <div class="nav">
             <div class="path">
-                <p class="f18 link" [routerLink]="['/home']">Home</p>
+                <p class="f18">Home</p>
                 <img src="assets/icons/arrow-r.svg" alt="">
-                <p class="f18 link" [routerLink]="['/knowledgebase']">Knowledgebase</p>
+                <p class="f18">Knowledgebase</p>
                 <img src="assets/icons/arrow-r.svg" alt="">
-                <p class="f18 sbold">Why are YOU your most important resource?</p>
+                <p class="f18 sbold">{{ (training$ | async)?.title }}</p>
             </div>
             <div class="path">
                 <img src="assets/icons/arrow-l.svg" alt="">
-                <p class="f18 sbold link" [routerLink]="['../']">Back</p>
+                <p class="f18 sbold link" [routerLink]="['../../']">Back</p>
             </div>
         </div>
-    </div>
-    <div class="content">
+    
         <h6 class="sbold"><span class="blue">Lesson {{ (training$ | async)?.order }}:</span> {{ (training$ | async)?.title }}</h6>
 
         <ng-container *ngFor="let block of (training$ | async)?.content">

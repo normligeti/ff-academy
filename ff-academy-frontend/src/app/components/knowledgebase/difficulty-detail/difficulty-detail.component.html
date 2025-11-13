@@ -21,28 +21,30 @@
     <div class="blue-box">
         <p class="f50 sbold">All Trainings</p>
         <div class="cards">
-            <div class="card" *ngFor="let training of (trainings$ | async)">
-                <div class="number f18 sbold">0{{ training.order }}</div>
-                <img src="assets/knowledgebase/lesson.png" alt="">
-                <div class="card-content">
-                    <p class="mbold">{{ training.title }}</p>
-                    <button class="btn-dark-blue xs" [routerLink]="['trainings', training._id]">start lesson</button>
-                    <p class="status-test">{{ training.userProgress.status }}
-                        <!--  -->
-                        <ng-container *ngIf="training.userProgress.retryAvailableAt as date">
-                            <ng-container *ngIf="(date | countdown | async) as t">
-                                <span *ngIf="t.totalMs > 0; else retryNow">
-                                    ({{ t.days }}d {{ t.hours }}h {{ t.minutes }}m {{ t.seconds }}s)
-                                </span>
+            <ng-container *ngFor="let training of (trainings$ | async)">
+                <div class="card" [ngClass]="{'disabled': training?.userProgress?.status === 'locked'}">
+                    <div class="number f18 sbold">0{{ training.order }}</div>
+                    <img src="assets/knowledgebase/lesson.png" alt="">
+                    <div class="card-content">
+                        <p class="mbold">{{ training.title }}</p>
+                        <button class="btn-dark-blue xs" [routerLink]="['trainings', training._id]">start lesson</button>
+                        <p class="status-test">{{ training.userProgress.status }}
+                            <!--  -->
+                            <ng-container *ngIf="training.userProgress.retryAvailableAt as date">
+                                <ng-container *ngIf="(date | countdown | async) as t">
+                                    <span *ngIf="t.totalMs > 0; else retryNow">
+                                        ({{ t.days }}d {{ t.hours }}h {{ t.minutes }}m {{ t.seconds }}s)
+                                    </span>
+                                </ng-container>
+                                <ng-template #retryNow>
+                                    <span>Retry available!</span>
+                                </ng-template>
                             </ng-container>
-                            <ng-template #retryNow>
-                                <span>Retry available!</span>
-                            </ng-template>
-                        </ng-container>
-                        <!--  -->
-                    </p>
+                            <!--  -->
+                        </p>
+                    </div>
                 </div>
-            </div>
+            </ng-container>
         </div>
     </div>
 </section>
