@@ -1,5 +1,10 @@
 const mongoose = require("mongoose");
 
+const localizedStringSchema = new mongoose.Schema({
+    lang: { type: String, required: true },
+    value: { type: String, default: "" }
+}, { _id: false });
+
 // Translation schema for each block's data
 // const translationSchema = new mongoose.Schema({
 //     lang: { type: String, required: true },
@@ -13,15 +18,18 @@ const contentBlockSchema = new mongoose.Schema({
     translations: mongoose.Schema.Types.Mixed        // array of per-language values
 }, { _id: false });
 
+// training schema
 const trainingSchema = new mongoose.Schema({
-    title: { type: String, required: true },
-    description: { type: String, default: "" },
+    title: { type: [localizedStringSchema], required: true },        // WAS: String
+    description: { type: [localizedStringSchema], default: [] },     // WAS: String
+
     order: { type: Number, required: true },
     path: { type: String, required: true, index: true },
     pillarOrder: { type: Number, required: true },
     difficultyOrder: { type: Number, required: true },
     version: { type: Number, default: 1 },
-    content: [contentBlockSchema],
+
+    content: [contentBlockSchema],    // untouched
 
     isActive: { type: Boolean, default: true },
     createdAt: { type: Date, default: Date.now },

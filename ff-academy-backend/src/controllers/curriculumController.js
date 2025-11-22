@@ -5,85 +5,86 @@ const curriculumController = {
     // GET /curriculum-data
     async getCurriculumDataForUser(req, res) {
         try {
-            // const userId = req.params.id; // /curriculum/trainings/:id
-            const userId = '68f027ed4ac1082b77d6d3c3';
-            const decorated = await curriculumService.getDecoratedTrainingsForUser(userId);
+            const userId = req.userInfo?.id;
+            const decorated = await curriculumService.getDecoratedDataForUser(userId);
             res.json(decorated);
         } catch (err) {
-            console.error("getAllTrainingsForUser error:", err);
-            res.status(500).json({ message: "Failed to fetch decorated trainings" });
+            console.error("getCurriculumDataForUser error:", err);
+            res.status(500).json({ message: "Failed to fetch data" });
         }
     },
 
-    // GET /trainings/:trainingId
-    async getTrainingById(req, res) {
-        try {
-            const { trainingId } = req.params;
-            // const userId = req.query.userId;
-            const userId = '68f027ed4ac1082b77d6d3c3';
+    // // GET /trainings/:trainingId
+    // async getTrainingById(req, res) {
+    //     try {
+    //         const { trainingId } = req.params;
+    //         // const userId = req.query.userId;
+    //         const userId = '68f027ed4ac1082b77d6d3c3';
 
-            const result = await curriculumService.checkTrainingAccess(userId, trainingId);
+    //         const result = await curriculumService.checkTrainingAccess(userId, trainingId);
             
-            if (!result.access.ok || !result.access.allowTraining) {
-                return res.status(403).json({ message: result.access.reason });
-            }
+    //         if (!result.access.ok || !result.access.allowTraining) {
+    //             return res.status(403).json({ message: result.access.reason });
+    //         }
 
-            const training = result.training;
+    //         const training = result.training;
 
-            res.json(training);
-        } catch (err) {
-            console.error("getTrainingById error:", err);
-            res.status(500).json({ message: "Failed to fetch training" });
-        }
-    },
+    //         res.json(training);
+    //     } catch (err) {
+    //         console.error("getTrainingById error:", err);
+    //         res.status(500).json({ message: "Failed to fetch training" });
+    //     }
+    // },
 
-    // GET /trainings/by-path/:path
-    async getTrainingByPath(req, res) {
-        try {
-            const { path } = req.params;
-            // const userId = req.query.userId;
-            const userId = '68f027ed4ac1082b77d6d3c3';
+    // // GET /trainings/by-path/:path
+    // async getTrainingByPath(req, res) {
+    //     try {
+    //         const { path } = req.params;
+    //         // const userId = req.query.userId;
+    //         const userId = '68f027ed4ac1082b77d6d3c3';
+    //         const lang = req.user?.preferredLanguage || "en";
 
-            const training = await curriculumService.getTrainingByPath(path);
-            if (!training) return res.status(404).json({ message: "Training not found" });
+    //         const training = await curriculumService.getTrainingByPath(path, lang);
+    //         if (!training) return res.status(404).json({ message: "Training not found" });
 
-            const result = await curriculumService.checkTrainingAccess(userId, training._id);
+    //         const result = await curriculumService.checkTrainingAccess(userId, training._id);
             
-            if (!result.access.ok || !result.access.allowTraining) {
-                return res.status(403).json({ message: result.access.reason });
-            }
+    //         if (!result.access.ok || !result.access.allowTraining) {
+    //             return res.status(403).json({ message: result.access.reason });
+    //         }
 
-            const trainingForResponse = result.training;
+    //         const trainingForResponse = result.training;
 
-            res.json(trainingForResponse);
-        } catch (err) {
-            console.error("getTrainingByPath error:", err);
-            res.status(500).json({ message: "Failed to fetch training" });
-        }
-    },
+    //         res.json(trainingForResponse);
+    //     } catch (err) {
+    //         console.error("getTrainingByPath error:", err);
+    //         res.status(500).json({ message: "Failed to fetch training" });
+    //     }
+    // },
 
-    // GET /trainings/:trainingId/quiz
-    async getQuizForTraining(req, res) {
-        try {
-            const { trainingId } = req.params;
-            // const userId = req.query.userId;
-            const userId = '68f027ed4ac1082b77d6d3c3';
+    // // GET /trainings/:trainingId/quiz
+    // async getQuizForTraining(req, res) {
+    //     try {
+    //         const { trainingId } = req.params;
+    //         // const userId = req.query.userId;
+    //         const userId = '68f027ed4ac1082b77d6d3c3';
+    //         const lang = req.user?.preferredLanguage || "en";
 
-            const result = await curriculumService.checkTrainingAccess(userId, trainingId);
+    //         const result = await curriculumService.checkTrainingAccess(userId, trainingId);
             
-            if (!result.access.ok || !result.access.allowQuiz) {
-                return res.status(403).json({ message: result.access.reason });
-            }
+    //         if (!result.access.ok || !result.access.allowQuiz) {
+    //             return res.status(403).json({ message: result.access.reason });
+    //         }
 
-            const quiz = await curriculumService.getQuizForTraining(trainingId);
-            if (!quiz) return res.status(404).json({ message: "Quiz not found" });
+    //         const quiz = await curriculumService.getQuizForTraining(trainingId, lang);
+    //         if (!quiz) return res.status(404).json({ message: "Quiz not found" });
 
-            res.json(quiz);
-        } catch (err) {
-            console.error("getQuizForTraining error:", err);
-            res.status(500).json({ message: "Failed to fetch quiz" });
-        }
-    }
+    //         res.json(quiz);
+    //     } catch (err) {
+    //         console.error("getQuizForTraining error:", err);
+    //         res.status(500).json({ message: "Failed to fetch quiz" });
+    //     }
+    // }
 
 };
 

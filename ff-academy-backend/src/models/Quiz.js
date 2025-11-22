@@ -1,10 +1,15 @@
 const mongoose = require("mongoose");
 
+const localizedStringSchema = new mongoose.Schema({
+    lang: { type: String, required: true },
+    value: { type: String, default: "" }
+}, { _id: false });
+
 const questionSchema = new mongoose.Schema({
     questionId: { type: Number, required: true },
-    text: { type: String, required: true },
-    answers: [{ type: String, required: true }],
-    correctAnswer: { type: String, required: true }
+    text: { type: [localizedStringSchema], required: true },
+    answers: { type: [[localizedStringSchema]], required: true },
+    correctAnswer: { type: [localizedStringSchema], required: true }
 });
 
 const quizSchema = new mongoose.Schema({

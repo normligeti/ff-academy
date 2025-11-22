@@ -7,6 +7,8 @@ const Quiz = require("./models/Quiz.js");
 const MONGO_URI = "mongodb://root:password@localhost:27008/ff-academy?authSource=admin";
 
 
+// old seed without translations
+
 // --- TEMPLATE DATA ---
 
 const pillars = [

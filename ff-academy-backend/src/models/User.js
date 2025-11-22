@@ -7,6 +7,7 @@ const progressSchema = new mongoose.Schema({
     completedAt: { type: Date },
     failedAt: { type: Date },
     retryAvailableAt: { type: Date },
+    failCount: { type: Number, default: 0 },
     seenVersion: { type: Number, default: 1 }
 }, { _id: false });
 
@@ -14,7 +15,7 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     name: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
-
+    preferredLanguage: { type: String, default: 'en' },
     progress: [progressSchema] // embedded progress records
 });
 

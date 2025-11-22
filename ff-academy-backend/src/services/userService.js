@@ -9,6 +9,10 @@ const userService = {
         return User.findById(id).lean();
     },
 
+    async findByEmail(email) {
+        return User.findOne({ email }).lean();
+    },
+
     async createUser(data) {
         const user = new User(data);
         return user.save();
@@ -50,6 +54,7 @@ const userService = {
                 seenVersion,
                 completedAt: null,
                 failedAt: null,
+                failCount: 0,
                 retryAvailableAt: null
             };
     
@@ -58,7 +63,9 @@ const userService = {
                 entry.completedAt = now;
             } else if (status === 'failed') {
                 entry.failedAt = now;
-                entry.retryAvailableAt = new Date(now.getTime() + 15 * 24 * 60 * 60 * 1000);
+                entry.failCount += 1;
+                // entry.retryAvailableAt = new Date(now.getTime() + 15 * 24 * 60 * 60 * 1000);
+                entry.retryAvailableAt = new Date(now.getTime() + 20 * 1000);
             }
     
             user.progress.push(entry);
@@ -73,11 +80,13 @@ const userService = {
                     entry.completedAt = now;
                     entry.failedAt = null;
                     entry.retryAvailableAt = null;
-                    break;
+                break;
                 case 'failed':
                     entry.failedAt = now;
-                    entry.retryAvailableAt = new Date(now.getTime() + 15 * 24 * 60 * 60 * 1000);
-                    break;
+                    entry.failCount += 1;
+                    // entry.retryAvailableAt = new Date(now.getTime() + 15 * 24 * 60 * 60 * 1000);
+                    entry.retryAvailableAt = new Date(now.getTime() + 20 * 1000);
+                break;
             }
         }
     

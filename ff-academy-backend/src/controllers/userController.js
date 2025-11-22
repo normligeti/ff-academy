@@ -1,19 +1,23 @@
 const userService = require("../services/userService");
+const jwt = require("jsonwebtoken");
+const JWT_SECRET = process.env.AUTH_JWT_SECRET || "secretx";
 
 const userController = {
-    async getUsers(req, res) {
-        try {
-            const users = await userService.getAllUsers();
-            res.json(users);
-        } catch (err) {
-            console.error("getUsers error:", err);
-            res.status(500).json({ message: "Failed to fetch users" });
-        }
-    },
+    // async getUsers(req, res) {
+    //     try {
+    //         const users = await userService.getAllUsers();
+    //         res.json(users);
+    //     } catch (err) {
+    //         console.error("getUsers error:", err);
+    //         res.status(500).json({ message: "Failed to fetch users" });
+    //     }
+    // },
 
     async getUser(req, res) {
+        const userId = req.userInfo?.id;
+
         try {
-            const user = await userService.getUserById(req.params.id);
+            const user = await userService.getUserById(userId);
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             }
@@ -23,6 +27,47 @@ const userController = {
             res.status(500).json({ message: "Failed to fetch user" });
         }
     },
+
+    async login(req, res) {
+        try {
+            const { email } = req.body;
+
+            console.log('login');
+            console.log(req.body);
+
+            if (!email) {
+                return res.status(400).json({ message: "Email is required" });
+            }
+    
+            const user = await userService.findByEmail(email);
+    
+            if (!user) {
+                return res.status(401).json({ message: "Invalid email" });
+            }
+    
+            //  verify a password here
+            // Generate a token or session cookie
+            const token = jwt.sign(
+                { id: user._id, email: user.email },
+                JWT_SECRET,
+                { expiresIn: 1000 * 60 * 60 * 16 }
+            );
+
+            // Set HttpOnly cookie
+            res.cookie("auth_token", token, {
+                httpOnly: true,
+                secure: false,               //  TODO use true in production (HTTPS), set samesite too
+                sameSite: "lax",
+                maxAge: 1000 * 60 * 60 * 16 // 16 hrs
+            });
+    
+            return res.status(200).json({ message: "Login successful" });
+        } catch (err) {
+            console.error("login error:", err);
+            res.status(500).json({ message: "Failed to login" });
+        }
+    },
+    
 
     async createUser(req, res) {
         try {

@@ -2,14 +2,20 @@ const Pillar = require("../models/Pillar");
 const Training = require("../models/Training");
 const Quiz = require("../models/Quiz");
 const User = require("../models/User");
+const { getLocalized } = require("../utils/localize");
 
 const curriculumService = {
-    async getDecoratedTrainingsForUser(userId) {
+    async getDecoratedDataForUser(userId) {
         const user = await User.findById(userId).lean();
         if (!user) throw new Error("User not found");
+
+        const lang = user.preferredLanguage || "en";
     
-        const pillars = await Pillar.find({}).sort({ order: 1 }).lean();
-        const trainings = await Training.find({}).sort({ order: 1 }).lean();
+        const pillarsRaw = await Pillar.find({}).sort({ order: 1 }).lean();
+        const trainingsRaw = await Training.find({}).sort({ order: 1 }).lean();
+
+        const pillars = getLocalized(pillarsRaw, lang);
+        const trainings = getLocalized(trainingsRaw, lang);
     
         const userProgress = user.progress || [];
         const now = Date.now();
@@ -45,14 +51,14 @@ const curriculumService = {
             t => ['completed', 'failed'].includes(t.userProgress.status)
         );
     
-        let stopIndex = -1;
+        let isLastProgressFailed;
         if (lastProgressIndex !== -1) {
             const last = decorated[lastProgressIndex].userProgress;
-            const retryAt = new Date(last.retryAvailableAt).getTime() || 0;
-            if (last.status === 'failed' && retryAt > now) {
-                stopIndex = lastProgressIndex;
+            if (last.status === 'failed') {
+                isLastProgressFailed = true;
             }
         }
+    
     
         // STEP 3: derive global training states
         for (let i = 0; i < decorated.length; i++) {
@@ -65,20 +71,32 @@ const curriculumService = {
                 state = "completed";
             } else if (up.status === "failed") {
                 const retryAt = new Date(up.retryAvailableAt).getTime() || 0;
-                state = retryAt > now ? "failed" : "available";
-            } else if (i === lastProgressIndex + 1 && (stopIndex === -1 || i < stopIndex)) {
+
+                if (retryAt > now) {
+                    state = "failed";
+                } else {
+                    state = "available";
+                    decorated[i].quiz = await curriculumService.getQuizForTraining(decorated[i]._id, lang);
+                }
+
+            } else if (i === lastProgressIndex + 1 && !isLastProgressFailed) {
                 state = "available";
+                decorated[i].quiz = await curriculumService.getQuizForTraining(decorated[i]._id, lang);
+            } else if (i === lastProgressIndex + 1 && isLastProgressFailed) {
+                state = "locked";
             }
     
             if (up.status === null && i < lastProgressIndex) {
                 state = "new";
+                decorated[i].quiz = await curriculumService.getQuizForTraining(decorated[i]._id, lang);
             }
     
             if (t.version > up.seenVersion) {
                 state = "modified";
             }
     
-            if (stopIndex !== -1 && i > stopIndex) {
+            // safe lock as last step
+            if (i > lastProgressIndex + 1) {
                 state = "locked";
             }
     
@@ -110,7 +128,11 @@ const curriculumService = {
     
             const difficulty = pillar.difficulties.find(d => d.order === diffOrder);
             if (!difficulty) return;
-    
+
+            if (t.userProgress.status === 'locked') {
+                t.content = []
+            };
+
             difficulty.trainings.push(t);
         });
     
@@ -159,145 +181,165 @@ const curriculumService = {
     },
 
     
-    async checkTrainingAccess(userId, trainingId) {
-        const user = await User.findById(userId).lean();
-        if (!user) return { ok: false, reason: "User not found" };
+    // async checkTrainingAccess(userId, trainingId) {
+    //     const user = await User.findById(userId).lean();
+    //     if (!user) return { ok: false, reason: "User not found" };
+        
+    //     const lang = user.preferredLanguage || "en";
 
-        const trainings = await Training.find({}).sort({ order: 1 }).lean();
-        const userProgress = user.progress || [];
-        const now = Date.now();
+    //     const trainingsRaw = await Training.find({}).sort({ order: 1 }).lean();
+    //     const trainings = getLocalized(trainingsRaw, lang);
 
-        // find target training
-        const target = trainings.find(t => t._id.toString() === trainingId);
-        if (!target) return { ok: false, reason: "Training not found" };
+    //     const userProgress = user.progress || [];
+    //     const now = Date.now();
 
-        // sort globally in difficulty-major order
-        trainings.sort((a, b) => {
-            const [pa, da, ta] = a.path.split('.').map(Number);
-            const [pb, db, tb] = b.path.split('.').map(Number);
-            if (da !== db) return da - db;
-            if (pa !== pb) return pa - pb;
-            return ta - tb;
-        });
+    //     // find target training
+    //     const target = trainings.find(t => t._id.toString() === trainingId);
+    //     if (!target) return { ok: false, reason: "Training not found" };
 
-        // merge progress
-        const decorated = trainings.map(t => {
-            const p = userProgress.find(x => x.trainingId.toString() === t._id.toString());
-            return {
-                ...t,
-                userProgress: {
-                    status: p?.status || null,
-                    completedAt: p?.completedAt || null,
-                    failedAt: p?.failedAt || null,
-                    retryAvailableAt: p?.retryAvailableAt || null,
-                    seenVersion: p?.seenVersion ?? 1
-                }
-            };
-        });
+    //     // sort globally in difficulty-major order
+    //     trainings.sort((a, b) => {
+    //         const [pa, da, ta] = a.path.split('.').map(Number);
+    //         const [pb, db, tb] = b.path.split('.').map(Number);
+    //         if (da !== db) return da - db;
+    //         if (pa !== pb) return pa - pb;
+    //         return ta - tb;
+    //     });
 
-        const targetIndex = decorated.findIndex(t => t._id.toString() === trainingId);
-        const t = decorated[targetIndex];
-        const up = t.userProgress;
+    //     // merge progress
+    //     const decorated = trainings.map(t => {
+    //         const p = userProgress.find(x => x.trainingId.toString() === t._id.toString());
+    //         return {
+    //             ...t,
+    //             userProgress: {
+    //                 status: p?.status || null,
+    //                 completedAt: p?.completedAt || null,
+    //                 failedAt: p?.failedAt || null,
+    //                 retryAvailableAt: p?.retryAvailableAt || null,
+    //                 seenVersion: p?.seenVersion ?? 1
+    //             }
+    //         };
+    //     });
 
-        // find last completed/failed
-        const lastProgressIndex = decorated.findLastIndex(t =>
-            ["completed", "failed"].includes(t.userProgress.status)
-        );
+    //     const targetIndex = decorated.findIndex(t => t._id.toString() === trainingId);
+    //     const t = decorated[targetIndex];
+    //     const up = t.userProgress;
 
-        // if no progress → only first index allowed
-        if (lastProgressIndex === -1) {
-            if (targetIndex === 0) {
-                let allowQuiz = true;
-                t.userProgress.allowQuiz = allowQuiz;
-                return { 
-                    access: { ok: true, allowTraining: true, allowQuiz: allowQuiz }, 
-                    training: t 
-                };
-            }
-            return { 
-                access: { ok: false, reason: "Locked" }, 
-                training: {} 
-            };
-        }
+    //     // find last completed/failed
+    //     const lastProgressIndex = decorated.findLastIndex(t =>
+    //         ["completed", "failed"].includes(t.userProgress.status)
+    //     );
 
-        // find if last progress is failed AND still locked by cooldown
-        let stopIndex = -1;
-        const last = decorated[lastProgressIndex].userProgress;
-        if (last.status === "failed") {
-            const retryAt = new Date(last.retryAvailableAt).getTime();
-            if (retryAt > now) {
-                stopIndex = lastProgressIndex;
-            }
-        }
+    //     // if no progress → only first index allowed
+    //     if (lastProgressIndex === -1) {
+    //         if (targetIndex === 0) {
+    //             let allowQuiz = true;
+    //             t.userProgress.allowQuiz = allowQuiz;
+    //             return { 
+    //                 access: { ok: true, allowTraining: true, allowQuiz: allowQuiz }, 
+    //                 training: t 
+    //             };
+    //         }
+    //         return { 
+    //             access: { ok: false, reason: "Locked" }, 
+    //             training: {} 
+    //         };
+    //     }
 
-        // determine state (simplified)
-        const versionModified = t.version > up.seenVersion;
+    //     // find if last progress is failed AND still locked by cooldown
+    //     let stopIndex = -1;
+    //     const last = decorated[lastProgressIndex].userProgress;
+    //     if (last.status === "failed") {
+    //         const retryAt = new Date(last.retryAvailableAt).getTime();
+    //         if (retryAt > now) {
+    //             stopIndex = lastProgressIndex;
+    //         }
+    //     }
 
-        if (versionModified) {
-            let allowQuiz = false;
-            t.userProgress.allowQuiz = allowQuiz;
-            return {
-                access: { ok: true, allowTraining: true, allowQuiz: allowQuiz, reason: "Quiz already completed (Modified training)" },
-                training: t
-            };
-        }
+    //     // determine state (simplified)
+    //     const versionModified = t.version > up.seenVersion;
 
-        if (up.status === "completed") {
-            let allowQuiz = false;
-            t.userProgress.allowQuiz = allowQuiz;
-            return {
-                access: { ok: true, allowTraining: true, allowQuiz: allowQuiz, reason: "Quiz already completed" },
-                training: t
-            };
-        }
+    //     if (versionModified) {
+    //         let allowQuiz = false;
+    //         t.userProgress.allowQuiz = allowQuiz;
+    //         return {
+    //             access: { ok: true, allowTraining: true, allowQuiz: allowQuiz, reason: "Quiz already completed (Modified training)" },
+    //             training: t
+    //         };
+    //     }
 
-        if (up.status === "failed") {
-            const retryAt = new Date(up.retryAvailableAt).getTime() || 0;
-            const canRetry = retryAt <= now;
-            t.userProgress.allowQuiz = canRetry;
-            return {
-                access: { ok: true, allowTraining: true, allowQuiz: canRetry, reason: canRetry ? undefined : "Retry cooldown" },
-                training: t
-            }
-        }
+    //     if (up.status === "completed") {
+    //         let allowQuiz = false;
+    //         t.userProgress.allowQuiz = allowQuiz;
+    //         return {
+    //             access: { ok: true, allowTraining: true, allowQuiz: allowQuiz, reason: "Quiz already completed" },
+    //             training: t
+    //         };
+    //     }
 
-        if (targetIndex === lastProgressIndex + 1 && (stopIndex === -1 || targetIndex < stopIndex)) {
-            let allowQuiz = true;
-            t.userProgress.allowQuiz = allowQuiz;
-            return {
-                access: { ok: true, allowTraining: true, allowQuiz: allowQuiz },
-                training: t
-            }
-        }
+    //     if (up.status === "failed") {
+    //         const retryAt = new Date(up.retryAvailableAt).getTime() || 0;
+    //         const canRetry = retryAt <= now;
+    //         t.userProgress.allowQuiz = canRetry;
+    //         return {
+    //             access: { ok: true, allowTraining: true, allowQuiz: canRetry, reason: canRetry ? undefined : "Retry cooldown" },
+    //             training: t
+    //         }
+    //     }
 
-        if (targetIndex < lastProgressIndex) {
-            // training added earlier in the path → new
-            let allowQuiz = true;
-            t.userProgress.allowQuiz = allowQuiz;
-            return {
-                access: { ok: true, allowTraining: true, allowQuiz: allowQuiz },
-                training: t
-            }
-        }
+    //     if (targetIndex === lastProgressIndex + 1 && (stopIndex === -1 || targetIndex < stopIndex)) {
+    //         let allowQuiz = true;
+    //         t.userProgress.allowQuiz = allowQuiz;
+    //         return {
+    //             access: { ok: true, allowTraining: true, allowQuiz: allowQuiz },
+    //             training: t
+    //         }
+    //     }
 
-        return {
-            access: { ok: false, reason: "Locked" },
-            training: {}
-        }
-    },
+    //     if (targetIndex < lastProgressIndex) {
+    //         // training added earlier in the path → new
+    //         let allowQuiz = true;
+    //         t.userProgress.allowQuiz = allowQuiz;
+    //         return {
+    //             access: { ok: true, allowTraining: true, allowQuiz: allowQuiz },
+    //             training: t
+    //         }
+    //     }
 
-    async getTrainingById(trainingId) {
-        return Training.findById(trainingId).lean();
-    },
+    //     return {
+    //         access: { ok: false, reason: "Locked" },
+    //         training: {}
+    //     }
+    // },
 
-    async getTrainingByPath(path) {
-        return Training.findOne({ path }).lean();
-    },
+    // async getTrainingById(trainingId) {
+    //     return Training.findById(trainingId).lean();
+    // },
 
-    // --- QUIZZES ---
-    async getQuizForTraining(trainingId) {
-        return Quiz.findOne({ trainingId }).lean();
+    // async getTrainingByPath(path) {
+    //     return Training.findOne({ path }).lean();
+    // },
+
+    // // --- QUIZZES ---
+    // async getQuizForTraining(trainingId) {
+    //     return Quiz.findOne({ trainingId }).lean();
+    // },
+
+    // async getTrainingById(trainingId, lang = "en") {
+    //     const doc = await Training.findById(trainingId).lean();
+    //     return doc ? getLocalized(doc, lang) : null;
+    // },
+    
+    // async getTrainingByPath(path, lang = "en") {
+    //     const doc = await Training.findOne({ path }).lean();
+    //     return doc ? getLocalized(doc, lang) : null;
+    // },
+    
+    async getQuizForTraining(trainingId, lang = "en") {
+        const doc = await Quiz.findOne({ trainingId }).lean();
+        return doc ? getLocalized(doc, lang) : null;
     }
+    
 };
 
 module.exports = curriculumService;
