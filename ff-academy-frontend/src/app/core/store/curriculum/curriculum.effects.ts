@@ -25,31 +25,31 @@ export class CurriculumEffects {
         )
     );
 
-    // --- Load Training Detail by ID ---
-    loadSelectedTraining$ = createEffect(() =>
-        this.actions$.pipe(
-            ofType(CurriculumActions.loadSelectedTraining),
-            mergeMap(({ trainingId }) =>
-                this.curriculumService.getTrainingById(trainingId).pipe(
-                    map(detail => CurriculumActions.loadSelectedTrainingSuccess({ detail })),
-                    catchError(error => of(CurriculumActions.loadSelectedTrainingFailure({ error })))
-                )
-            )
-        )
-    );
+    // // --- Load Training Detail by ID ---
+    // loadSelectedTraining$ = createEffect(() =>
+    //     this.actions$.pipe(
+    //         ofType(CurriculumActions.loadSelectedTraining),
+    //         mergeMap(({ trainingId }) =>
+    //             this.curriculumService.getTrainingById(trainingId).pipe(
+    //                 map(detail => CurriculumActions.loadSelectedTrainingSuccess({ detail })),
+    //                 catchError(error => of(CurriculumActions.loadSelectedTrainingFailure({ error })))
+    //             )
+    //         )
+    //     )
+    // );
 
-    // --- Load Training Detail by Path (optional) ---
-    loadSelectedTrainingByPath$ = createEffect(() =>
-        this.actions$.pipe(
-            ofType(CurriculumActions.loadSelectedTrainingByPath),
-            mergeMap(({ path }) =>
-                this.curriculumService.getTrainingByPath(path).pipe(
-                    map(detail => CurriculumActions.loadSelectedTrainingByPathSuccess({ detail })),
-                    catchError(error => of(CurriculumActions.loadSelectedTrainingByPathFailure({ error })))
-                )
-            )
-        )
-    );
+    // // --- Load Training Detail by Path (optional) ---
+    // loadSelectedTrainingByPath$ = createEffect(() =>
+    //     this.actions$.pipe(
+    //         ofType(CurriculumActions.loadSelectedTrainingByPath),
+    //         mergeMap(({ path }) =>
+    //             this.curriculumService.getTrainingByPath(path).pipe(
+    //                 map(detail => CurriculumActions.loadSelectedTrainingByPathSuccess({ detail })),
+    //                 catchError(error => of(CurriculumActions.loadSelectedTrainingByPathFailure({ error })))
+    //             )
+    //         )
+    //     )
+    // );
 
     // --- Load Quiz by trainingId ---
     loadQuiz$ = createEffect(() =>

@@ -16,7 +16,12 @@
 <section class="section-4" *ngIf="pillars$ | async as pillars">
     <div class="cards">
         <div class="s4-card" [ngClass]="{'available': pillars[0]?.status !== 'locked'}" (click)="showSection(pillars[0])">
-            <img src="assets/knowledgebase/available-badge.svg" alt="" class="badge">
+            <div class="badge">
+                <div class="badge-text-wrapper">
+                    <p class="uc f24 sbold" [innerHTML]="'KNOWLEDGEBASE.SECTION4.BADGE' | translate"></p>
+                </div>
+                <img src="assets/knowledgebase/available-badge2.svg" alt="">
+            </div>
             <div class="number f28 sbold">01</div>
             <img src="assets/knowledgebase/icons/lock.svg" alt="" class="lock">
             <img src="assets/knowledgebase/icons/mindset.svg" alt="" class="icon">
@@ -25,7 +30,9 @@
             <!-- <p class="f32 sbold uc center">{{ pillars[0].title }}</p> -->
         </div>
         <div class="s4-card" [ngClass]="{'available': pillars[1]?.status !== 'locked'}" (click)="showSection(pillars[1])">
-            <img src="assets/knowledgebase/available-badge.svg" alt="" class="badge">
+            <div class="badge">
+                <img src="assets/knowledgebase/available-badge.svg" alt="">
+            </div>
             <div class="number f28 sbold">02</div>
             <img src="assets/knowledgebase/icons/lock.svg" alt="" class="lock">
             <img src="assets/knowledgebase/icons/logo-invert.svg" alt="" class="icon">
@@ -35,7 +42,9 @@
 
         </div>
         <div class="s4-card" [ngClass]="{'available': pillars[2]?.status !== 'locked'}" (click)="showSection(pillars[2])">
-            <img src="assets/knowledgebase/available-badge.svg" alt="" class="badge">
+            <div class="badge">
+                <img src="assets/knowledgebase/available-badge.svg" alt="">
+            </div>
             <div class="number f28 sbold">03</div>
             <img src="assets/knowledgebase/icons/lock.svg" alt="" class="lock">
             <img src="assets/knowledgebase/icons/network.svg" alt="" class="icon">
@@ -45,7 +54,9 @@
 
         </div>
         <div class="s4-card" [ngClass]="{'available': pillars[3]?.status !== 'locked'}" (click)="showSection(pillars[3])">
-            <img src="assets/knowledgebase/available-badge.svg" alt="" class="badge">
+            <div class="badge">
+                <img src="assets/knowledgebase/available-badge.svg" alt="">
+            </div>
             <div class="number f28 sbold">04</div>
             <img src="assets/knowledgebase/icons/lock.svg" alt="" class="lock">
             <img src="assets/knowledgebase/icons/clock.svg" alt="" class="icon">
@@ -78,7 +89,7 @@
                     your life, set truly motivating goals, build a sustainable learning routine, and work consistently — regardless of immediate results. 
                     This module will help you develop the mindset and discipline that all your future success will be built upon.
                 </p>
-                <button class="btn-dark-blue small" [routerLink]="['pillars', selectedPillar.order, diff.name]" [innerHTML]="'KNOWLEDGEBASE.SECTION5.LEVEL1.BUTTON' | translate"></button>
+                <button class="btn-dark-blue small" [routerLink]="['pillars', selectedPillar.order, DIFFICULTY_ORDER_TO_NAME[diff.order]]" [innerHTML]="'KNOWLEDGEBASE.SECTION5.LEVEL1.BUTTON' | translate"></button>
             </div>
         </div>
     </ng-container>

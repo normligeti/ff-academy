@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NavigationStart, Router, RouterOutlet } from '@angular/router';
 import { MainHeaderComponent } from './components/main-header/main-header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { filter } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
+import { Store } from '@ngrx/store';
+import { ProfileActions } from './core/store/profile/profile.actions';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +16,8 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class AppComponent {
     title = 'ff-academy-frontend';
+
+    private store = inject(Store);
 
     constructor( 
         public router: Router,
@@ -31,6 +35,8 @@ export class AppComponent {
     }
     
     ngOnInit(): void {
+        this.store.dispatch(ProfileActions.loadProfile());
+
         this.router.events.pipe(filter(event => event instanceof NavigationStart)).subscribe(() => {
             this.initScroll();
         });

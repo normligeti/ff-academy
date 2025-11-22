@@ -1,7 +1,7 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { CurriculumActions } from './curriculum.actions';
 
-export const curriculumFeatureKey = 'curriculum';
+export const curriculumFeatureKey = 'curriculumData';
 
 export interface CurriculumState {
     curriculum: any | null;
@@ -10,10 +10,10 @@ export interface CurriculumState {
     curriculumError: any;
 
     // Selected training
-    selectedTraining: any | null;
-    loadingSelectedTraining: boolean;
-    loadedSelectedTraining: boolean;
-    selectedTrainingError: any;
+    // selectedTraining: any | null;
+    // loadingSelectedTraining: boolean;
+    // loadedSelectedTraining: boolean;
+    // selectedTrainingError: any;
 
     // Selected quiz
     selectedQuiz: any | null;
@@ -29,10 +29,10 @@ export const initialState: CurriculumState = {
     curriculumError: null,
 
     // Training detail
-    selectedTraining: null,
-    loadingSelectedTraining: false,
-    loadedSelectedTraining: false,
-    selectedTrainingError: null,
+    // selectedTraining: null,
+    // loadingSelectedTraining: false,
+    // loadedSelectedTraining: false,
+    // selectedTrainingError: null,
 
     // Quiz
     selectedQuiz: null,
@@ -66,24 +66,24 @@ export const reducer = createReducer(
     })),
 
     // --- TRAINING DETAILS ---
-    on(CurriculumActions.loadSelectedTraining, state => ({
-        ...state,
-        loadingSelectedTraining: true,
-        loadedSelectedTraining: false,
-        selectedTrainingError: null
-    })),
-    on(CurriculumActions.loadSelectedTrainingSuccess, (state, { detail }) => ({
-        ...state,
-        loadingSelectedTraining: false,
-        loadedSelectedTraining: true,
-        selectedTraining: detail
-    })),
-    on(CurriculumActions.loadSelectedTrainingFailure, (state, { error }) => ({
-        ...state,
-        loadingSelectedTraining: false,
-        loadedSelectedTraining: false,
-        selectedTrainingError: error
-    })),
+    // on(CurriculumActions.loadSelectedTraining, state => ({
+    //     ...state,
+    //     loadingSelectedTraining: true,
+    //     loadedSelectedTraining: false,
+    //     selectedTrainingError: null
+    // })),
+    // on(CurriculumActions.loadSelectedTrainingSuccess, (state, { detail }) => ({
+    //     ...state,
+    //     loadingSelectedTraining: false,
+    //     loadedSelectedTraining: true,
+    //     selectedTraining: detail
+    // })),
+    // on(CurriculumActions.loadSelectedTrainingFailure, (state, { error }) => ({
+    //     ...state,
+    //     loadingSelectedTraining: false,
+    //     loadedSelectedTraining: false,
+    //     selectedTrainingError: error
+    // })),
 
     // --- QUIZ ---
     on(CurriculumActions.loadQuiz, state => ({

@@ -20,6 +20,16 @@ export class ProfileService {
         this.baseUrl = baseUrl;
     }
 
+    login(loginData): Observable<any> {
+        console.log('login');
+        
+        return this.http.post(`${this.baseUrl}/users/login`, loginData, { withCredentials: true });
+    }
+
+    loadProfile(): Observable<any> {
+        return this.http.get(`${this.baseUrl}/users/get-user-profile`, { withCredentials: true });
+    }
+
     createUser(user: User): Observable<User> {
         return this.http.post<User>(`${this.baseUrl}/users/create`, user);
     }

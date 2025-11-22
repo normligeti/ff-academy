@@ -6,6 +6,7 @@ import { CurriculumActions } from '../../../core/store/curriculum/curriculum.act
 import { filter, map, Observable, take } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { CountdownPipe } from '../../../core/utils/countdown.pipe';
+import { DIFFICULTY_NAME_TO_ORDER } from '../../../core/utils/difficulty.enum';
 
 @Component({
   selector: 'app-difficulty-detail',
@@ -19,6 +20,7 @@ export class DifficultyDetailComponent {
 
     pillarOrder!: number;
     difficultyName!: string;
+    difficultyOrder!: number;
 
     pillar$!: Observable<any>;
     trainings$!: Observable<any>;
@@ -28,12 +30,15 @@ export class DifficultyDetailComponent {
         map(err => [err])
     );
 
+    DIFFICULTY_NAME_TO_ORDER = DIFFICULTY_NAME_TO_ORDER;
+
     constructor(private route: ActivatedRoute) {}
 
     ngOnInit() {
         this.route.paramMap.subscribe(params => {
             this.pillarOrder = Number(params.get('pillarOrder'));
             this.difficultyName = params.get('difficultyName') || '';
+            this.difficultyOrder = DIFFICULTY_NAME_TO_ORDER[this.difficultyName];
 
             this.store.select(CurriculumSelectors.selectCurriculumLoaded)
                 .pipe(take(1))
@@ -51,7 +56,7 @@ export class DifficultyDetailComponent {
             this.trainings$ = this.store.select(
                 CurriculumSelectors.selectTrainingsForDifficulty(
                     this.pillarOrder,
-                    this.difficultyName
+                    this.difficultyOrder
                 )
             );
         });

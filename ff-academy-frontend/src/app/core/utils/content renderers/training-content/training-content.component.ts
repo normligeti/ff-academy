@@ -14,8 +14,6 @@ export class TrainingContentComponent {
     @Input() lang = 'en';
 
     get(key: string): any {
-        const trans = this.block.data?.translations?.find(t => t.lang === this.lang);
-        
-        return trans?.value?.[key] ?? this.block.data?.[key];
+        return this.block.data?.[key];
     }
 }

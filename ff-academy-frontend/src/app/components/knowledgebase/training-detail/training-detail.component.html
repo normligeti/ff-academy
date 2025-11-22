@@ -1,6 +1,6 @@
-<div *ngIf="error$ | async as error" class="loader-container">
+<!-- <div *ngIf="error$ | async as error" class="loader-container">
     <pre>{{ error | json }}</pre>
-</div>
+</div> -->
 
 <section class="section-1">
     <div class="subpage-background">
@@ -180,13 +180,16 @@
 </section>
 
 <section class="section-2">
-    <button class="btn-white" [routerLink]="['quiz']" [disabled]="!(training$ | async)?.userProgress?.allowQuiz">
-        <ng-container *ngIf="(training$ | async)?.userProgress?.allowQuiz">
+    <!-- <button class="btn-white" [routerLink]="['quiz']" [disabled]="!(training$ | async)?.quiz">
+
+        <ng-container *ngIf="(training$ | async)?.quiz">
             <img src="assets/icons/button-arrow.svg" alt="">
             <p>start quiz</p>
         </ng-container>
-        <p *ngIf="!(training$ | async)?.userProgress?.allowQuiz && !(training$ | async)?.userProgress?.retryAvailableAt">quiz already completed</p>
-        <p *ngIf="!(training$ | async)?.userProgress?.allowQuiz && (training$ | async)?.userProgress?.retryAvailableAt">
+
+        <p *ngIf="!(training$ | async)?.quiz && !(training$ | async)?.userProgress?.retryAvailableAt">quiz already completed</p>
+
+        <p *ngIf="!(training$ | async)?.quiz && (training$ | async)?.userProgress?.retryAvailableAt">
             you can retry quiz in:
             
             <ng-container *ngIf="(training$ | async)?.userProgress.retryAvailableAt as date">
@@ -201,10 +204,44 @@
             </ng-container>
             
         </p>
-    </button>
+
+    </button> -->
+
+    <ng-container *ngIf="(training$ | async)?.quiz as quiz">
+        <button class="btn-white" [routerLink]="['quiz']" [disabled]="!quiz">
+            <img src="assets/icons/button-arrow.svg" alt="">
+            <p>start quiz</p>
+        </button>
+    </ng-container>
+
+    <ng-container *ngIf="!(training$ | async)?.quiz as noQuiz">
+        <ng-container *ngIf="!(training$ | async)?.userProgress?.retryAvailableAt">
+            <button class="btn-white" (click)="reloadData()" [routerLink]="['quiz']" [disabled]="noQuiz">
+                <p>quiz already completed</p>
+            </button>
+        </ng-container>
+        
+        <ng-container *ngIf="(training$ | async)?.userProgress?.retryAvailableAt as date">
+            <ng-container *ngIf="(date | countdown | async) as t">
+                <button class="btn-white" (click)="reloadData()" [routerLink]="['quiz']" [disabled]="t.totalMs > 0">
+                    <p>
+                        you can retry quiz in:
+                    
+                        <span *ngIf="t.totalMs > 0; else retryNow">
+                            {{ t.days }}d {{ t.hours }}h {{ t.minutes }}m {{ t.seconds }}s
+                        </span>
+                        <ng-template #retryNow>
+                            <span>Retry available!</span>
+                        </ng-template>
+                    </p>
+                </button>
+            </ng-container>
+        </ng-container>
+    </ng-container>
+   
 </section>
 
-<ng-container *ngIf="(nextTrainings$ | async) as next">
+<!-- <ng-container *ngIf="(nextTrainings$ | async) as next">
     <section class="section-3" *ngIf="next.length > 0">
         <p class="f50 sbold title">Next Lessons</p>
         <p class="f21">(ennek itt biztos hogy van ertelme tekintve hogy nem mehetnek tovabb?)</p>
@@ -219,4 +256,4 @@
             </div>
         </div>
     </section>
-</ng-container>
+</ng-container> -->

@@ -6,6 +6,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { CurriculumActions } from '../../core/store/curriculum/curriculum.actions';
 import { CurriculumSelectors } from '../../core/store/curriculum/curriculum.selectors';
 import { take } from 'rxjs';
+import { DIFFICULTY_ORDER_TO_NAME } from '../../core/utils/difficulty.enum';
 
 @Component({
   selector: 'app-knowledgebase',
@@ -19,6 +20,8 @@ export class KnowledgebaseComponent {
     pillars$ = this.store.select(CurriculumSelectors.selectPillars);
 
     selectedPillar: any = null;
+
+    DIFFICULTY_ORDER_TO_NAME = DIFFICULTY_ORDER_TO_NAME;
 
     ngOnInit() {
         this.store.select(CurriculumSelectors.selectCurriculumLoaded)
@@ -36,12 +39,12 @@ export class KnowledgebaseComponent {
     }
 
 
-    // dropdown display (openstates init values might not work TODO)
-    openStates: { [key: number]: boolean } = { 0:false, 1:false, 2:false };
+    // dropdown display
+    openStates: { [key: number]: boolean };
 
     showSection(pillar) {
         let element = document.querySelector('.section-5') as HTMLElement;
-        this.openStates = { 0:false, 1:false, 2:false };
+        this.openStates = { 0:true, 1:false, 2:false };
 
         if ((pillar?.order !== this.selectedPillar?.order) || !element.classList.contains('show')) {
             element.classList.add('show');

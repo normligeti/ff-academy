@@ -1,6 +1,6 @@
-<div *ngIf="(error$ | async)!.length > 0 " class="loader-container">
+<!-- <div *ngIf="(error$ | async)!.length > 0 " class="loader-container">
         <pre>{{ (error$ | async) | json }}</pre>
-</div>
+</div> -->
 
 <section class="section-1">
     <div class="subpage-background">
@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        <ng-container *ngIf="(quiz$ | async)?.questions as questions">
+        <ng-container *ngIf="quiz?.questions as questions">
             <div class="quiz-box" *ngIf="counter <= questions.length" @fadeInOut>
                 <div class="row">
                     <h6 class="blue sbold spacer">Quiz</h6>

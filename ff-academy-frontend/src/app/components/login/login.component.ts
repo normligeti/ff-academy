@@ -29,7 +29,6 @@ export class LoginComponent {
     login() {
         let loginData = {
             email: this.formData.email,
-            password: this.formData.password,
         };
 
         // this.counter++;

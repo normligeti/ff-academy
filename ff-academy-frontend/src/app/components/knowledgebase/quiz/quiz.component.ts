@@ -7,9 +7,10 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { Store } from '@ngrx/store';
 import { CurriculumSelectors } from '../../../core/store/curriculum/curriculum.selectors';
 import { CurriculumActions } from '../../../core/store/curriculum/curriculum.actions';
-import { combineLatest, map, Subject, take, takeUntil } from 'rxjs';
+import { combineLatest, map, Observable, Subject, take, takeUntil } from 'rxjs';
 import { ProfileActions } from '../../../core/store/profile/profile.actions';
 import { Actions, ofType } from '@ngrx/effects';
+import { DIFFICULTY_NAME_TO_ORDER } from '../../../core/utils/difficulty.enum';
 
 @Component({
   selector: 'app-quiz',
@@ -33,21 +34,26 @@ import { Actions, ofType } from '@ngrx/effects';
 export class QuizComponent {
     private store = inject(Store);
     trainingId!: string;
+    pillarOrder!: number;
+    difficultyName!: string;
+    difficultyOrder!: number;
+
     savingProgressFailed: boolean;
 
     destroy$ = new Subject<void>();
     
-    quiz$ = this.store.select(CurriculumSelectors.selectSelectedQuiz);
-    training$ = this.store.select(CurriculumSelectors.selectSelectedTraining);
+    // quiz$ = this.store.select(CurriculumSelectors.selectSelectedQuiz);
+    quiz;
+    training$: Observable<any>;
 
-    error$ = combineLatest([
-        this.store.select(CurriculumSelectors.selectSelectedTrainingError),
-        this.store.select(CurriculumSelectors.selectQuizError)
-    ]).pipe(
-        map(([trainingError, quizError]) =>
-            [trainingError, quizError].filter(Boolean)   // remove null/undefined
-        )
-    );
+    // error$ = combineLatest([
+    //     this.store.select(CurriculumSelectors.selectSelectedTrainingError),
+    //     this.store.select(CurriculumSelectors.selectQuizError)
+    // ]).pipe(
+    //     map(([trainingError, quizError]) =>
+    //         [trainingError, quizError].filter(Boolean)   // remove null/undefined
+    //     )
+    // );
     
     counter = 1;
 
@@ -59,18 +65,45 @@ export class QuizComponent {
     ngOnInit() {
         this.route.paramMap.subscribe(params => {
             this.trainingId = String(params.get('trainingId'));
+            this.pillarOrder = Number(params.get('pillarOrder'));
+            this.difficultyName = params.get('difficultyName') || '';
+            this.difficultyOrder = DIFFICULTY_NAME_TO_ORDER[this.difficultyName];
 
-            this.store.dispatch(
-                CurriculumActions.loadQuiz({
-                    trainingId: this.trainingId
-                })
+            this.store.select(CurriculumSelectors.selectCurriculumLoaded)
+                .pipe(take(1))
+                .subscribe(loaded => {
+                    if (!loaded) {
+                        this.store.dispatch(CurriculumActions.loadDecoratedCurriculum());
+                    }
+                }
             );
 
-            this.store.dispatch(
-                CurriculumActions.loadSelectedTraining({
-                    trainingId: this.trainingId
-                })
+            this.training$ = this.store.select(
+                CurriculumSelectors.selectTrainingDetails(
+                    this.pillarOrder,
+                    this.difficultyOrder,
+                    this.trainingId
+                )
             );
+
+            this.training$.pipe(takeUntil(this.destroy$)).subscribe(training => {
+                console.log('quiz detail component');
+                console.log(training);
+                
+                this.quiz = training?.quiz;
+            });
+
+            // this.store.dispatch(
+            //     CurriculumActions.loadQuiz({
+            //         trainingId: this.trainingId
+            //     })
+            // );
+
+            // this.store.dispatch(
+            //     CurriculumActions.loadSelectedTraining({
+            //         trainingId: this.trainingId
+            //     })
+            // );
         });
 
         this.actions$
@@ -132,9 +165,18 @@ export class QuizComponent {
     }
 
     // TODO decide what to do when failing a new quiz and opening modified quiz
+    // TODO move quiz validation to backend
     onQuizComplete() {
         this.training$.pipe(take(1)).subscribe(training => {
-            const status = this.allQuestionsCorrect ? 'completed' : 'failed';
+            let status: any;
+            console.log(training?.path);
+            
+            if (training?.userProgress?.status === 'new') {
+                status = this.allQuestionsCorrect ? 'completed' : null; // TODO ignore fail progress
+
+            } else {
+                status = this.allQuestionsCorrect ? 'completed' : 'failed';
+            }
     
             const progress = {
                 trainingId: training?._id,
@@ -157,12 +199,17 @@ export class QuizComponent {
         this.fakeDownload = true;
     }
 
-    getDifficultyOrder(name: string): number {
-        switch (name.toLowerCase()) {
-            case 'basic': return 1;
-            case 'intermediate': return 2;
-            case 'master': return 3;
-            default: return 0;
-        }
+    // getDifficultyOrder(name: string): number {
+    //     switch (name.toLowerCase()) {
+    //         case 'basic': return 1;
+    //         case 'intermediate': return 2;
+    //         case 'master': return 3;
+    //         default: return 0;
+    //     }
+    // }
+
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.unsubscribe();
     }
 }

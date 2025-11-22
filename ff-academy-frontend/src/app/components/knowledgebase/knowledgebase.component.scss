@@ -81,6 +81,8 @@
         transition: all 0.1s;
         box-shadow: 0px 0px 0px 0px #0596AE66;
         pointer-events: none;
+        // will-change: transform;
+        transform: translateZ(0);
 
         p {
             opacity: 50%;
@@ -120,6 +122,28 @@
             position: absolute;
             top: 0;
             left: 0;
+            // transform: translateZ(0);
+            
+            .badge-text-wrapper {
+                position: absolute;
+                top: 44px;
+                left: 46px;
+                height: 0px;
+                width: 0px;
+                transform: rotate(-45deg);
+            }
+
+            p {
+                position: absolute;
+                top: 0;
+                left: 0;
+                transform: translate(-53%, -45%);
+                transform-origin: center;
+                color: var(--gray);
+                letter-spacing: 0.5px;
+                display: none;
+                display: block;
+            }
         }
 
         &.available {

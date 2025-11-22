@@ -25,7 +25,7 @@ export class CurriculumService {
     // }
 
     getDecoratedCurriculum(): Observable<any> {
-        return this.http.get<any>(`${this.baseUrl}/curriculum/curriculum-data`);
+        return this.http.get<any>(`${this.baseUrl}/curriculum/curriculum-data`, { withCredentials: true });
     }
 
     // --- TRAINING DETAIL (by ID) ---

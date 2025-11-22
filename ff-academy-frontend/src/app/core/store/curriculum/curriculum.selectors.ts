@@ -54,39 +54,52 @@ export const CurriculumSelectors = {
     ),
 
     // --- TRAININGS INSIDE DIFFICULTY ---
-    selectTrainingsForDifficulty: (pillarOrder: number, difficultyName: string) =>
+    selectTrainingsForDifficulty: (pillarOrder: number, difficultyOrder: number) =>
         createSelector(
             selectCurriculumState,
             state => {
                 const pillar = state.curriculum?.pillars?.find(
                     p => p.order === pillarOrder
                 );
+                
                 if (!pillar) return [];
 
                 const difficulty = pillar.difficulties?.find(
-                    d => d.name === difficultyName
+                    d => d.order === difficultyOrder
                 );
                 return difficulty?.trainings ?? [];
             }
     ),
 
     // --- TRAINING DETAIL ---
-    selectSelectedTraining: createSelector(
-        selectCurriculumState,
-        (state) => state.selectedTraining
+    selectTrainingDetails: (pillarOrder: number, difficultyOrder: number, trainingId: string) =>
+        createSelector(
+            CurriculumSelectors.selectTrainingsForDifficulty(
+                pillarOrder,
+                difficultyOrder
+            ),
+            (trainings) => {
+                if (!trainings) return null;
+                return trainings.find(t => String(t._id) === String(trainingId)) ?? null;
+            }
     ),
-    selectSelectedTrainingLoading: createSelector(
-        selectCurriculumState,
-        (state) => state.loadingSelectedTraining
-    ),
-    selectSelectedTrainingLoaded: createSelector(
-        selectCurriculumState,
-        (state) => state.loadedSelectedTraining
-    ),
-    selectSelectedTrainingError: createSelector(
-        selectCurriculumState,
-        (state) => state.selectedTrainingError
-    ),
+
+    // selectSelectedTraining: createSelector(
+    //     selectCurriculumState,
+    //     (state) => state.selectedTraining
+    // ),
+    // selectSelectedTrainingLoading: createSelector(
+    //     selectCurriculumState,
+    //     (state) => state.loadingSelectedTraining
+    // ),
+    // selectSelectedTrainingLoaded: createSelector(
+    //     selectCurriculumState,
+    //     (state) => state.loadedSelectedTraining
+    // ),
+    // selectSelectedTrainingError: createSelector(
+    //     selectCurriculumState,
+    //     (state) => state.selectedTrainingError
+    // ),
 
     // --- QUIZ ---
     selectSelectedQuiz: createSelector(
