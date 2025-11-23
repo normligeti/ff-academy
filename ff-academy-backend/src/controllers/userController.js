@@ -21,6 +21,7 @@ const userController = {
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             }
+            // TODO dont return whole user object
             res.json(user);
         } catch (err) {
             console.error("getUser error:", err);
@@ -42,7 +43,7 @@ const userController = {
             const user = await userService.findByEmail(email);
     
             if (!user) {
-                return res.status(401).json({ message: "Invalid email" });
+                return res.status(401).json({ message: "User not found" });
             }
     
             //  verify a password here
@@ -65,6 +66,23 @@ const userController = {
         } catch (err) {
             console.error("login error:", err);
             res.status(500).json({ message: "Failed to login" });
+        }
+    },
+
+    async logout(req, res) {
+        try {
+            // Overwrite the cookie with empty value + immediate expiration
+            res.cookie("auth_token", "", {
+                httpOnly: true,
+                secure: false,        // same as login (set to true in prod)
+                sameSite: "lax",
+                expires: new Date(0)  // destroys cookie immediately
+            });
+    
+            return res.status(200).json({ message: "Logout successful" });
+        } catch (err) {
+            console.error("logout error:", err);
+            res.status(500).json({ message: "Failed to logout" });
         }
     },
     
