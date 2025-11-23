@@ -7,16 +7,18 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { Store } from '@ngrx/store';
 import { CurriculumSelectors } from '../../../core/store/curriculum/curriculum.selectors';
 import { CurriculumActions } from '../../../core/store/curriculum/curriculum.actions';
-import { combineLatest, map, Observable, Subject, take, takeUntil } from 'rxjs';
+import { combineLatest, map, Observable, skip, Subject, take, takeUntil } from 'rxjs';
 import { ProfileActions } from '../../../core/store/profile/profile.actions';
 import { Actions, ofType } from '@ngrx/effects';
 import { DIFFICULTY_NAME_TO_ORDER } from '../../../core/utils/difficulty.enum';
+import { ParamService } from '../../../core/services/param.service';
 
 @Component({
   selector: 'app-quiz',
   imports: [RouterModule, CommonModule, MatCheckboxModule, FormsModule],
   templateUrl: './quiz.component.html',
   styleUrl: './quiz.component.scss',
+  providers: [ParamService],
   animations: [
     trigger('fadeInOut', [
         transition(':enter', [
@@ -33,10 +35,11 @@ import { DIFFICULTY_NAME_TO_ORDER } from '../../../core/utils/difficulty.enum';
 
 export class QuizComponent {
     private store = inject(Store);
-    trainingId!: string;
-    pillarOrder!: number;
-    difficultyName!: string;
-    difficultyOrder!: number;
+    // trainingId!: string;
+    // pillarOrder!: number;
+    // difficultyName!: string;
+    // difficultyOrder!: number;
+    // facade: ParamService;
 
     savingProgressFailed: boolean;
 
@@ -59,16 +62,15 @@ export class QuizComponent {
 
     constructor(
         private route: ActivatedRoute,
-        private actions$: Actions
+        private actions$: Actions,
+        private params: ParamService
     ) {}
 
     ngOnInit() {
-        this.route.paramMap.subscribe(params => {
-            this.trainingId = String(params.get('trainingId'));
-            this.pillarOrder = Number(params.get('pillarOrder'));
-            this.difficultyName = params.get('difficultyName') || '';
-            this.difficultyOrder = DIFFICULTY_NAME_TO_ORDER[this.difficultyName];
-
+        this.params.params$.subscribe(params => {
+            console.log('params');
+            console.log(params);
+            
             this.store.select(CurriculumSelectors.selectCurriculumLoaded)
                 .pipe(take(1))
                 .subscribe(loaded => {
@@ -80,9 +82,9 @@ export class QuizComponent {
 
             this.training$ = this.store.select(
                 CurriculumSelectors.selectTrainingDetails(
-                    this.pillarOrder,
-                    this.difficultyOrder,
-                    this.trainingId
+                    params.pillarOrder,
+                    params.difficultyOrder,
+                    params.trainingId
                 )
             );
 
@@ -92,19 +94,50 @@ export class QuizComponent {
                 
                 this.quiz = training?.quiz;
             });
-
-            // this.store.dispatch(
-            //     CurriculumActions.loadQuiz({
-            //         trainingId: this.trainingId
-            //     })
-            // );
-
-            // this.store.dispatch(
-            //     CurriculumActions.loadSelectedTraining({
-            //         trainingId: this.trainingId
-            //     })
-            // );
         });
+
+        // this.route.paramMap.subscribe(params => {
+            // this.trainingId = String(params.get('trainingId'));
+            // this.pillarOrder = Number(params.get('pillarOrder'));
+            // this.difficultyName = params.get('difficultyName') || '';
+            // this.difficultyOrder = DIFFICULTY_NAME_TO_ORDER[this.difficultyName];
+
+            // this.store.select(CurriculumSelectors.selectCurriculumLoaded)
+            //     .pipe(take(1))
+            //     .subscribe(loaded => {
+            //         if (!loaded) {
+            //             this.store.dispatch(CurriculumActions.loadDecoratedCurriculum());
+            //         }
+            //     }
+            // );
+
+            // this.training$ = this.store.select(
+            //     CurriculumSelectors.selectTrainingDetails(
+            //         this.pillarOrder,
+            //         this.difficultyOrder,
+            //         this.trainingId
+            //     )
+            // );
+
+            // this.training$.pipe(takeUntil(this.destroy$)).subscribe(training => {
+            //     console.log('quiz detail component');
+            //     console.log(training);
+                
+            //     this.quiz = training?.quiz;
+            // });
+
+            // // this.store.dispatch(
+            // //     CurriculumActions.loadQuiz({
+            // //         trainingId: this.trainingId
+            // //     })
+            // // );
+
+            // // this.store.dispatch(
+            // //     CurriculumActions.loadSelectedTraining({
+            // //         trainingId: this.trainingId
+            // //     })
+            // // );
+        // });
 
         this.actions$
             .pipe(
@@ -198,15 +231,6 @@ export class QuizComponent {
         this.success = null;
         this.fakeDownload = true;
     }
-
-    // getDifficultyOrder(name: string): number {
-    //     switch (name.toLowerCase()) {
-    //         case 'basic': return 1;
-    //         case 'intermediate': return 2;
-    //         case 'master': return 3;
-    //         default: return 0;
-    //     }
-    // }
 
     ngOnDestroy() {
         this.destroy$.next();

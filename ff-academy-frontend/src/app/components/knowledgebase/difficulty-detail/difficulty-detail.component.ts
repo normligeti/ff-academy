@@ -7,20 +7,22 @@ import { filter, map, Observable, take } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { CountdownPipe } from '../../../core/utils/countdown.pipe';
 import { DIFFICULTY_NAME_TO_ORDER } from '../../../core/utils/difficulty.enum';
+import { ParamService } from '../../../core/services/param.service';
 
 @Component({
-  selector: 'app-difficulty-detail',
-  imports: [RouterModule, CommonModule, CountdownPipe],
-  templateUrl: './difficulty-detail.component.html',
-  styleUrl: './difficulty-detail.component.scss'
+    selector: 'app-difficulty-detail',
+    imports: [RouterModule, CommonModule, CountdownPipe],
+    providers: [ParamService],
+    templateUrl: './difficulty-detail.component.html',
+    styleUrl: './difficulty-detail.component.scss'
 })
 export class DifficultyDetailComponent {
 
     private store = inject(Store);
 
-    pillarOrder!: number;
+    // pillarOrder!: number;
     difficultyName!: string;
-    difficultyOrder!: number;
+    // difficultyOrder!: number;
 
     pillar$!: Observable<any>;
     trainings$!: Observable<any>;
@@ -30,16 +32,17 @@ export class DifficultyDetailComponent {
         map(err => [err])
     );
 
-    DIFFICULTY_NAME_TO_ORDER = DIFFICULTY_NAME_TO_ORDER;
+    // DIFFICULTY_NAME_TO_ORDER = DIFFICULTY_NAME_TO_ORDER;
 
-    constructor(private route: ActivatedRoute) {}
+    constructor(
+        private route: ActivatedRoute,
+        private params: ParamService
+    ) {}
 
     ngOnInit() {
-        this.route.paramMap.subscribe(params => {
-            this.pillarOrder = Number(params.get('pillarOrder'));
-            this.difficultyName = params.get('difficultyName') || '';
-            this.difficultyOrder = DIFFICULTY_NAME_TO_ORDER[this.difficultyName];
-
+        this.params.params$.subscribe(params => {
+            this.difficultyName = params.difficultyName;
+            
             this.store.select(CurriculumSelectors.selectCurriculumLoaded)
                 .pipe(take(1))
                 .subscribe(loaded => {
@@ -50,15 +53,41 @@ export class DifficultyDetailComponent {
             );
 
             this.pillar$ = this.store.select(
-                CurriculumSelectors.selectPillar(this.pillarOrder)
+                CurriculumSelectors.selectPillar(params.pillarOrder)
             );
 
             this.trainings$ = this.store.select(
                 CurriculumSelectors.selectTrainingsForDifficulty(
-                    this.pillarOrder,
-                    this.difficultyOrder
+                    params.pillarOrder,
+                    params.difficultyOrder
                 )
             );
         });
+
+        // this.route.paramMap.subscribe(params => {
+            // this.pillarOrder = Number(params.get('pillarOrder'));
+            // this.difficultyName = params.get('difficultyName') || '';
+            // this.difficultyOrder = DIFFICULTY_NAME_TO_ORDER[this.difficultyName];
+
+            // this.store.select(CurriculumSelectors.selectCurriculumLoaded)
+            //     .pipe(take(1))
+            //     .subscribe(loaded => {
+            //         if (!loaded) {
+            //             this.store.dispatch(CurriculumActions.loadDecoratedCurriculum());
+            //         }
+            //     }
+            // );
+
+            // this.pillar$ = this.store.select(
+            //     CurriculumSelectors.selectPillar(this.pillarOrder)
+            // );
+
+            // this.trainings$ = this.store.select(
+            //     CurriculumSelectors.selectTrainingsForDifficulty(
+            //         this.pillarOrder,
+            //         this.difficultyOrder
+            //     )
+            // );
+        // });
     }
 }
