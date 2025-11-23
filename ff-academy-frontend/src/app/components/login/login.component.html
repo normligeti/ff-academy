@@ -37,13 +37,21 @@
                 <p class="f14">Remember me</p>
             </div>
             
-            <button class="btn-dark-blue" [disabled]="formRef.invalid" (click)="login()" *ngIf="counter === 0">
-                Log in
-            </button>
-            <button class="btn-dark-blue disabled" (click)="login()" *ngIf="counter === 1">
-                Logging in...
-                <loader color="white" [size]="20"></loader>
-            </button>
+            <div class="input-wrapper">
+                <button class="btn-dark-blue" [disabled]="formRef.invalid" (click)="login()" *ngIf="!(loading$ | async)">
+                    Log in
+                </button>
+                <button class="btn-dark-blue disabled" (click)="login()" *ngIf="(loading$ | async)">
+                    Logging in...
+                    <loader color="white" [size]="20"></loader>
+                </button>
+                <div class="error" *ngIf="loginError">
+                    <p class="f18">
+                        {{ loginError }}
+                    </p>
+                </div>
+            </div>
+            
         </form>
     </div>
 

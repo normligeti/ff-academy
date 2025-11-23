@@ -35,7 +35,11 @@
         <li class="disabled">
             {{ 'NAV.MY_PROFILE' | translate }}
         </li>
-        <li [routerLink]="['/login']">
+        <div class="divider"></div>
+        <li *ngIf="(isAuthenticated$ | async)" (click)="logout()">
+            {{ 'NAV.LOGOUT' | translate }}
+        </li>
+        <li [routerLink]="['/login']" *ngIf="!(isAuthenticated$ | async)">
             {{ 'NAV.LOGIN' | translate }}
         </li>
     </ul>

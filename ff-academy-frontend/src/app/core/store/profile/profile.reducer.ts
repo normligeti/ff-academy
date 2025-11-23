@@ -49,16 +49,24 @@ export const reducer = createReducer(
         isLoaded: false
     })),
 
-    on(ProfileActions.loginSuccess, (state, { profile }) => ({
+    on(ProfileActions.login, (state) => ({
         ...state,
-        profile,
-        isAuthenticated: true,
+        isLoading: true,
+        isLoaded: false,
+        error: null
+    })),
+    on(ProfileActions.loginSuccess, (state) => ({
+        ...state,
+        isLoading: false,
+        isLoaded: false,
         error: null
     })),
     on(ProfileActions.loginFailure, (state, { error }) => ({
         ...state,
-        error,
-        isAuthenticated: false
+        isAuthenticated: false,
+        isLoading: false,
+        isLoaded: false,
+        error
     })),
 
     on(ProfileActions.logout, (state) => ({

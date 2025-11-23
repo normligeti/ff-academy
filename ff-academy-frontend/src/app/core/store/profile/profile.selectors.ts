@@ -20,6 +20,11 @@ export const selectIsAuthenticated = createSelector(
     (state) => state.isAuthenticated
 );
 
+export const selectAuthLoading = createSelector(
+    selectProfileState,
+    state => state.isLoading
+);
+
 // --- PROGRESS ---
 export const selectUserProgress = createSelector(
     selectProfileState,

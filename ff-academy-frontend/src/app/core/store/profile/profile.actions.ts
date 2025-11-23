@@ -8,7 +8,7 @@ export const ProfileActions = createActionGroup({
         'Load Profile Failure': props<{ error: any }>(),
 
         'Login': props<{ loginData: Object }>(),
-        'Login Success': props<{ profile: any }>(),
+        'Login Success': emptyProps(),
         'Login Failure': props<{ error: any }>(),
 
         'Logout': emptyProps(),

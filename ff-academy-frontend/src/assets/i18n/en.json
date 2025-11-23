@@ -6,7 +6,8 @@
         "WEB3": "Web3 & FFT",
         "DOWNLOADS": "Downloads",
         "MY_PROFILE": "My Profile",
-        "LOGIN": "Log In"
+        "LOGIN": "Log In",
+        "LOGOUT": "Log Out"
     },
     "HOME": {
         "SECTION1": {

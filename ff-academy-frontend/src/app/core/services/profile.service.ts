@@ -21,9 +21,11 @@ export class ProfileService {
     }
 
     login(loginData): Observable<any> {
-        console.log('login');
-        
         return this.http.post(`${this.baseUrl}/users/login`, loginData, { withCredentials: true });
+    }
+
+    logout(): Observable<any> {
+        return this.http.post(`${this.baseUrl}/users/logout`, {}, { withCredentials: true });
     }
 
     loadProfile(): Observable<any> {

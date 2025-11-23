@@ -18,7 +18,7 @@ export class ProfileEffects {
             this.profileService.loadProfile().pipe(
                 map((response: any) =>
                     ProfileActions.loadProfileSuccess({
-                        profile: response.user
+                        profile: response
                     })
                 ),
                 catchError((error) =>
@@ -35,9 +35,7 @@ export class ProfileEffects {
         switchMap(({ loginData }) =>
             this.profileService.login(loginData).pipe(
                 map((response: any) =>
-                    ProfileActions.loginSuccess({
-                        profile: response
-                    })
+                    ProfileActions.loginSuccess()
                 ),
                 catchError((error) =>
                     of(ProfileActions.loginFailure({ error: error.error }))
@@ -47,21 +45,21 @@ export class ProfileEffects {
         );
     });
 
-    // logout$ = createEffect(() => {
-    //     return this.actions$.pipe(
-    //     ofType(ProfileActions.logout),
-    //     switchMap(() =>
-    //         this.authService.logout().pipe(
-    //             map(() =>
-    //                 ProfileActions.logoutSuccess()
-    //             ),
-    //             catchError((error) =>
-    //                 of(ProfileActions.logoutFailure({ error: error.error }))
-    //             )
-    //         )
-    //     )
-    //     );
-    // });
+    logout$ = createEffect(() => {
+        return this.actions$.pipe(
+        ofType(ProfileActions.logout),
+        switchMap(() =>
+            this.profileService.logout().pipe(
+                map(() =>
+                    ProfileActions.logoutSuccess()
+                ),
+                catchError((error) =>
+                    of(ProfileActions.logoutFailure({ error: error.error }))
+                )
+            )
+        )
+        );
+    });
 
     saveProgress$ = createEffect(() =>
         this.actions$.pipe(
