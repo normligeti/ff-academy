@@ -36,10 +36,10 @@ export class ProfileService {
         return this.http.post<User>(`${this.baseUrl}/users/create`, user);
     }
 
-    saveUserProgress(userId: string, progressData: any): Observable<any[]> {
-        return this.http.post<any[]>(
-            `${this.baseUrl}/users/${userId}/progress`,
-            progressData
-        );
-    }
+    // saveUserProgress(userId: string, progressData: any): Observable<any[]> {
+    //     return this.http.post<any[]>(
+    //         `${this.baseUrl}/users/${userId}/progress`,
+    //         progressData
+    //     );
+    // }
 }

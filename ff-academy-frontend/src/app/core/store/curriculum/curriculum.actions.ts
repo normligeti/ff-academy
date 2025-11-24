@@ -22,5 +22,9 @@ export const CurriculumActions = createActionGroup({
         'Load Quiz': props<{ trainingId: string }>(),
         'Load Quiz Success': props<{ quiz: any }>(),
         'Load Quiz Failure': props<{ error: any }>(),
+
+        'Validate Quiz': props<{ trainingInfo: Object; answers: Record<number, number> }>(),
+        'Validate Quiz Success': props<{ result: any }>(),
+        'Validate Quiz Failure': props<{ error: any }>(),
     }
 });

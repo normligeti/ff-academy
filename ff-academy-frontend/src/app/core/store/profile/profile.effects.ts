@@ -61,21 +61,21 @@ export class ProfileEffects {
         );
     });
 
-    saveProgress$ = createEffect(() =>
-        this.actions$.pipe(
-            ofType(ProfileActions.saveProgress),
-            mergeMap(({ userId, progressData }) =>
-                this.profileService.saveUserProgress(userId, progressData).pipe(
-                    map(updatedProgress =>
-                        ProfileActions.saveProgressSuccess({ updatedProgress })
-                    ),
-                    catchError(error =>
-                        of(ProfileActions.saveProgressFailure({ error }))
-                    )
-                )
-            )
-        )
-    );
+    // saveProgress$ = createEffect(() =>
+    //     this.actions$.pipe(
+    //         ofType(ProfileActions.saveProgress),
+    //         mergeMap(({ userId, progressData }) =>
+    //             this.profileService.saveUserProgress(userId, progressData).pipe(
+    //                 map(updatedProgress =>
+    //                     ProfileActions.saveProgressSuccess({ updatedProgress })
+    //                 ),
+    //                 catchError(error =>
+    //                     of(ProfileActions.saveProgressFailure({ error }))
+    //                 )
+    //             )
+    //         )
+    //     )
+    // );
 
 
     constructor(

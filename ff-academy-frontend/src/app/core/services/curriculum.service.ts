@@ -42,4 +42,8 @@ export class CurriculumService {
     getQuiz(trainingId: string): Observable<any> {
         return this.http.get<any>(`${this.baseUrl}/curriculum/trainings/${trainingId}/quiz`);
     }
+
+    validateQuiz(trainingInfo: Object, answers: Record<number, number>) {
+        return this.http.post(`${this.baseUrl}/curriculum/trainings/quiz-validate`, { trainingInfo, answers }, { withCredentials: true });
+    }
 }

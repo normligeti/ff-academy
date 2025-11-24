@@ -41,7 +41,7 @@ export class QuizComponent {
     // difficultyOrder!: number;
     // facade: ParamService;
 
-    savingProgressFailed: boolean;
+    validationError: boolean;
 
     destroy$ = new Subject<void>();
     
@@ -68,8 +68,6 @@ export class QuizComponent {
 
     ngOnInit() {
         this.params.params$.subscribe(params => {
-            console.log('params');
-            console.log(params);
             
             this.store.select(CurriculumSelectors.selectCurriculumLoaded)
                 .pipe(take(1))
@@ -89,9 +87,6 @@ export class QuizComponent {
             );
 
             this.training$.pipe(takeUntil(this.destroy$)).subscribe(training => {
-                console.log('quiz detail component');
-                console.log(training);
-                
                 this.quiz = training?.quiz;
             });
         });
@@ -141,22 +136,22 @@ export class QuizComponent {
 
         this.actions$
             .pipe(
-                ofType(ProfileActions.saveProgressSuccess),
+                ofType(CurriculumActions.validateQuizSuccess),
                 takeUntil(this.destroy$)
             )
-            .subscribe(() => {
-                this.success = this.allQuestionsCorrect;
+            .subscribe((response) => {
+                this.success = response?.result?.quizSuccess;
                 this.store.dispatch(CurriculumActions.loadDecoratedCurriculum());
             }
         );
 
         this.actions$
             .pipe(
-                ofType(ProfileActions.saveProgressFailure),
+                ofType(CurriculumActions.validateQuizFailure),
                 takeUntil(this.destroy$)
             )
             .subscribe(err => {
-                this.savingProgressFailed = true;
+                this.validationError = true;
                 this.success = false;
                 this.store.dispatch(CurriculumActions.loadDecoratedCurriculum());
             }
@@ -166,34 +161,18 @@ export class QuizComponent {
 
     // quiz stepper
     success: boolean | null = null; // null = not finished, true/false after last question
-    selectedAnswers: Record<number, string | null> = {};
-    checkedAnswers: Record<number, boolean> = {};
-    allQuestionsCorrect: boolean;
+    selectedAnswers: Record<number, number> = {};
     fakeDownload = false;
 
-    onSelect(questionId: number, answer: string) {
-        if (this.checkedAnswers[questionId]) return; // prevent changing after submit
-        this.selectedAnswers[questionId] = answer;
+    onSelect(questionId: number, answer: any) {
+        this.selectedAnswers[questionId] = answer.answerId;
+        console.log(this.selectedAnswers);
     }
 
     submit(questions: any[]) {
-        const currentQ = questions.find(q => q.questionId === this.counter);
-        if (!currentQ) return;
-        
-        if (!this.selectedAnswers[currentQ.questionId]) {
-            alert('Please select an answer first.');
-            return;
-        }
-        
-        this.checkedAnswers[currentQ.questionId] = true;
-        
         if (this.counter === questions.length) {
-            this.allQuestionsCorrect = questions.every(q =>
-                this.selectedAnswers[q.questionId] === q.correctAnswer
-            );
             this.onQuizComplete();
         }
-
         this.counter++;
     }
 
@@ -201,27 +180,25 @@ export class QuizComponent {
     // TODO move quiz validation to backend
     onQuizComplete() {
         this.training$.pipe(take(1)).subscribe(training => {
-            let status: any;
-            console.log(training?.path);
-            
-            if (training?.userProgress?.status === 'new') {
-                status = this.allQuestionsCorrect ? 'completed' : null; // TODO ignore fail progress
-
-            } else {
-                status = this.allQuestionsCorrect ? 'completed' : 'failed';
-            }
     
-            const progress = {
+            const trainingInfo = {
                 trainingId: training?._id,
                 path: `${training?.path}`,
-                status,
+                status: training?.userProgress?.status,
                 seenVersion: training?.version ?? 1
             };
     
+            // this.store.dispatch(
+            //     ProfileActions.saveProgress({
+            //         userId: '68f027ed4ac1082b77d6d3c3',
+            //         progressData: progress
+            //     })
+            // );
+
             this.store.dispatch(
-                ProfileActions.saveProgress({
-                    userId: '68f027ed4ac1082b77d6d3c3',
-                    progressData: progress
+                CurriculumActions.validateQuiz({
+                    trainingInfo,
+                    answers: this.selectedAnswers
                 })
             );
         });

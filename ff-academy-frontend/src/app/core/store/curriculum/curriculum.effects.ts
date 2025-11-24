@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { mergeMap, map, catchError } from 'rxjs/operators';
+import { mergeMap, map, catchError, switchMap } from 'rxjs/operators';
 import { CurriculumService } from '../../services/curriculum.service';
 import { CurriculumActions } from './curriculum.actions';
 
@@ -59,6 +59,18 @@ export class CurriculumEffects {
                 this.curriculumService.getQuiz(trainingId).pipe(
                     map(quiz => CurriculumActions.loadQuizSuccess({ quiz })),
                     catchError(error => of(CurriculumActions.loadQuizFailure({ error })))
+                )
+            )
+        )
+    );
+
+    validateQuiz$ = createEffect(() =>
+        this.actions$.pipe(
+          ofType(CurriculumActions.validateQuiz),
+            switchMap(({ trainingInfo, answers }) =>
+                this.curriculumService.validateQuiz(trainingInfo, answers).pipe(
+                    map(response => CurriculumActions.validateQuizSuccess({ result: response })),
+                    catchError(error => of(CurriculumActions.validateQuizFailure({ error })))
                 )
             )
         )

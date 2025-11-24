@@ -57,8 +57,8 @@ export class TrainingDetailComponent {
             );
 
             this.training$.pipe().subscribe(training => {
-                console.log('training detail component');
-                console.log(training);
+                // console.log('training detail component');
+                // console.log(training);
             });
         });
 

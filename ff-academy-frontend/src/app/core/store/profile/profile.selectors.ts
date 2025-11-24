@@ -26,15 +26,15 @@ export const selectAuthLoading = createSelector(
 );
 
 // --- PROGRESS ---
-export const selectUserProgress = createSelector(
-    selectProfileState,
-    (state) => state.userProgress
-);
-export const selectSavingProgress = createSelector(
-    selectProfileState,
-    (state) => state.savingProgress
-);
-export const selectProgressError = createSelector(
-    selectProfileState,
-    (state) => state.progressError
-);
+// export const selectUserProgress = createSelector(
+//     selectProfileState,
+//     (state) => state.userProgress
+// );
+// export const selectSavingProgress = createSelector(
+//     selectProfileState,
+//     (state) => state.savingProgress
+// );
+// export const selectProgressError = createSelector(
+//     selectProfileState,
+//     (state) => state.progressError
+// );

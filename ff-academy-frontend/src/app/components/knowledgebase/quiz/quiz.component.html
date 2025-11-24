@@ -41,28 +41,19 @@
     
                 <div class="question-wrapper">
                     <ng-container *ngFor="let q of questions; index as i">
-                        <div
-                            class="question-content"
-                            [@fadeInOut]
-                            *ngIf="counter === i + 1"
-                        >
-                            <p class="f32 sbold">{{ q.questionId }}. {{ q.text }} --- {{ q.correctAnswer }}</p>
+                        <div class="question-content" [@fadeInOut] *ngIf="counter === i + 1">
+                            <p class="f32 sbold">{{ q.questionId }}. {{ q.text }}</p>
                             <div class="answers">
-                            <div
-                                class="checkbox-wrapper"
-                                *ngFor="let a of q.answers"
-                                (click)="onSelect(q.questionId, a)"
-                            >
-                                <div class="checkbox-border">
-                                    <mat-checkbox
-                                        class="display-only"
-                                        [checked]="selectedAnswers[q.questionId] === a"
-                                        [disabled]="checkedAnswers[q.questionId]"
-                                        (click)="$event.preventDefault()"
-                                    ></mat-checkbox>
+                                <div class="checkbox-wrapper" *ngFor="let a of q.answers" (click)="onSelect(q.questionId, a)">
+                                    <div class="checkbox-border">
+                                        <mat-checkbox
+                                            class="display-only"
+                                            [checked]="selectedAnswers[q.questionId] === a.answerId"
+                                            (click)="$event.preventDefault()"
+                                        ></mat-checkbox>
+                                    </div>
+                                    <p>{{ a.text }}</p>
                                 </div>
-                                <p>{{ a }}</p>
-                            </div>
                             </div>
                         </div>
                     </ng-container>
@@ -89,16 +80,16 @@
         <div class="result fail" *ngIf="success === false" @fadeInOut>
             <img src="assets/knowledgebase/icons/failure.svg" alt="" class="icon">
 
-            <ng-container *ngIf="!savingProgressFailed">
+            <ng-container *ngIf="!validationError">
                 <p class="f40 mbold">Not this time… but don’t give up!</p>
                 <div>
                     <p class="f24">You didn’t pass the quiz, but this is just part of the learning process.</p>
                     <p class="f18">Take time to review the lesson, practice the concepts, and come back stronger.</p>
                 </div>
-                <p class="f24 mbold">You can retake this quiz in 15 days.</p>
+                <p class="f24 mbold" *ngIf="(training$ | async).userProgress.status !== 'new'">You can retake this quiz in 15 days.</p>
             </ng-container>
 
-            <ng-container *ngIf="savingProgressFailed">
+            <ng-container *ngIf="validationError">
                 <p class="f28 mbold">Something went wrong while trying to save results.</p>
                 <p class="f28 mbold">Please try again later.</p>
             </ng-container>
