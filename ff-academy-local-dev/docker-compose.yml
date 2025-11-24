@@ -32,6 +32,7 @@ services:
       MONGO_LOCAL_DEV: true
       MONGO_SSL: false
       MONGO_USERNAME: root
+      AUTH_JWT_SECRET: secret
     volumes:
       - ../ff-academy-backend:/app
     depends_on:
