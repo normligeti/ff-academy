@@ -49,34 +49,34 @@ function generateMultilingualQuiz(trainingTitle) {
             questionId: 1,
             text: makeLocalized(`What is the main idea of "${trainingTitle}"?`),
             answers: [
-                makeLocalized("Option A"),
-                makeLocalized("Option B"),
-                makeLocalized("Option C"),
-                makeLocalized("Option D")
+                { answerId: 1, text: makeLocalized("Option A") },
+                { answerId: 2, text: makeLocalized("Option B") },
+                { answerId: 3, text: makeLocalized("Option C") },
+                { answerId: 4, text: makeLocalized("Option D") }
             ],
-            correctAnswer: makeLocalized("Option A")
+            correctAnswerId: 1
         },
         {
             questionId: 2,
             text: makeLocalized(`Which skill is improved by "${trainingTitle}"?`),
             answers: [
-                makeLocalized("Skill A"),
-                makeLocalized("Skill B"),
-                makeLocalized("Skill C"),
-                makeLocalized("Skill D")
+                { answerId: 1, text: makeLocalized("Skill A") },
+                { answerId: 2, text: makeLocalized("Skill B") },
+                { answerId: 3, text: makeLocalized("Skill C") },
+                { answerId: 4, text: makeLocalized("Skill D") }
             ],
-            correctAnswer: makeLocalized("Skill B")
+            correctAnswerId: 2
         },
         {
             questionId: 3,
             text: makeLocalized(`How can you apply "${trainingTitle}" in real life?`),
             answers: [
-                makeLocalized("Method A"),
-                makeLocalized("Method B"),
-                makeLocalized("Method C"),
-                makeLocalized("Method D")
+                { answerId: 1, text: makeLocalized("Method A") },
+                { answerId: 2, text: makeLocalized("Method B") },
+                { answerId: 3, text: makeLocalized("Method C") },
+                { answerId: 4, text: makeLocalized("Method D") }
             ],
-            correctAnswer: makeLocalized("Method C")
+            correctAnswerId: 3
         }
     ];
 }

@@ -76,19 +76,19 @@ const curriculumService = {
                     state = "failed";
                 } else {
                     state = "available";
-                    decorated[i].quiz = await curriculumService.getQuizForTraining(decorated[i]._id, lang);
+                    decorated[i].quiz = await curriculumService.getQuizWithoutSolution(decorated[i]._id, lang);
                 }
 
             } else if (i === lastProgressIndex + 1 && !isLastProgressFailed) {
                 state = "available";
-                decorated[i].quiz = await curriculumService.getQuizForTraining(decorated[i]._id, lang);
+                decorated[i].quiz = await curriculumService.getQuizWithoutSolution(decorated[i]._id, lang);
             } else if (i === lastProgressIndex + 1 && isLastProgressFailed) {
                 state = "locked";
             }
     
             if (up.status === null && i < lastProgressIndex) {
                 state = "new";
-                decorated[i].quiz = await curriculumService.getQuizForTraining(decorated[i]._id, lang);
+                decorated[i].quiz = await curriculumService.getQuizWithoutSolution(decorated[i]._id, lang);
             }
     
             if (t.version > up.seenVersion) {
@@ -334,6 +334,21 @@ const curriculumService = {
     //     const doc = await Training.findOne({ path }).lean();
     //     return doc ? getLocalized(doc, lang) : null;
     // },
+
+    async getQuizWithoutSolution(trainingId, lang = "en") {
+        const doc = await Quiz.findOne({ trainingId }).lean();
+        if (!doc) return null;
+    
+        const localized = getLocalized(doc, lang);
+    
+        // remove correct answers from each question
+        localized.questions = localized.questions.map(q => {
+            const { correctAnswer, ...safeQuestion } = q;
+            return safeQuestion;
+        });
+    
+        return localized;
+    },
     
     async getQuizForTraining(trainingId, lang = "en") {
         const doc = await Quiz.findOne({ trainingId }).lean();

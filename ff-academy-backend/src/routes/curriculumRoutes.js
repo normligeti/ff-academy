@@ -13,6 +13,7 @@ router.get("/curriculum-data", auth.attachUserInfo, curriculumController.getCurr
 
 // Quiz for training
 // router.get("/trainings/:trainingId/quiz", curriculumController.getQuizForTraining);
+router.post("/trainings/quiz-validate", auth.attachUserInfo, curriculumController.validateQuiz);
 
 
 module.exports = router;
