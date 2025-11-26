@@ -18,13 +18,10 @@ const userService = {
         return user.save();
     },
 
-    async deleteUser(id) {
-        return User.findByIdAndDelete(id).lean();
-    },
+    // async deleteUser(id) {
+    //     return User.findByIdAndDelete(id).lean();
+    // },
 
-    /**
-     * Get all progress records for a user
-     */
     async getUserProgress(userId) {
         const user = await User.findById(userId).lean();
         if (!user) return null;
@@ -148,6 +145,16 @@ const userService = {
         await user.save();
     
         return { ok: true };
+    },
+
+    async setPreferredLanguage(userId, lang) {
+        const user = await User.findById(userId);
+        if (!user) return null;
+    
+        user.preferredLanguage = lang;
+    
+        await user.save();
+        return user;
     }
     
 };
