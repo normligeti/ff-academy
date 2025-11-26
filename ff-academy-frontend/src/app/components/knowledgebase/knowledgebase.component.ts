@@ -5,8 +5,9 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 import { CurriculumActions } from '../../core/store/curriculum/curriculum.actions';
 import { CurriculumSelectors } from '../../core/store/curriculum/curriculum.selectors';
-import { take } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { DIFFICULTY_ORDER_TO_NAME } from '../../core/utils/difficulty.enum';
+import { selectPreferredLanguage } from '../../core/store/profile/profile.selectors';
 
 @Component({
   selector: 'app-knowledgebase',
@@ -18,8 +19,9 @@ export class KnowledgebaseComponent {
     private store = inject(Store);
 
     pillars$ = this.store.select(CurriculumSelectors.selectPillars);
-
+    selectedPillar$!: Observable<any>;
     selectedPillar: any = null;
+    currentLang$ = this.store.select(selectPreferredLanguage);
 
     DIFFICULTY_ORDER_TO_NAME = DIFFICULTY_ORDER_TO_NAME;
 
@@ -36,6 +38,9 @@ export class KnowledgebaseComponent {
 
     onSelectPillar(pillar: any) {
         this.selectedPillar = pillar;
+        this.selectedPillar$ = this.store.select(
+            CurriculumSelectors.selectPillarByOrder(pillar.order)
+        );
     }
 
 

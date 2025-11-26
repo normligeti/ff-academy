@@ -16,11 +16,9 @@
 <section class="section-4" *ngIf="pillars$ | async as pillars">
     <div class="cards">
         <div class="s4-card" [ngClass]="{'available': pillars[0]?.status !== 'locked'}" (click)="showSection(pillars[0])">
+            <!-- TODO make svg for all languages -->
             <div class="badge">
-                <div class="badge-text-wrapper">
-                    <p class="uc f24 sbold" [innerHTML]="'KNOWLEDGEBASE.SECTION4.BADGE' | translate"></p>
-                </div>
-                <img src="assets/knowledgebase/available-badge2.svg" alt="">
+                <img [src]="'assets/knowledgebase/available-badge-' + (currentLang$ | async) + '.svg'" alt="">
             </div>
             <div class="number f28 sbold">01</div>
             <img src="assets/knowledgebase/icons/lock.svg" alt="" class="lock">
@@ -31,7 +29,7 @@
         </div>
         <div class="s4-card" [ngClass]="{'available': pillars[1]?.status !== 'locked'}" (click)="showSection(pillars[1])">
             <div class="badge">
-                <img src="assets/knowledgebase/available-badge.svg" alt="">
+                <img [src]="'assets/knowledgebase/available-badge-' + (currentLang$ | async) + '.svg'" alt="">
             </div>
             <div class="number f28 sbold">02</div>
             <img src="assets/knowledgebase/icons/lock.svg" alt="" class="lock">
@@ -43,7 +41,7 @@
         </div>
         <div class="s4-card" [ngClass]="{'available': pillars[2]?.status !== 'locked'}" (click)="showSection(pillars[2])">
             <div class="badge">
-                <img src="assets/knowledgebase/available-badge.svg" alt="">
+                <img [src]="'assets/knowledgebase/available-badge-' + (currentLang$ | async) + '.svg'" alt="">
             </div>
             <div class="number f28 sbold">03</div>
             <img src="assets/knowledgebase/icons/lock.svg" alt="" class="lock">
@@ -55,7 +53,7 @@
         </div>
         <div class="s4-card" [ngClass]="{'available': pillars[3]?.status !== 'locked'}" (click)="showSection(pillars[3])">
             <div class="badge">
-                <img src="assets/knowledgebase/available-badge.svg" alt="">
+                <img [src]="'assets/knowledgebase/available-badge-' + (currentLang$ | async) + '.svg'" alt="">
             </div>
             <div class="number f28 sbold">04</div>
             <img src="assets/knowledgebase/icons/lock.svg" alt="" class="lock">
@@ -69,12 +67,12 @@
 </section>
 
 <section class="section-5">
-    <ng-container *ngIf="!selectedPillar?.difficulties">Content not available at the moment.</ng-container>
-    <ng-container *ngFor="let diff of selectedPillar?.difficulties; index as i">
+    <ng-container *ngIf="!(selectedPillar$ | async )?.difficulties">Content not available at the moment.</ng-container>
+    <ng-container *ngFor="let diff of (selectedPillar$ | async )?.difficulties; index as i">
         <div class="dropdown" [ngClass]="{'inactive': diff.status === 'locked'}" [id]="'dropdown-' + i"  (click)="toggleDropdown(i)">
             <img src="assets/knowledgebase/dropdown-{{ diff.status !== 'locked' ? 'active' : 'inactive'}}.svg" alt="" class="bg">
             <h5 class="sbold uc">{{ diff.name }}</h5>
-            <p class="f24 sbold uc">{{ selectedPillar.title }}</p>
+            <p class="f24 sbold uc">{{ (selectedPillar$ | async ).title }}</p>
             <img src="assets/knowledgebase/icons/{{openStates[i] ? 'minus' : 'plus'}}.svg" alt="" class="icon">
             <p class="status-test">{{diff?.status}}</p>
         </div>
@@ -89,7 +87,7 @@
                     your life, set truly motivating goals, build a sustainable learning routine, and work consistently — regardless of immediate results. 
                     This module will help you develop the mindset and discipline that all your future success will be built upon.
                 </p>
-                <button class="btn-dark-blue small" [routerLink]="['pillars', selectedPillar.order, DIFFICULTY_ORDER_TO_NAME[diff.order]]" [innerHTML]="'KNOWLEDGEBASE.SECTION5.LEVEL1.BUTTON' | translate"></button>
+                <button class="btn-dark-blue small" [routerLink]="['pillars', (selectedPillar$ | async ).order, DIFFICULTY_ORDER_TO_NAME[diff.order]]" [innerHTML]="'KNOWLEDGEBASE.SECTION5.LEVEL1.BUTTON' | translate"></button>
             </div>
         </div>
     </ng-container>

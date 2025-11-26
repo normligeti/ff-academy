@@ -39,6 +39,12 @@ export const CurriculumSelectors = {
                 ) ?? null
     ),
 
+    selectPillarByOrder: (order: number) =>
+        createSelector(
+            selectCurriculumState,
+            state => state.curriculum?.pillars?.find(p => p.order === order) ?? null
+    ),
+
     // --- DIFFICULTIES ---
     selectDifficulty: (pillarOrder: number, difficultyName: string) =>
         createSelector(

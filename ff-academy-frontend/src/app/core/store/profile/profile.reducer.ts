@@ -97,6 +97,14 @@ export const reducer = createReducer(
     //     savingProgress: false,
     //     progressError: error
     // })),
+
+    on(ProfileActions.updatePreferredLanguageSuccess, (state, { lang }) => ({
+        ...state,
+        profile: {
+            ...state.profile,
+            preferredLanguage: lang
+        }
+    })),
 );
 
 export const profileFeature = createFeature({

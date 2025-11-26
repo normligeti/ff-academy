@@ -4,6 +4,7 @@ import { of } from 'rxjs';
 import { mergeMap, map, catchError, switchMap } from 'rxjs/operators';
 import { CurriculumService } from '../../services/curriculum.service';
 import { CurriculumActions } from './curriculum.actions';
+import { ProfileActions } from '../profile/profile.actions';
 
 @Injectable()
 export class CurriculumEffects {
@@ -22,6 +23,13 @@ export class CurriculumEffects {
                     )
                 )
             )
+        )
+    );
+
+    updatePreferredLanguageSuccess$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(ProfileActions.updatePreferredLanguageSuccess),
+            map(() => CurriculumActions.loadDecoratedCurriculum())
         )
     );
 

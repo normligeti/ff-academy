@@ -19,5 +19,10 @@ export const ProfileActions = createActionGroup({
         // 'Save Progress': props<{ userId: string; progressData: any }>(),
         // 'Save Progress Success': props<{ updatedProgress: any[] }>(),
         // 'Save Progress Failure': props<{ error: any }>(),
+
+        'Update Preferred Language': props<{ lang: string }>(),
+        'Update Preferred Language Success': props<{ lang: string }>(),
+        'Update Preferred Language Failure': props<{ error: any }>(),
+
     }
 });

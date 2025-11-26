@@ -23,7 +23,14 @@ export class MainHeaderComponent {
     }
 
     switchLang(lang: string) {
+        const current = this.translate.getCurrentLang();
+    
+        // Don’t fire anything if user clicks the already-active language
+        if (lang === current) return;
+    
         this.translate.use(lang);
+    
+        this.store.dispatch(ProfileActions.updatePreferredLanguage({ lang }));
     }
 
     logout() {

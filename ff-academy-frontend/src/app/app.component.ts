@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngrx/store';
 import { ProfileActions } from './core/store/profile/profile.actions';
+import { selectPreferredLanguage } from './core/store/profile/profile.selectors';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,8 @@ export class AppComponent {
 
     private store = inject(Store);
 
+    preferredLanguage$ = this.store.select(selectPreferredLanguage);
+    
     constructor( 
         public router: Router,
         private translate: TranslateService
@@ -29,9 +32,9 @@ export class AppComponent {
         // set default language
         this.translate.setFallbackLang('en');
 
-        // try to detect browser language
-
-        this.translate.use('en');
+        this.preferredLanguage$
+            .pipe(filter(lang => !!lang))
+            .subscribe(lang => this.translate.use(lang));
     }
     
     ngOnInit(): void {

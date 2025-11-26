@@ -77,6 +77,20 @@ export class ProfileEffects {
     //     )
     // );
 
+    updatePreferredLanguage$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(ProfileActions.updatePreferredLanguage),
+            mergeMap(({ lang }) =>
+                this.profileService.updatePreferredLanguage(lang).pipe(
+                    map(() => ProfileActions.updatePreferredLanguageSuccess({ lang })),
+                    catchError(error =>
+                        of(ProfileActions.updatePreferredLanguageFailure({ error }))
+                    )
+                )
+            )
+        )
+    );
+    
 
     constructor(
         // private authService: AuthService,

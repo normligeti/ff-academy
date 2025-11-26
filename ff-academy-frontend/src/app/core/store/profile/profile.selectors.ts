@@ -25,6 +25,11 @@ export const selectAuthLoading = createSelector(
     state => state.isLoading
 );
 
+export const selectPreferredLanguage = createSelector(
+    selectProfileState,
+    (state) => state.profile?.preferredLanguage
+);
+
 // --- PROGRESS ---
 // export const selectUserProgress = createSelector(
 //     selectProfileState,

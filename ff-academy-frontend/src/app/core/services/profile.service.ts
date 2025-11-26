@@ -42,4 +42,10 @@ export class ProfileService {
     //         progressData
     //     );
     // }
+
+    updatePreferredLanguage(lang: string): Observable<any> {
+        return this.http.put(`${this.baseUrl}/users/set-preferred-language`, { lang }, { withCredentials: true }
+        );
+    }
+    
 }
