@@ -1,5 +1,6 @@
 const curriculumService = require("../services/curriculumService");
 const userService = require("../services/userService");
+const imageService = require("../services/imageService");
 
 const Quiz = require("../models/Quiz");
 
@@ -131,7 +132,24 @@ const curriculumController = {
                 await userService.addOrUpdateProgress(userId, trainingInfo);
             }
 
-            return res.status(200).json({ quizSuccess: allCorrect });
+            if (allCorrect) {
+                const buffer = await imageService.generateCertificate({
+                    userName: 'user.name',
+                    quizTitle: 'quiz.title',
+                    dateString: new Date().toISOString().substring(0, 10)
+                });
+                const base64 = buffer.toString('base64');
+
+                return res.status(200).json({
+                    quizSuccess: allCorrect,
+                    certificateImage: base64
+                });
+            } else {
+                return res.status(200).json({ quizSuccess: allCorrect });
+            }
+
+            
+
 
         } catch (err) {
             console.error("validateQuiz error:", err);
