@@ -93,6 +93,7 @@ const curriculumController = {
     async validateQuiz(req, res) {
         try {
             const userId = req.userInfo?.id;
+            const userName = req.userInfo?.name;
             const trainingInfo = req.body.trainingInfo;
             const submitted = req.body.answers; // format: { questionId: answerId }
 
@@ -134,9 +135,10 @@ const curriculumController = {
 
             if (allCorrect) {
                 const buffer = await imageService.generateCertificate({
-                    userName: 'user.name',
-                    quizTitle: 'quiz.title',
-                    dateString: new Date().toISOString().substring(0, 10)
+                    name: userName,
+                    lessonTitle: trainingInfo.trainingTitle,
+                    moduleTitle: trainingInfo.pillarTitle + ' - ' + trainingInfo.difficultyName,
+                    completionDate: new Date().toISOString().substring(0, 10).replace(/-/g, ".")
                 });
                 const base64 = buffer.toString('base64');
 
@@ -147,8 +149,6 @@ const curriculumController = {
             } else {
                 return res.status(200).json({ quizSuccess: allCorrect });
             }
-
-            
 
 
         } catch (err) {

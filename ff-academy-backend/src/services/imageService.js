@@ -3,41 +3,55 @@ const { createCanvas, loadImage, registerFont } = require('canvas');
 const path = require('path');
 
 // Register fonts once at startup
-registerFont(path.join(__dirname, 'imageServiceFiles', 'SofiaProSemiBold.woff2'), {
+registerFont(path.join(__dirname, 'imageServiceFiles', 'SofiaProSemiBold.OTF'), {
     family: 'SofiaPro',
     weight: 'bold'
 });
 
-async function generateCertificate({ userName, quizTitle, dateString }) {
-    // Load background template
-    const templatePath = path.join(__dirname, 'imageServiceFiles', 'certificate.png');
+async function generateCertificate({ 
+    name, 
+    lessonTitle, 
+    moduleTitle, 
+    completionDate 
+}) {
+    const templatePath = path.join(__dirname, "imageServiceFiles", "certificate.png");
+    // TODO add error handling so progress saving and errors here are different
     const template = await loadImage(templatePath);
 
-    // Create canvas same size as template
-    const canvas = createCanvas(template.width, template.height);
-    const ctx = canvas.getContext('2d');
+    const width = template.width;
+    const height = template.height;
 
-    // Draw template
-    ctx.drawImage(template, 0, 0);
+    const canvas = createCanvas(width, height);
+    const ctx = canvas.getContext("2d");
 
-    // Common text settings
-    ctx.fillStyle = '#ffffff';
-    ctx.textBaseline = 'top';
+    // Draw base template
+    ctx.drawImage(template, 0, 0, width, height);
 
-    // USER NAME
-    ctx.font = 'bold 70px MyFont';
-    ctx.fillText(userName, 300, 250);
+    // Common styles
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
 
-    // QUIZ TITLE
-    ctx.font = 'normal 50px MyFont';
-    ctx.fillText(quizTitle, 300, 360);
+    // 2. Name (“John Smith”)
+    ctx.font = "30px SofiaPro";
+    ctx.fillStyle = "#505D65"; // or #333 if you want black
+    ctx.fillText(name, width / 2, height * 0.457);
 
-    // DATE (e.g., "Completed on 2025-01-20")
-    ctx.font = 'normal 38px MyFont';
-    ctx.fillText(dateString, 300, 450);
+    // 4. LESSON TITLE (the red one in your screenshot)
+    ctx.font = "30px SofiaPro";
+    ctx.fillStyle = "#505D65"; 
+    ctx.fillText(lessonTitle, width / 2, height * 0.575);
 
-    // Return buffer to controller
-    return canvas.toBuffer('image/png');
+    // 6. MODULE TITLE (red, larger)
+    ctx.font = "30px SofiaPro";
+    ctx.fillStyle = "#0596AE";
+    ctx.fillText(moduleTitle, width / 2, height * 0.675);
+
+    // 7. Completion date — bottom center-ish
+    ctx.font = "20px SofiaPro";
+    ctx.fillStyle = "#505D65";
+    ctx.fillText('Date of Completion: ' + completionDate, width / 2, height * 0.792);
+
+    return canvas.toBuffer("image/png");
 }
 
 module.exports = {

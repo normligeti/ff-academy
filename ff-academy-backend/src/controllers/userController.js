@@ -49,7 +49,7 @@ const userController = {
             //  verify a password here
             // Generate a token or session cookie
             const token = jwt.sign(
-                { id: user._id, email: user.email },
+                { id: user._id, email: user.email, name: user.name },
                 JWT_SECRET,
                 { expiresIn: 1000 * 60 * 60 * 16 }
             );
