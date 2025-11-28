@@ -49,7 +49,10 @@ export class KnowledgebaseComponent {
 
     showSection(pillar) {
         let element = document.querySelector('.section-5') as HTMLElement;
-        this.openStates = { 0:true, 1:false, 2:false };
+
+        this.openStates = { 0:false, 1:false, 2:false };
+        let showIndex = pillar.difficulties.findIndex(d => d.status === 'in_progress');
+        if (showIndex) this.openStates[showIndex] = true;
 
         if ((pillar?.order !== this.selectedPillar?.order) || !element.classList.contains('show')) {
             element.classList.add('show');

@@ -10,12 +10,13 @@ import { CurriculumActions } from '../../../core/store/curriculum/curriculum.act
 import { combineLatest, map, Observable, skip, Subject, take, takeUntil } from 'rxjs';
 import { ProfileActions } from '../../../core/store/profile/profile.actions';
 import { Actions, ofType } from '@ngrx/effects';
-import { DIFFICULTY_NAME_TO_ORDER } from '../../../core/utils/difficulty.enum';
 import { ParamService } from '../../../core/services/param.service';
+import { DIFFICULTY_ORDER_TO_NAME } from '../../../core/utils/difficulty.enum';
+import { LoaderComponent } from "../../loader/loader.component";
 
 @Component({
   selector: 'app-quiz',
-  imports: [RouterModule, CommonModule, MatCheckboxModule, FormsModule],
+  imports: [RouterModule, CommonModule, MatCheckboxModule, FormsModule, LoaderComponent],
   templateUrl: './quiz.component.html',
   styleUrl: './quiz.component.scss',
   providers: [ParamService],
@@ -48,6 +49,7 @@ export class QuizComponent {
     // quiz$ = this.store.select(CurriculumSelectors.selectSelectedQuiz);
     quiz;
     training$: Observable<any>;
+    isLoading = false;
 
     // error$ = combineLatest([
     //     this.store.select(CurriculumSelectors.selectSelectedTrainingError),
@@ -57,6 +59,9 @@ export class QuizComponent {
     //         [trainingError, quizError].filter(Boolean)   // remove null/undefined
     //     )
     // );
+
+    certificateBlob;
+    certificateUrl;
     
     counter = 1;
 
@@ -87,52 +92,12 @@ export class QuizComponent {
             );
 
             this.training$.pipe(takeUntil(this.destroy$)).subscribe(training => {
+                console.log('training');
+                console.log(training);
+                
                 this.quiz = training?.quiz;
             });
         });
-
-        // this.route.paramMap.subscribe(params => {
-            // this.trainingId = String(params.get('trainingId'));
-            // this.pillarOrder = Number(params.get('pillarOrder'));
-            // this.difficultyName = params.get('difficultyName') || '';
-            // this.difficultyOrder = DIFFICULTY_NAME_TO_ORDER[this.difficultyName];
-
-            // this.store.select(CurriculumSelectors.selectCurriculumLoaded)
-            //     .pipe(take(1))
-            //     .subscribe(loaded => {
-            //         if (!loaded) {
-            //             this.store.dispatch(CurriculumActions.loadDecoratedCurriculum());
-            //         }
-            //     }
-            // );
-
-            // this.training$ = this.store.select(
-            //     CurriculumSelectors.selectTrainingDetails(
-            //         this.pillarOrder,
-            //         this.difficultyOrder,
-            //         this.trainingId
-            //     )
-            // );
-
-            // this.training$.pipe(takeUntil(this.destroy$)).subscribe(training => {
-            //     console.log('quiz detail component');
-            //     console.log(training);
-                
-            //     this.quiz = training?.quiz;
-            // });
-
-            // // this.store.dispatch(
-            // //     CurriculumActions.loadQuiz({
-            // //         trainingId: this.trainingId
-            // //     })
-            // // );
-
-            // // this.store.dispatch(
-            // //     CurriculumActions.loadSelectedTraining({
-            // //         trainingId: this.trainingId
-            // //     })
-            // // );
-        // });
 
         this.actions$
             .pipe(
@@ -140,8 +105,21 @@ export class QuizComponent {
                 takeUntil(this.destroy$)
             )
             .subscribe((response) => {
+                this.isLoading = false;
+                this.counter++;
                 this.success = response?.result?.quizSuccess;
                 this.store.dispatch(CurriculumActions.loadDecoratedCurriculum());
+
+                if (response.result?.quizSuccess && response.result?.certificateImage) {
+                        const byteString = atob(response.result?.certificateImage);
+                        const array = new Uint8Array(byteString.length);
+                        for (let i = 0; i < byteString.length; i++) {
+                        array[i] = byteString.charCodeAt(i);
+                        }
+                    
+                        this.certificateBlob = new Blob([array], { type: 'image/png' });
+                        this.certificateUrl = URL.createObjectURL(this.certificateBlob);
+                  }
             }
         );
 
@@ -151,6 +129,8 @@ export class QuizComponent {
                 takeUntil(this.destroy$)
             )
             .subscribe(err => {
+                this.isLoading = false;
+                this.counter++;
                 this.validationError = true;
                 this.success = false;
                 this.store.dispatch(CurriculumActions.loadDecoratedCurriculum());
@@ -162,7 +142,7 @@ export class QuizComponent {
     // quiz stepper
     success: boolean | null = null; // null = not finished, true/false after last question
     selectedAnswers: Record<number, number> = {};
-    fakeDownload = false;
+    showCert = false;
 
     onSelect(questionId: number, answer: any) {
         this.selectedAnswers[questionId] = answer.answerId;
@@ -172,41 +152,48 @@ export class QuizComponent {
     submit(questions: any[]) {
         if (this.counter === questions.length) {
             this.onQuizComplete();
+        } else {
+            this.counter++;
         }
-        this.counter++;
     }
 
-    // TODO decide what to do when failing a new quiz and opening modified quiz
-    // TODO move quiz validation to backend
+    // TODO decide what to do when opening modified quiz
     onQuizComplete() {
-        this.training$.pipe(take(1)).subscribe(training => {
-    
+        combineLatest([
+            this.training$.pipe(take(1)),
+            this.store.select(CurriculumSelectors.selectPillars).pipe(take(1))
+        ])
+        .subscribe(([training, pillars]) => {
+      
+            const pillar = pillars.find(p => p.order === training?.pillarOrder);
+            const pillarTitle = pillar?.title ?? '';
+            
+            const diffName = pillar?.difficulties[training?.difficultyOrder - 1]?.name ?? '';
+      
             const trainingInfo = {
                 trainingId: training?._id,
+                trainingTitle: training?.title,
+                pillarTitle: pillarTitle,
+                difficultyName: diffName,
                 path: `${training?.path}`,
                 status: training?.userProgress?.status,
                 seenVersion: training?.version ?? 1
             };
-    
-            // this.store.dispatch(
-            //     ProfileActions.saveProgress({
-            //         userId: '68f027ed4ac1082b77d6d3c3',
-            //         progressData: progress
-            //     })
-            // );
-
+            
             this.store.dispatch(
                 CurriculumActions.validateQuiz({
                     trainingInfo,
                     answers: this.selectedAnswers
                 })
             );
+
+            this.isLoading = true;
         });
     }
 
-    download() {
+    showCertificate() {
         this.success = null;
-        this.fakeDownload = true;
+        this.showCert = true;
     }
 
     ngOnDestroy() {

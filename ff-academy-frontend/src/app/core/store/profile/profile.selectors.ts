@@ -27,7 +27,7 @@ export const selectAuthLoading = createSelector(
 
 export const selectPreferredLanguage = createSelector(
     selectProfileState,
-    (state) => state.profile?.preferredLanguage
+    (state) => state.profile?.preferredLanguage || 'en'
 );
 
 // --- PROGRESS ---

@@ -60,7 +60,11 @@
                 </div>
                 
                 <div class="bottom">
-                    <button class="btn-dark-blue small" (click)="submit(questions)" [disabled]="!selectedAnswers[counter]"> <p>next question</p></button>
+                    <button class="btn-dark-blue small" (click)="submit(questions)" [disabled]="!selectedAnswers[counter] || isLoading"> 
+                        <p *ngIf="counter !== questions.length">next question</p>
+                        <p *ngIf="counter === questions.length">finish quiz</p>
+                        <loader *ngIf="isLoading" color="white" [size]="20"></loader>
+                    </button>
                 </div>
                     
             </div>
@@ -74,7 +78,7 @@
                 <p class="f18">Your dedication and effort are paying off — keep moving forward on your journey of growth!</p>
             </div>
             <p class="f24 mbold">Your certificate is now available below.</p>
-            <button class="btn-white s" (click)="download()">DOWNLOAD YOUR Certificate of Completion</button>
+            <button class="btn-white s" (click)="showCertificate()">DOWNLOAD YOUR Certificate of Completion</button>
         </div>
 
         <div class="result fail" *ngIf="success === false" @fadeInOut>
@@ -95,8 +99,12 @@
             </ng-container>
         </div>
 
-        <div class="certificate" *ngIf="fakeDownload" @fadeInOut>
-            <img src="assets/knowledgebase/certificate.png" alt="">
+        <div class="certificate" *ngIf="showCert" @fadeInOut>
+            <!-- <img src="assets/knowledgebase/certificate.png" alt=""> -->
+            <img [src]="certificateUrl" alt="Certificate">
+            <button class="btn-white s" >
+                <a [href]="certificateUrl" download="fireflies-academy-certificate.png">DOWNLOAD</a>
+            </button>
         </div>
         
     </div>
