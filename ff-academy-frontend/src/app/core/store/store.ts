@@ -1,16 +1,18 @@
 import { isDevMode } from '@angular/core';
 import {
-  ActionReducer,
-  ActionReducerMap,
-  createFeatureSelector,
-  createSelector,
-  MetaReducer
+    Action,
+    ActionReducer,
+    ActionReducerMap,
+    createFeatureSelector,
+    createSelector,
+    MetaReducer
 } from '@ngrx/store';
 
 import { profileFeature, ProfileState } from './profile/profile.reducer';
 import { ProfileEffects } from './profile/profile.effects';
 import { curriculumFeature, CurriculumState } from './curriculum/curriculum.reducer';
 import { CurriculumEffects } from './curriculum/curriculum.effects';
+import { ProfileActions } from './profile/profile.actions';
 
 
 export interface AppState {
@@ -41,4 +43,15 @@ export function logger(reducer: ActionReducer<AppState>): ActionReducer<AppState
     };
 }
 
-export const metaReducers: MetaReducer<AppState>[] = isDevMode() ? [logger] : [];
+export function clearStateReducer<State>(reducer: ActionReducer<State>) {
+    return function (state: State | undefined, action: Action) {
+
+            if (action.type === ProfileActions.logoutSuccess.type) {
+                state = undefined;
+            }
+
+            return reducer(state, action);
+    };
+}
+
+export const metaReducers: MetaReducer<AppState>[] = isDevMode() ? [logger, clearStateReducer] : [clearStateReducer];
