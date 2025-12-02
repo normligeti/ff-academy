@@ -75,6 +75,15 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
 
+      - name: Debug – list files
+        run: |
+          pwd
+          ls
+          echo "---- ff-academy-frontend/dist ----"
+          ls ff-academy-frontend/dist || echo "nincs ilyen mappa"
+          echo "---- recursive ----"
+          ls -R
+
       - name: Upload all (except index.html) with cache
         run: |
           aws s3 sync ff-academy-frontend/dist/ff-academy-frontend/browser s3://ff-academy-frontend \
