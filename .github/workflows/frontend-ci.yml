@@ -20,6 +20,7 @@ jobs:
         with:
           node-version: 'lts/*'
           cache: 'npm'
+          cache-dependency-path: ff-academy-frontend/package-lock.json
 
       - name: Install system dependencies (Chromium, build tools, python)
         run: |
@@ -30,6 +31,7 @@ jobs:
             build-essential python3
 
       - name: Install dependencies
+        working-directory: ff-academy-frontend
         run: npm ci --legacy-peer-deps
 
       # Ha később kell lint/test
@@ -40,13 +42,14 @@ jobs:
       #   run: npm run test:ci
 
       - name: Build
+        working-directory: ff-academy-frontend
         run: npm run build
 
       - name: Upload dist artifact
         uses: actions/upload-artifact@v4
         with:
           name: dist
-          path: dist/**
+          path: ff-academy-frontend/dist/**
           if-no-files-found: error
 
   deploy_prod:
