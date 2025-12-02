@@ -1,4 +1,7 @@
-FROM node:22.6.0-bullseye
+FROM node:20.12-bullseye
 
-RUN npm install -g nodemon
-RUN npm install -g ts-node
+# package.json is now next to Dockerfile in local-dev
+COPY package*.json ./
+
+# Install Linux node_modules
+RUN npm install
