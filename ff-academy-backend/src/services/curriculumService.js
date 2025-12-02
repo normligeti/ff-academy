@@ -94,6 +94,11 @@ const curriculumService = {
             if (t.version > up.seenVersion) {
                 state = "modified";
             }
+
+            // modified above overwrites first as available without this
+            if (t.path === '1.1.1') {
+                state = 'available';
+            }
     
             // safe lock as last step
             if (i > lastProgressIndex + 1) {
