@@ -76,12 +76,12 @@ const userController = {
     async logout(req, res) {
         try {
             // Overwrite the cookie with empty value + immediate expiration
-            res.cookie("auth_token", "", {
-                httpOnly: true,
-                secure: false,        // same as login (set to true in prod)
-                sameSite: "lax",
-                expires: new Date(0)  // destroys cookie immediately
-            });
+            // res.cookie("auth_token", "", {
+            //     httpOnly: true,
+            //     secure: false,        // same as login (set to true in prod)
+            //     sameSite: "lax",
+            //     expires: new Date(0)  // destroys cookie immediately
+            // });
     
             return res.status(200).json({ message: "Logout successful" });
         } catch (err) {
