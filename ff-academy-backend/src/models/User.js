@@ -13,7 +13,7 @@ const progressSchema = new mongoose.Schema({
 
 const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
-    name: { type: String, required: true },
+    name: { type: String, required: true, default: 'default name' }, //TODO remove default
     createdAt: { type: Date, default: Date.now },
     preferredLanguage: { type: String, default: 'en' },
     progress: [progressSchema] // embedded progress records

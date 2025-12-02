@@ -40,10 +40,11 @@ const userController = {
                 return res.status(400).json({ message: "Email is required" });
             }
     
-            const user = await userService.findByEmail(email);
+            let user = await userService.findByEmail(email);
     
             if (!user) {
-                return res.status(401).json({ message: "User not found" });
+                user = await userService.createUser(req.body); // TODO remove, testing only
+                // return res.status(401).json({ message: "User not found" });
             }
     
             //  verify a password here
