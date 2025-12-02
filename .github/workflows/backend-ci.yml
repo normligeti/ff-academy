@@ -65,7 +65,7 @@ jobs:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: ff-academy-backend
-          environment_name: ff-academy-backend-env
+          environment_name: ff-academy-node-backend
           version_label: ${{ github.sha }}
           region: ${{ secrets.AWS_DEFAULT_REGION }}
           deployment_package: application.zip
