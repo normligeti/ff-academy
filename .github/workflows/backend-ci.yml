@@ -1,0 +1,75 @@
+name: Backend CI
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch: {}
+
+jobs:
+  build_backend:
+    name: Bundle zip
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'npm'
+
+      - name: Install zip
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y zip
+
+      - name: Install dependencies
+        working-directory: ff-academy-backend
+        run: npm install
+
+      - name: Build
+        working-directory: ff-academy-backend
+        run: npm run build
+
+      - name: Create application.zip
+        working-directory: ff-academy-backend
+        run: |
+          zip -r application.zip . \
+            -x "node_modules/*" "src/*" ".git/*"
+
+      - name: Upload application.zip artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: application-zip
+          path: ff-academy-backend/application.zip
+          if-no-files-found: error
+
+  deploy_prod_backend:
+    name: Deploy to Production (Elastic Beanstalk)
+    needs: build_backend
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download application.zip
+        uses: actions/download-artifact@v4
+        with:
+          name: application-zip
+          path: .
+
+      - name: Deploy to AWS Elastic Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v22
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: ffacademy-backend
+          environment_name: ffacademy-backend
+          version_label: ${{ github.sha }}
+          region: ${{ secrets.AWS_DEFAULT_REGION }}
+          deployment_package: application.zip

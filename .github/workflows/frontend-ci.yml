@@ -1,0 +1,85 @@
+name: Frontend CI
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch: {}
+
+jobs:
+  build_frontend:
+    name: Install, Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'npm'
+
+      - name: Install system dependencies (Chromium, build tools, python)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            chromium-browser chromium-chromedriver \
+            xvfb procps \
+            build-essential python3
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      # Ha később kell lint/test
+      # - name: Lint
+      #   run: npm run lint
+      #
+      # - name: Unit tests
+      #   run: npm run test:ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/**
+          if-no-files-found: error
+
+  deploy_prod:
+    name: Deploy to AWS
+    needs: build_frontend
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download dist artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: .
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-central-1
+
+      - name: Upload all (except index.html) with cache
+        run: |
+          aws s3 sync ff-academy-frontend/dist/ff-academy-frontend/browser s3://ff-academy-frontend \
+            --exclude "index.html" \
+            --cache-control "max-age=86400"
+
+      - name: Upload index.html with no-store
+        run: |
+          aws s3 cp ff-academy-frontend/dist/ff-academy-frontend/browser/index.html \
+            s3://ff-academy-frontend/index.html \
+            --cache-control "no-store"
