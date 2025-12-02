@@ -10,7 +10,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:4200",
+    origin: ['http://d3b46wp806irt1.cloudfront.net', "http://localhost:4200"],
     credentials: true,
 }));
 
