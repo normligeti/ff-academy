@@ -202,9 +202,34 @@
         flex-direction: column;
         position: relative;
 
+        &.open {
+            .row {
+                &:hover {
+                    padding-top: 0;
+                    padding-bottom: 6px;
+                }
+            }
+
+            .icon {
+                transform: scaleY(-1);
+            }
+
+            body {
+                height: 557px;
+                padding-bottom: 40px;
+                opacity: 1;
+                transition: all 0.2s 0s, opacity 0.2s 0.2s;
+            }
+        }
+
         .icon {
             width: 20px;
             margin-left: auto;
+            transition: all 0.2s;
+
+            &.rotate{ 
+                transform: scaleY(-1);
+            }
         }
     }
 
@@ -217,7 +242,7 @@
 
         &:hover {
             cursor: pointer;
-            padding-bottom: 4px;
+            padding-top: 6px;
         }
     }
 
@@ -229,13 +254,6 @@
         gap: 20px;
         opacity: 0;
         transition: all 0.2s 0.2s, opacity 0.2s 0s;
-
-        &.open {
-            height: 557px;
-            padding-bottom: 40px;
-            opacity: 1;
-            transition: all 0.2s 0s, opacity 0.2s 0.2s;
-        }
     }
 
     .divider {
