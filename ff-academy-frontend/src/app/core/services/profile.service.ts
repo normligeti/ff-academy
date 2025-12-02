@@ -1,7 +1,8 @@
 import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { BASE_URL } from '../utils/variables';
+import { BASE_URL, PRODUCTION_HOSTNAMES } from '../utils/variables';
+import { environment } from '../../../environments/environment';
 
 export interface User {
     _id?: string;
@@ -17,6 +18,9 @@ export class ProfileService {
         protected http: HttpClient,
         @Inject(BASE_URL) baseUrl: string
     ) {
+        console.log('Injected BASE_URL =', baseUrl);
+        console.log(PRODUCTION_HOSTNAMES, window.location.hostname);
+        console.log('environment', environment);
         this.baseUrl = baseUrl;
     }
 

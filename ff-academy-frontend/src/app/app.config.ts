@@ -30,7 +30,7 @@ export const appConfig: ApplicationConfig = {
                 lockedResourceInterceptor
             ])
         ),
-        { 
+        {
             provide: BASE_URL, 
             useValue: PRODUCTION_HOSTNAMES.includes(window.location.hostname) ? environment.API_BASE_PATH : environment.DEV_API_BASE_PATH 
         },
