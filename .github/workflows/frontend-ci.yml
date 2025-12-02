@@ -77,12 +77,12 @@ jobs:
 
       - name: Upload all (except index.html) with cache
         run: |
-          aws s3 sync ff-academy-frontend/dist/ff-academy-frontend/browser s3://ff-academy-frontend \
+          aws s3 sync dist/ff-academy-frontend/browser s3://ff-academy-frontend \
             --exclude "index.html" \
             --cache-control "max-age=86400"
 
       - name: Upload index.html with no-store
         run: |
-          aws s3 cp ff-academy-frontend/dist/ff-academy-frontend/browser/index.html \
+          aws s3 cp dist/ff-academy-frontend/browser/index.html \
             s3://ff-academy-frontend/index.html \
             --cache-control "no-store"
