@@ -10,8 +10,8 @@ const app = express();
 
 // Middleware
 app.use(cors({
-    origin: ['http://d3b46wp806irt1.cloudfront.net', "http://localhost:4200"],
-    credentials: true,
+    origin: ['http://d3b46wp806irt1.cloudfront.net', "http://localhost:4200", "http://localhost:4202"],
+    // credentials: true,
 }));
 
 app.use(express.json());

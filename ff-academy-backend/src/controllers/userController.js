@@ -55,15 +55,18 @@ const userController = {
                 { expiresIn: 1000 * 60 * 60 * 16 }
             );
 
-            // Set HttpOnly cookie
-            res.cookie("auth_token", token, {
-                httpOnly: true,
-                secure: false,               //  TODO use true in production (HTTPS), set samesite too
-                sameSite: "lax",
-                maxAge: 1000 * 60 * 60 * 16 // 16 hrs
-            });
+            // // Set HttpOnly cookie
+            // res.cookie("auth_token", token, {
+            //     httpOnly: true,
+            //     secure: false,               //  TODO use true in production (HTTPS), set samesite too
+            //     sameSite: "lax",
+            //     maxAge: 1000 * 60 * 60 * 16 // 16 hrs
+            // });
+
+            // bearer token
+            // res.json({ token });
     
-            return res.status(200).json({ message: "Login successful" });
+            return res.status(200).json({ message: "Login successful", token });
         } catch (err) {
             console.error("login error:", err);
             res.status(500).json({ message: "Failed to login" });
