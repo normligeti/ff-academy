@@ -1,10 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, concatMap, switchMap, mergeMap } from 'rxjs/operators';
+import { catchError, map, concatMap, switchMap, mergeMap, tap } from 'rxjs/operators';
 import { ProfileActions } from './profile.actions';
 import { of } from 'rxjs';
 // import { AuthService } from '../../services/auth.service';
 import { ProfileService } from '../../services/profile.service';
+import { Router } from '@angular/router';
 // import { AuthService } from '../../services/AuthService';
 
 @Injectable()
@@ -61,6 +62,17 @@ export class ProfileEffects {
         );
     });
 
+    logoutSuccess$ = createEffect(
+        () =>
+          this.actions$.pipe(
+            ofType(ProfileActions.logoutSuccess),
+            tap(() => {
+              this.router.navigate(['/login']); 
+            })
+          ),
+        { dispatch: false }
+    );
+
     // saveProgress$ = createEffect(() =>
     //     this.actions$.pipe(
     //         ofType(ProfileActions.saveProgress),
@@ -93,7 +105,7 @@ export class ProfileEffects {
     
 
     constructor(
-        // private authService: AuthService,
+        private router: Router,
         private profileService: ProfileService,
     ) {}
 }

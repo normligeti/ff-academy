@@ -6,6 +6,8 @@ import { DifficultyDetailComponent } from './components/knowledgebase/difficulty
 import { TrainingDetailComponent } from './components/knowledgebase/training-detail/training-detail.component';
 import { QuizComponent } from './components/knowledgebase/quiz/quiz.component';
 import { LockedComponent } from './components/locked/locked.component';
+import { OnlinePresenceComponent } from './components/online-presence/online-presence.component';
+import { Web3Component } from './components/web3/web3.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -20,4 +22,6 @@ export const routes: Routes = [
     },
     { path: 'login', component: LoginComponent },
     { path: 'locked', component: LockedComponent },
+    { path: 'online-presence', component: OnlinePresenceComponent },
+    { path: 'web3', component: Web3Component },
 ];

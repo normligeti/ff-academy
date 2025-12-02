@@ -20,11 +20,11 @@
             {{ 'NAV.KNOWLEDGEBASE' | translate }}
         </li>
         <div class="divider"></div>
-        <li class="disabled">
+        <li [routerLink]="['/online-presence']" routerLinkActive="active">
             {{ 'NAV.ONLINE_PRESENCE' | translate }}
         </li>
         <div class="divider"></div>
-        <li class="disabled">
+        <li class="disabled" [routerLink]="['/web3']" routerLinkActive="active">
             {{ 'NAV.WEB3' | translate }}
         </li>
         <div class="divider"></div>

@@ -1,0 +1,219 @@
+<section class="section-1">
+    <div class="text">
+        <h4 class="uc bold">Build Your Digital Presence Like a Pro</h4>
+        <p class="f32">Master the art of online branding and social media visibility to 
+            attract more prospects, build trust, and grow your Fireflies business.
+        </p>
+    </div>
+</section>
+
+<section class="section-2">
+    <h6 class="sbold">Grow Your Influence – Step by Step</h6>
+    
+    <div class="cards">
+        <div class="s2-card scroll-hiddenx">
+            <div class="top">
+                <img src="assets/icons/step.svg" alt="">
+            </div>
+            <div class="bottom">
+                <p class="f24 center sbold">
+                    Setting up a professional profile on Instagram, Facebook
+                </p>
+            </div>
+        </div>
+        <div class="s2-card scroll-hiddenx d01">
+            <div class="top">
+                <img src="assets/icons/step.svg" alt="">
+            </div>
+            <div class="bottom">
+                <p class="f24 center sbold">
+                    What to post and
+                    when – content
+                    calendar basics
+                </p>
+            </div>
+        </div>
+        <div class="s2-card scroll-hiddenx d02">
+            <div class="top">
+                <img src="assets/icons/step.svg" alt="">
+            </div>
+            <div class="bottom">
+                <p class="f24 center sbold">
+                    How to use hashtags,
+                    reels, and stories.
+                </p>
+            </div>
+        </div>
+        <div class="s2-card scroll-hiddenx d03">
+            <div class="top">
+                <img src="assets/icons/step.svg" alt="">
+            </div>
+            <div class="bottom">
+                <p class="f24 center sbold">
+                    Responding to DMs and leading conversations
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-3">
+    <h6 class="sbold">Video Lessons</h6>
+
+    <div class="video-wrapper">
+        <iframe 
+            class="video-embed" 
+            [src]="'https://www.youtube.com/embed/' + mainVideo?.id | safeUrl"
+            title="Rick Astley - Never Gonna Give You Up (Official Video) (4K Remaster)"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+        >
+        </iframe>
+        <img class="img-1" src="../../../assets/online-presence/video-1.png" alt="">
+        <img class="img-2" src="../../../assets/online-presence/video-2.png" alt="">
+    </div>
+    <p class="f28">{{ mainVideo?.title }}</p>
+</section>
+
+<section class="section-4">
+    <div class="cards">
+        <div class="video-wrapper" [ngClass]="{'disabled': mainVideo === item }" *ngFor="let item of gallery" (click)="selectVideo(item)">
+            <img 
+                [src]="'https://img.youtube.com/vi/' + item.id + '/mqdefault.jpg'"
+                class="thumb-img"
+                alt="{{ item.title }}"
+            >
+            <p class="f16 sbold">{{ item.title }}</p>
+        </div>
+    </div>
+</section>
+
+<section class="section-5">
+    <div class="dropdown">
+        <img src="assets/knowledgebase/dropdown-active.svg" alt="" class="bg">
+        <h5 class="sbold f50">Downloadable Tools</h5>
+    </div>
+    
+    <div class="dropdown-box" [ngClass]="{'open': openStates[1]}" (click)="toggleDropdown(1)">
+        <div class="row">
+            <div class="text">
+                <p class="f32 sbold">Editable content calendar (Google Sheets or Notion)</p>
+            </div>
+            <img src="assets/icons/arrow2-d.svg" alt="" class="icon">
+        </div>
+        <div class="body"[ngClass]="{'open': openStates[1]}">
+            <p class="">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur sequi eius a recusandae eaque cum consectetur pariatur dignissimos eos esse incidunt placeat accusantium itaque possimus necessitatibus quod odit aliquam delectus quo, unde aperiam? Exercitationem sint numquam suscipit? sse incidunt placeat accusantium itaque possimus necessitatibus quod odit aliquam delectus quo, unde aperiam? Exercitationem sint numquam suscipit Recusandae, suscipit labore!
+            </p>
+            <p class="">
+                Curabitur a sapien luctus, congue neque nec, vulputate mi. Vestibulum at libero sit amet quam tristique sagittis sed sed massa. Fusce id nisl eu ligula consequat elementum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Pellentesque a tincidunt tellus. In sagittis dolor in neque dapibus sodales. Quisque consectetur massa est, a mollis risus tincidunt vel. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vivamus eget eros turpis. Aenean id nibh nibh. Morbi sodales felis id mi luctus fringilla. Suspendisse maximus id urna ultricies mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+            </p>
+            <p class="">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur tempora odio cumque atque in quisquam esse deserunt tempore quasi dicta excepturi ullam quaerat nisi repellendus, minus quod neque earum ipsam? Ab vero architecto quos consectetur nobis iste magnam, modi distinctio laudantium tenetur facilis quasi necessitatibus autem, nesciunt ducimus velit unde odio quidem sit ipsa qui. Nulla, nostrum. Nobis ipsam eum nostrum natus fugiat quo, accusamus dolores, quibusdam soluta iusto perspiciatis magnam officia iste magni nam aut ducimus minima optio rem! audantium tenetur facilis quasi necessitatibus autem, nesciunt ducimus velit unde odio quidem sit ipsa qui. Nulla, nostrum. Nobis ipsam eum nostrum natus fugiat quo, accusamus dolores, quibusdam soluta iusto perspiciatis magnam officia iste magni nam aut duci
+            </p>
+            <p class="">
+                Fusce auctor ornare nulla, in convallis augue facilisis vitae. Mauris maximus mi ex. Aenean condimentum lacus id tincidunt dignissim. Aenean mattis non leo nec consequat. Nullam velit magna, vehicula non finibus sit amet, ullamcorper sit amet enim. Nunc ac egestas urna. Nunc ut eleifend ante.
+            </p>
+            <p class="">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur sequi eius a recusandae eaque cum consectetur pariatur dignissimos eos esse incidunt placeat accusantium itaque possimus necessitatibus quod odit aliquam delectus quo, unde aperiam? Exercitationem sint numquam suscipit? Recusandae, suscipit labore!
+            </p>
+        </div>
+    </div>
+    <div class="dropdown-box" [ngClass]="{'open': openStates[2]}" (click)="toggleDropdown(2)">
+        <div class="row">
+            <div class="text">
+                <p class="f32 sbold">Caption idea bank</p>
+            </div>
+            <img src="assets/icons/arrow2-d.svg" alt="" class="icon">
+        </div>
+        <div class="body"[ngClass]="{'open': openStates[2]}">
+            <p class="">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur sequi eius a recusandae eaque cum consectetur pariatur dignissimos eos esse incidunt placeat accusantium itaque possimus necessitatibus quod odit aliquam delectus quo, unde aperiam? Exercitationem sint numquam suscipit? sse incidunt placeat accusantium itaque possimus necessitatibus quod odit aliquam delectus quo, unde aperiam? Exercitationem sint numquam suscipit Recusandae, suscipit labore!
+            </p>
+            <p class="">
+                Curabitur a sapien luctus, congue neque nec, vulputate mi. Vestibulum at libero sit amet quam tristique sagittis sed sed massa. Fusce id nisl eu ligula consequat elementum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Pellentesque a tincidunt tellus. In sagittis dolor in neque dapibus sodales. Quisque consectetur massa est, a mollis risus tincidunt vel. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vivamus eget eros turpis. Aenean id nibh nibh. Morbi sodales felis id mi luctus fringilla. Suspendisse maximus id urna ultricies mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+            </p>
+            <p class="">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur tempora odio cumque atque in quisquam esse deserunt tempore quasi dicta excepturi ullam quaerat nisi repellendus, minus quod neque earum ipsam? Ab vero architecto quos consectetur nobis iste magnam, modi distinctio laudantium tenetur facilis quasi necessitatibus autem, nesciunt ducimus velit unde odio quidem sit ipsa qui. Nulla, nostrum. Nobis ipsam eum nostrum natus fugiat quo, accusamus dolores, quibusdam soluta iusto perspiciatis magnam officia iste magni nam aut ducimus minima optio rem! audantium tenetur facilis quasi necessitatibus autem, nesciunt ducimus velit unde odio quidem sit ipsa qui. Nulla, nostrum. Nobis ipsam eum nostrum natus fugiat quo, accusamus dolores, quibusdam soluta iusto perspiciatis magnam officia iste magni nam aut duci
+            </p>
+            <p class="">
+                Fusce auctor ornare nulla, in convallis augue facilisis vitae. Mauris maximus mi ex. Aenean condimentum lacus id tincidunt dignissim. Aenean mattis non leo nec consequat. Nullam velit magna, vehicula non finibus sit amet, ullamcorper sit amet enim. Nunc ac egestas urna. Nunc ut eleifend ante.
+            </p>
+            <p class="">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur sequi eius a recusandae eaque cum consectetur pariatur dignissimos eos esse incidunt placeat accusantium itaque possimus necessitatibus quod odit aliquam delectus quo, unde aperiam? Exercitationem sint numquam suscipit? Recusandae, suscipit labore!
+            </p>
+        </div>
+    </div>
+    <div class="dropdown-box" [ngClass]="{'open': openStates[3]}" (click)="toggleDropdown(3)">
+        <div class="row">
+            <div class="text">
+                <p class="f32 sbold">Instagram Bio & Linktree setup guide</p>
+            </div>
+            <img src="assets/icons/arrow2-d.svg" alt="" class="icon">
+        </div>
+        <div class="body"[ngClass]="{'open': openStates[3]}">
+            <p class="">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur sequi eius a recusandae eaque cum consectetur pariatur dignissimos eos esse incidunt placeat accusantium itaque possimus necessitatibus quod odit aliquam delectus quo, unde aperiam? Exercitationem sint numquam suscipit? sse incidunt placeat accusantium itaque possimus necessitatibus quod odit aliquam delectus quo, unde aperiam? Exercitationem sint numquam suscipit Recusandae, suscipit labore!
+            </p>
+            <p class="">
+                Curabitur a sapien luctus, congue neque nec, vulputate mi. Vestibulum at libero sit amet quam tristique sagittis sed sed massa. Fusce id nisl eu ligula consequat elementum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Pellentesque a tincidunt tellus. In sagittis dolor in neque dapibus sodales. Quisque consectetur massa est, a mollis risus tincidunt vel. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vivamus eget eros turpis. Aenean id nibh nibh. Morbi sodales felis id mi luctus fringilla. Suspendisse maximus id urna ultricies mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+            </p>
+            <p class="">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur tempora odio cumque atque in quisquam esse deserunt tempore quasi dicta excepturi ullam quaerat nisi repellendus, minus quod neque earum ipsam? Ab vero architecto quos consectetur nobis iste magnam, modi distinctio laudantium tenetur facilis quasi necessitatibus autem, nesciunt ducimus velit unde odio quidem sit ipsa qui. Nulla, nostrum. Nobis ipsam eum nostrum natus fugiat quo, accusamus dolores, quibusdam soluta iusto perspiciatis magnam officia iste magni nam aut ducimus minima optio rem! audantium tenetur facilis quasi necessitatibus autem, nesciunt ducimus velit unde odio quidem sit ipsa qui. Nulla, nostrum. Nobis ipsam eum nostrum natus fugiat quo, accusamus dolores, quibusdam soluta iusto perspiciatis magnam officia iste magni nam aut duci
+            </p>
+            <p class="">
+                Fusce auctor ornare nulla, in convallis augue facilisis vitae. Mauris maximus mi ex. Aenean condimentum lacus id tincidunt dignissim. Aenean mattis non leo nec consequat. Nullam velit magna, vehicula non finibus sit amet, ullamcorper sit amet enim. Nunc ac egestas urna. Nunc ut eleifend ante.
+            </p>
+            <p class="">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur sequi eius a recusandae eaque cum consectetur pariatur dignissimos eos esse incidunt placeat accusantium itaque possimus necessitatibus quod odit aliquam delectus quo, unde aperiam? Exercitationem sint numquam suscipit? Recusandae, suscipit labore!
+            </p>
+        </div>
+    </div>
+    <div class="dropdown-box" [ngClass]="{'open': openStates[4]}" (click)="toggleDropdown(4)">
+        <div class="row">
+            <div class="text">
+                <p class="f32 sbold">Canva templates for Stories and Posts</p>
+            </div>
+            <img src="assets/icons/arrow2-d.svg" alt="" class="icon">
+        </div>
+        <div class="body"[ngClass]="{'open': openStates[4]}">
+            <p class="">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur sequi eius a recusandae eaque cum consectetur pariatur dignissimos eos esse incidunt placeat accusantium itaque possimus necessitatibus quod odit aliquam delectus quo, unde aperiam? Exercitationem sint numquam suscipit? sse incidunt placeat accusantium itaque possimus necessitatibus quod odit aliquam delectus quo, unde aperiam? Exercitationem sint numquam suscipit Recusandae, suscipit labore!
+            </p>
+            <p class="">
+                Curabitur a sapien luctus, congue neque nec, vulputate mi. Vestibulum at libero sit amet quam tristique sagittis sed sed massa. Fusce id nisl eu ligula consequat elementum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Pellentesque a tincidunt tellus. In sagittis dolor in neque dapibus sodales. Quisque consectetur massa est, a mollis risus tincidunt vel. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vivamus eget eros turpis. Aenean id nibh nibh. Morbi sodales felis id mi luctus fringilla. Suspendisse maximus id urna ultricies mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+            </p>
+            <p class="">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur tempora odio cumque atque in quisquam esse deserunt tempore quasi dicta excepturi ullam quaerat nisi repellendus, minus quod neque earum ipsam? Ab vero architecto quos consectetur nobis iste magnam, modi distinctio laudantium tenetur facilis quasi necessitatibus autem, nesciunt ducimus velit unde odio quidem sit ipsa qui. Nulla, nostrum. Nobis ipsam eum nostrum natus fugiat quo, accusamus dolores, quibusdam soluta iusto perspiciatis magnam officia iste magni nam aut ducimus minima optio rem! audantium tenetur facilis quasi necessitatibus autem, nesciunt ducimus velit unde odio quidem sit ipsa qui. Nulla, nostrum. Nobis ipsam eum nostrum natus fugiat quo, accusamus dolores, quibusdam soluta iusto perspiciatis magnam officia iste magni nam aut duci
+            </p>
+            <p class="">
+                Fusce auctor ornare nulla, in convallis augue facilisis vitae. Mauris maximus mi ex. Aenean condimentum lacus id tincidunt dignissim. Aenean mattis non leo nec consequat. Nullam velit magna, vehicula non finibus sit amet, ullamcorper sit amet enim. Nunc ac egestas urna. Nunc ut eleifend ante.
+            </p>
+            <p class="">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur sequi eius a recusandae eaque cum consectetur pariatur dignissimos eos esse incidunt placeat accusantium itaque possimus necessitatibus quod odit aliquam delectus quo, unde aperiam? Exercitationem sint numquam suscipit? Recusandae, suscipit labore!
+            </p>
+        </div>
+    </div>
+    <div class="divider"></div>
+</section>
+
+<section class="section-6">
+    <h6 class="sbold">Simple Rules for Long-Term Success</h6>
+
+    <div class="grid">
+        <div class="card">
+            <p class="f32 uc sbold">Be consistent, not perfect.</p>
+        </div>
+        <div class="card">
+            <p class="f32 uc sbold">Don’t try to sell <br> try to connect.</p>
+        </div>
+        <div class="card">
+            <p class="f32 uc sbold">Show your lifestyle and values, <br>not just the product.</p>
+        </div>
+        <div class="card">
+            <p class="f32 uc sbold">Use your real voice <br>authenticity wins.</p>
+        </div>
+    </div>
+</section>

@@ -39,7 +39,7 @@ export class KnowledgebaseComponent {
     onSelectPillar(pillar: any) {
         this.selectedPillar = pillar;
         this.selectedPillar$ = this.store.select(
-            CurriculumSelectors.selectPillarByOrder(pillar.order)
+            CurriculumSelectors.selectPillarByOrder(pillar?.order)
         );
     }
 
@@ -51,7 +51,7 @@ export class KnowledgebaseComponent {
         let element = document.querySelector('.section-5') as HTMLElement;
 
         this.openStates = { 0:false, 1:false, 2:false };
-        let showIndex = pillar.difficulties.findIndex(d => d.status === 'in_progress');
+        let showIndex = pillar?.difficulties.findIndex(d => d.status === 'in_progress');
         if (showIndex) this.openStates[showIndex] = true;
 
         if ((pillar?.order !== this.selectedPillar?.order) || !element.classList.contains('show')) {
