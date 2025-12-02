@@ -80,7 +80,8 @@ export class ProfileEffects {
           this.actions$.pipe(
             ofType(ProfileActions.logoutSuccess),
             tap(() => {
-              this.router.navigate(['/login']); 
+                this.authService.clearToken();
+                this.router.navigate(['/login']); 
             })
           ),
         { dispatch: false }
