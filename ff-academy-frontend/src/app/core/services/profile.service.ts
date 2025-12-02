@@ -22,15 +22,15 @@ export class ProfileService {
     }
 
     login(loginData): Observable<any> {
-        return this.http.post(`${this.baseUrl}/users/login`, loginData, { withCredentials: true });
+        return this.http.post(`${this.baseUrl}/users/login`, loginData);
     }
 
     logout(): Observable<any> {
-        return this.http.post(`${this.baseUrl}/users/logout`, {}, { withCredentials: true });
+        return this.http.post(`${this.baseUrl}/users/logout`, {});
     }
 
     loadProfile(): Observable<any> {
-        return this.http.get(`${this.baseUrl}/users/get-user-profile`, { withCredentials: true });
+        return this.http.get(`${this.baseUrl}/users/get-user-profile`);
     }
 
     createUser(user: User): Observable<User> {
@@ -45,7 +45,7 @@ export class ProfileService {
     // }
 
     updatePreferredLanguage(lang: string): Observable<any> {
-        return this.http.put(`${this.baseUrl}/users/set-preferred-language`, { lang }, { withCredentials: true }
+        return this.http.put(`${this.baseUrl}/users/set-preferred-language`, { lang }
         );
     }
     

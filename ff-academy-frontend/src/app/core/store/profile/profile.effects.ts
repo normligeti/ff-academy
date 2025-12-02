@@ -6,6 +6,7 @@ import { of } from 'rxjs';
 // import { AuthService } from '../../services/auth.service';
 import { ProfileService } from '../../services/profile.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth-service';
 // import { AuthService } from '../../services/AuthService';
 
 @Injectable()
@@ -36,7 +37,7 @@ export class ProfileEffects {
         switchMap(({ loginData }) =>
             this.profileService.login(loginData).pipe(
                 map((response: any) =>
-                    ProfileActions.loginSuccess()
+                    ProfileActions.loginSuccess({ token: response.token })
                 ),
                 catchError((error) =>
                     of(ProfileActions.loginFailure({ error: error.error }))
@@ -45,6 +46,18 @@ export class ProfileEffects {
         )
         );
     });
+
+    loginSuccess$ = createEffect(
+        () => {
+            return this.actions$.pipe(
+                ofType(ProfileActions.loginSuccess),
+                tap(({ token }) => {
+                    this.authService.setToken(token);
+                })
+            );
+        },
+        { dispatch: false }
+    );
 
     logout$ = createEffect(() => {
         return this.actions$.pipe(
@@ -107,5 +120,6 @@ export class ProfileEffects {
     constructor(
         private router: Router,
         private profileService: ProfileService,
+        private authService: AuthService,
     ) {}
 }

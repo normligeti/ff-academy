@@ -10,7 +10,7 @@ import { BASE_URL, PRODUCTION_HOSTNAMES } from './core/utils/variables';
 import { environment } from '../environments/environment';
 import { provideTranslateService } from '@ngx-translate/core';
 import {provideTranslateHttpLoader} from "@ngx-translate/http-loader";
-import { lockedResourceInterceptor } from './core/utils/locked-resource.interceptor';
+import { authInterceptor } from './core/utils/auth-interceptor';
 
 const scrollConfig: InMemoryScrollingOptions = {
     scrollPositionRestoration: 'enabled'
@@ -27,7 +27,7 @@ export const appConfig: ApplicationConfig = {
         provideEffects(effects),
         provideHttpClient(
             withInterceptors([
-                lockedResourceInterceptor
+                authInterceptor
             ])
         ),
         {

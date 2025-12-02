@@ -25,7 +25,7 @@ export class CurriculumService {
     // }
 
     getDecoratedCurriculum(): Observable<any> {
-        return this.http.get<any>(`${this.baseUrl}/curriculum/curriculum-data`, { withCredentials: true });
+        return this.http.get<any>(`${this.baseUrl}/curriculum/curriculum-data`);
     }
 
     // --- TRAINING DETAIL (by ID) ---
@@ -44,6 +44,6 @@ export class CurriculumService {
     }
 
     validateQuiz(trainingInfo: Object, answers: Record<number, number>) {
-        return this.http.post(`${this.baseUrl}/curriculum/trainings/quiz-validate`, { trainingInfo, answers }, { withCredentials: true });
+        return this.http.post(`${this.baseUrl}/curriculum/trainings/quiz-validate`, { trainingInfo, answers });
     }
 }
