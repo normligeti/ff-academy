@@ -31,15 +31,10 @@ jobs:
         working-directory: ff-academy-backend
         run: npm install
 
-      - name: Build
-        working-directory: ff-academy-backend
-        run: npm run build
-
       - name: Create application.zip
         working-directory: ff-academy-backend
         run: |
-          zip -r application.zip . \
-            -x "node_modules/*" "src/*" ".git/*"
+          zip application.zip -r * .[^.]*
 
       - name: Upload application.zip artifact
         uses: actions/upload-artifact@v4
@@ -49,7 +44,7 @@ jobs:
           if-no-files-found: error
 
   deploy_prod_backend:
-    name: Deploy to Production (Elastic Beanstalk)
+    name: Deploy to AWS (Elastic Beanstalk)
     needs: build_backend
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
@@ -69,8 +64,8 @@ jobs:
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: ffacademy-backend
-          environment_name: ffacademy-backend
+          application_name: ff-academy-backend
+          environment_name: ff-academy-backend-env
           version_label: ${{ github.sha }}
           region: ${{ secrets.AWS_DEFAULT_REGION }}
           deployment_package: application.zip
