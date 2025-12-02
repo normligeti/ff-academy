@@ -91,13 +91,8 @@ const curriculumService = {
                 decorated[i].quiz = await curriculumService.getQuizWithoutSolution(decorated[i]._id, lang);
             }
     
-            if (t.version > up.seenVersion) {
+            if ((t.version > up.seenVersion) && t.path !== '1.1.1') {
                 state = "modified";
-            }
-
-            // modified above overwrites first as available without this
-            if (t.path === '1.1.1') {
-                state = 'available';
             }
     
             // safe lock as last step
