@@ -18,9 +18,6 @@ export class ProfileService {
         protected http: HttpClient,
         @Inject(BASE_URL) baseUrl: string
     ) {
-        console.log('Injected BASE_URL =', baseUrl);
-        console.log(PRODUCTION_HOSTNAMES, window.location.hostname);
-        console.log('environment', environment);
         this.baseUrl = baseUrl;
     }
 
